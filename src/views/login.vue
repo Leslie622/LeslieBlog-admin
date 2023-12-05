@@ -2,8 +2,8 @@
   <div class="login">
     <div class="login__container">
       <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" status-icon label-width="100px">
-        <el-form-item label="账号" prop="username">
-          <el-input v-model="ruleForm.username" />
+        <el-form-item label="账号" prop="account">
+          <el-input v-model="ruleForm.account" />
         </el-form-item>
         <el-form-item label="密码" prop="password">
           <el-input v-model="ruleForm.password" />
@@ -21,23 +21,23 @@
 
 <script setup lang="ts">
 import { useUserStore } from '@/stores/modules/user'
-import type { FormInstance, FormRules } from 'element-plus'
+import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 const router = useRouter()
 
 const userStore = useUserStore()
 interface RuleForm {
-  username: string
+  account: string
   password: string
 }
 
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive<RuleForm>({
-  username: '',
+  account: '',
   password: ''
 })
 
 const rules = reactive<FormRules<RuleForm>>({
-  username: [
+  account: [
     { required: true, message: '请输入您的用户名', trigger: 'blur' },
     { min: 5, max: 20, message: '用户名长度必须大于 5', trigger: 'blur' }
   ],
@@ -53,11 +53,14 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   isLoading.value = true
   await formEl.validate(async (valid, fields) => {
     if (valid) {
-      await userStore.login(ruleForm)
-      router.push('/home')
-      isLoading.value = false
-    } else {
-      isLoading.value = false
+      try {
+        await userStore.login(ruleForm)
+        router.push('/home')
+        ElMessage()
+        isLoading.value = false
+      } catch (error) {
+        isLoading.value = false
+      }
     }
   })
 }

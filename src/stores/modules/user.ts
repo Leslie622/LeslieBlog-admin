@@ -1,16 +1,11 @@
+import apiUser from '@/api/modules/user'
+
 export const useUserStore = defineStore('user', () => {
   const account = ref(localStorage.account ?? '')
   const token = ref(localStorage.token ?? '')
-  function delayedPromise() {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve("123");
-      }, 3000);
-    });
-  }
-  async function login(data: { username: string; password: string }) {
-   await delayedPromise()
-   
+
+  async function login(data: { account: string; password: string }) {
+    await apiUser.login(data)
   }
   return { account, token, login }
 })
