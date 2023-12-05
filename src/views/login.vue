@@ -1,13 +1,7 @@
 <template>
   <div class="login">
     <div class="login__container">
-      <el-form
-        ref="ruleFormRef"
-        :model="ruleForm"
-        :rules="rules"
-        status-icon
-        label-width="100px"
-      >
+      <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" status-icon label-width="100px">
         <el-form-item label="账号" prop="username">
           <el-input v-model="ruleForm.username" />
         </el-form-item>
@@ -15,7 +9,9 @@
           <el-input v-model="ruleForm.password" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm(ruleFormRef)"> 登录 </el-button>
+          <el-button type="primary" @click="submitForm(ruleFormRef)" :loading="isLoading">
+            登录
+          </el-button>
           <el-button @click="resetForm(ruleFormRef)">重置</el-button>
         </el-form-item>
       </el-form>
@@ -24,7 +20,11 @@
 </template>
 
 <script setup lang="ts">
+import { useUserStore } from '@/stores/modules/user'
 import type { FormInstance, FormRules } from 'element-plus'
+const router = useRouter()
+
+const userStore = useUserStore()
 interface RuleForm {
   username: string
   password: string
@@ -47,13 +47,17 @@ const rules = reactive<FormRules<RuleForm>>({
   ]
 })
 
+let isLoading = ref(false)
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
-  await formEl.validate((valid, fields) => {
+  isLoading.value = true
+  await formEl.validate(async (valid, fields) => {
     if (valid) {
-      console.log('submit!')
+      await userStore.login(ruleForm)
+      router.push('/home')
+      isLoading.value = false
     } else {
-      console.log('error submit!', fields)
+      isLoading.value = false
     }
   })
 }
