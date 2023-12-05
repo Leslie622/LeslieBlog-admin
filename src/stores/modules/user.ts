@@ -5,7 +5,8 @@ export const useUserStore = defineStore('user', () => {
   const token = ref(localStorage.token ?? '')
 
   async function login(data: { account: string; password: string }) {
-    await apiUser.login(data)
+    const res = await apiUser.login(data)
+    console.log(res)
   }
   return { account, token, login }
 })
