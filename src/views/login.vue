@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import { useUserStore } from '@/stores/modules/user'
-import { error } from 'console';
+import { error } from 'console'
 import { ElMessage, Message, type FormInstance, type FormRules } from 'element-plus'
 const router = useRouter()
 
@@ -54,17 +54,15 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   isLoading.value = true
   await formEl.validate(async (valid, fields) => {
     if (valid) {
-      try {
-        await userStore.login(ruleForm)
-        router.push('/home')
-        ElMessage({
-          type:"success",
-          message:"登录成功"
-        })
-        isLoading.value = false
-      } catch (error) {
-        isLoading.value = false
-      }
+      await userStore.login(ruleForm)
+      router.push('/home')
+      ElMessage({
+        type: 'success',
+        message: '登录成功'
+      })
+      isLoading.value = false
+    } else {
+      isLoading.value = false
     }
   })
 }
