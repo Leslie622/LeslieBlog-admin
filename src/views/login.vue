@@ -44,7 +44,7 @@ const rules = reactive<FormRules<RuleForm>>({
   ],
   password: [
     { required: true, message: '请输入您的密码', trigger: 'blur' },
-    { min: 5, max: 20, message: '密码长度必须大于 5', trigger: 'blur' }
+    { min: 6, max: 20, message: '密码长度必须大于 6', trigger: 'blur' }
   ]
 })
 
