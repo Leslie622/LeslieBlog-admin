@@ -8,22 +8,20 @@ const api = axios.create({
   timeout: 1000 * 60
 })
 
-//请求拦截
+/* 请求拦截 */
 api.interceptors.request.use((request) => {
   return request
 })
 
-//响应拦截
+/* 响应拦截 */
 api.interceptors.response.use(
   (response) => {
-    if (response.data.status === 1) {
-      if (response.data.error !== '') {
-        // 错误提示
-        ElMessage.error(response.data.error)
-        return Promise.reject(response.data)
-      }
+    // 根据status返回不同的信息
+    if (response.data.status === 200) {
+      ElMessage.success(response.data.message)
     } else {
-      //登出
+      ElMessage.error(response.data.message)
+      return Promise.reject(response.data)
     }
     return Promise.resolve(response.data)
   },

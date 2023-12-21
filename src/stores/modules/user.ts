@@ -1,6 +1,5 @@
 import apiUser from '@/api/modules/user'
 
-
 export const useUserStore = defineStore('user', () => {
   const account = ref(localStorage.account ?? '')
   const token = ref(localStorage.token ?? '')
@@ -8,5 +7,10 @@ export const useUserStore = defineStore('user', () => {
   async function login(data: { account: string; password: string }) {
     const response = await apiUser.login(data)
   }
-  return { account, token, login }
+
+  /* 用户注册 */
+  async function register(data: { account: string; password: string }) {
+    const response = await apiUser.register(data)
+  }
+  return { account, token, login, register }
 })

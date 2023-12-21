@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <div class="login__container">
-      <el-form ref="loginFormRef" :model="loginForm" :rules="rules" status-icon label-width="100px">
+      <el-form ref="loginFormRef" :model="loginForm" :rules="rules" status-icon>
         <el-form-item label="账号" prop="account">
           <el-input v-model="loginForm.account" />
         </el-form-item>
@@ -60,15 +60,14 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   await formEl.validate(async (valid, fields) => {
     //验证通过
     if (valid) {
-      //请求登录接口：该逻辑在store/user中处理
-      await userStore.login(loginForm)
-      //登录成功后跳转到主页
-      router.push('/home')
-      ElMessage({
-        type: 'success',
-        message: '登录成功'
-      })
-      isLoading.value = false
+      try {
+        //请求登录接口：该逻辑在store/user中处理
+        await userStore.login(loginForm)
+        isLoading.value = false
+        router.push('/home')
+      } catch {
+        isLoading.value = false
+      }
     }
     //验证失败
     else {
@@ -84,14 +83,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 </script>
 
 <style lang="scss" scoped>
-.login {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-
-  .login__container {
-    width: 500px;
-  }
+.login__container {
+  width: 500px;
 }
 </style>
