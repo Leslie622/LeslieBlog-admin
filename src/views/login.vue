@@ -1,18 +1,18 @@
 <template>
   <div class="login">
     <div class="login__container">
-      <el-form ref="ruleFormRef" :model="ruleForm" :rules="rules" status-icon label-width="100px">
+      <el-form ref="loginFormRef" :model="loginForm" :rules="rules" status-icon label-width="100px">
         <el-form-item label="账号" prop="account">
-          <el-input v-model="ruleForm.account" />
+          <el-input v-model="loginForm.account" />
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="ruleForm.password" />
+          <el-input v-model="loginForm.password" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm(ruleFormRef)" :loading="isLoading">
+          <el-button type="primary" @click="submitForm(loginFormRef)" :loading="isLoading">
             登录
           </el-button>
-          <el-button @click="resetForm(ruleFormRef)">重置</el-button>
+          <el-button @click="resetForm(loginFormRef)">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -21,23 +21,27 @@
 
 <script setup lang="ts">
 import { useUserStore } from '@/stores/modules/user'
-import { error } from 'console'
-import { ElMessage, Message, type FormInstance, type FormRules } from 'element-plus'
+import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
 const router = useRouter()
-
 const userStore = useUserStore()
-interface RuleForm {
+
+/* 定义登录表单接口 */
+interface LoginForm {
   account: string
   password: string
 }
 
-const ruleFormRef = ref<FormInstance>()
-const ruleForm = reactive<RuleForm>({
+/* 登录表单ref */
+const loginFormRef = ref<FormInstance>()
+
+/* 登录表单 */
+const loginForm = reactive<LoginForm>({
   account: '',
   password: ''
 })
 
-const rules = reactive<FormRules<RuleForm>>({
+/* 登录表单规则 */
+const rules = reactive<FormRules<LoginForm>>({
   account: [
     { required: true, message: '请输入您的用户名', trigger: 'blur' },
     { min: 5, max: 20, message: '用户名长度必须大于 5', trigger: 'blur' }
@@ -48,25 +52,31 @@ const rules = reactive<FormRules<RuleForm>>({
   ]
 })
 
-let isLoading = ref(false)
+/* 登录操作 */
+let isLoading = ref(false) //控制登录加载
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   isLoading.value = true
   await formEl.validate(async (valid, fields) => {
+    //验证通过
     if (valid) {
-      await userStore.login(ruleForm)
+      //请求登录接口：该逻辑在store/user中处理
+      await userStore.login(loginForm)
+      //登录成功后跳转到主页
       router.push('/home')
       ElMessage({
         type: 'success',
         message: '登录成功'
       })
       isLoading.value = false
-    } else {
+    }
+    //验证失败
+    else {
       isLoading.value = false
     }
   })
 }
-
+/* 重置表单操作 */
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.resetFields()
