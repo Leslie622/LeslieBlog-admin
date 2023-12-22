@@ -10,6 +10,11 @@ const api = axios.create({
 
 /* 请求拦截 */
 api.interceptors.request.use((request) => {
+  //如果存在token，每次请求带上token信息
+  const token = localStorage.getItem('token')
+  if (token) {
+    request.headers.Authorization = token
+  }
   return request
 })
 
