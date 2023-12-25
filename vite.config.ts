@@ -4,6 +4,8 @@ import vue from '@vitejs/plugin-vue'
 //ELement按需引入
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
+import Icons from 'unplugin-icons/vite'
+import IconsResolver from 'unplugin-icons/resolver'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig(({ command, mode }) => {
@@ -15,12 +17,25 @@ export default defineConfig(({ command, mode }) => {
       vue(),
       AutoImport({
         imports: ['vue', 'vue-router', 'pinia'],
+        resolvers: [
+          ElementPlusResolver(),
+          IconsResolver({
+            prefix: 'Icon'
+          })
+        ],
         dts: 'src/types/auto-imports.d.ts',
-        resolvers: [ElementPlusResolver()]
       }),
       Components({
+        resolvers: [
+          IconsResolver({
+            enabledCollections: ['ep']
+          }),
+          ElementPlusResolver()
+        ],
         dts: 'src/types/components.d.ts',
-        resolvers: [ElementPlusResolver()]
+      }),
+      Icons({
+        autoInstall: true
       })
     ],
     resolve: {
@@ -41,8 +56,8 @@ export default defineConfig(({ command, mode }) => {
         '/proxy': {
           target: env.VITE_APP_API_BASEURL,
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/proxy/, ''),
-        },
+          rewrite: (path) => path.replace(/^\/proxy/, '')
+        }
       }
     }
   }
