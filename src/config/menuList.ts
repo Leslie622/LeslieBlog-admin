@@ -4,12 +4,12 @@
   menuType: 1：列表 2：路由
 */
 
-const menuList = [
+const menuList: MenuItem[] = [
   {
     menuType: 'list',
     menuName: '仪表盘',
     icon: IconEpDataAnalysis,
-    path:"/home",
+    path: '/home',
     children: [
       {
         menuType: 'router',
