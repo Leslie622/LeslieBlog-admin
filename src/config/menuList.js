@@ -1,43 +1,42 @@
 /* 菜单列表 */
+
+/* 
+  menuType: 1：列表 2：路由
+*/
+
 const menuList = [
   {
-    menuType: '1',
+    menuType: 'list',
     menuName: '仪表盘',
-    menuCode: '',
-    path: '',
-    icon: IconEpEdit,
-    component: '',
+    icon: IconEpDataAnalysis,
+    path:"/home",
     children: [
       {
-        menuType: '1',
+        menuType: 'router',
         menuName: '文章数据',
-        menuCode: '',
         path: '/home/ArticleData',
         component: 'ArticleData'
       },
       {
-        menuType: '1',
+        menuType: 'router',
         menuName: '日记数据',
-        menuCode: '',
         path: '/home/DiaryData',
         component: 'DiaryData'
       }
     ]
   },
   {
-    menuType: '1',
+    menuType: 'router',
     menuName: '用户管理',
-    menuCode: '',
     path: '/home/UserManage',
-    icon: '123',
+    icon: IconEpUser,
     component: 'UserManage'
   },
   {
-    menuType: '1',
+    menuType: 'router',
     menuName: '文章管理',
-    menuCode: '',
     path: '/home/ArticleManage',
-    icon: '123',
+    icon: IconEpNotebook,
     component: 'ArticleManage'
   }
 ]

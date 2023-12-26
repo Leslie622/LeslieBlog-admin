@@ -22,28 +22,31 @@ const router = createRouter({
       path: '/home',
       name: 'home',
       component: Home,
-      redirect: (to)=>{
-        return componentsArray[0].path
-        
+      redirect: (to) => {
+        return routeList[0].path
       }
     }
   ]
 })
 
-const extractComponents = (menuList) => {
+/* 将菜单转换为路由列表 */
+const getRouteList = (menuList) => {
   return menuList.reduce((acc, item) => {
-    if (item.component !== '') {
+    //如果菜单类型是路由，则添加到路由列表
+    if (item.menuType === 'router') {
       acc.push(item)
     }
-    if (item.children && item.children.length > 0) {
-      const childrenWithComponents = extractComponents(item.children)
-      acc.push(...childrenWithComponents)
+    //如果该菜单类型为list，并有children项，则递归
+    if (item.children && item.menuType === 'list') {
+      const childrenRoute = getRouteList(item.children)
+      acc.push(...childrenRoute)
     }
     return acc
   }, [])
 }
 
-const componentsArray = extractComponents(menuList)
+// 路由列表
+const routeList = getRouteList(menuList)
 
 /* 全局前置守卫 */
 let registerRouteFresh = true
@@ -59,7 +62,7 @@ router.beforeEach((to, from, next) => {
     } else {
       //注册动态路由
       if (registerRouteFresh) {
-        componentsArray.forEach((route) => {
+        routeList.forEach((route) => {
           router.addRoute('home', {
             path: route.path,
             name: route.menuName,

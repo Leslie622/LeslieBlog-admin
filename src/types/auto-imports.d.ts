@@ -7,7 +7,11 @@ export {}
 declare global {
   const EffectScope: typeof import('vue')['EffectScope']
   const ElMessage: typeof import('element-plus/es')['ElMessage']
+  const IconEpDataAnalysis: typeof import('~icons/ep/data-analysis')['default']
   const IconEpEdit: typeof import('~icons/ep/edit')['default']
+  const IconEpNoteBook: typeof import('~icons/ep/note-book')['default']
+  const IconEpNotebook: typeof import('~icons/ep/notebook')['default']
+  const IconEpUser: typeof import('~icons/ep/user')['default']
   const acceptHMRUpdate: typeof import('pinia')['acceptHMRUpdate']
   const computed: typeof import('vue')['computed']
   const createApp: typeof import('vue')['createApp']

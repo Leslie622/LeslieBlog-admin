@@ -2,7 +2,7 @@
   <el-container class="home">
     <!-- aside -->
     <el-aside width="150px">
-      <el-menu :default-active="activeMenu" :default-openeds="['']" @open="handleOpen" @close="handleClose" router>
+      <el-menu :default-active="activeMenu"  @open="handleOpen" @close="handleClose" router>
         <tree-menu :menuList="menuList"></tree-menu>
       </el-menu>
     </el-aside>
@@ -100,15 +100,7 @@ watch(
   { immediate: true, deep: true }
 )
 
-const addTab = (targetName: string) => {
-  // const newTabName = `${++tabIndex}`
-  // editableTabs.value.push({
-  //   title: 'New Tab',
-  //   name: newTabName,
-  //   content: 'New Tab content'
-  // })
-  // editableTabsValue.value = newTabName
-}
+
 const tabClick = (pane, event) => {
   console.log(pane.index, event)
   router.push(editableTabs.value[pane.index].path)
