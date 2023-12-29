@@ -4,38 +4,29 @@ import vue from '@vitejs/plugin-vue'
 //ELement按需引入
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
-import Icons from 'unplugin-icons/vite'
-import IconsResolver from 'unplugin-icons/resolver'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineConfig(({ command, mode }) => {
   //环境变量
   const env = loadEnv(mode, process.cwd(), '')
+
   //vite配置
   return {
     plugins: [
       vue(),
       AutoImport({
         imports: ['vue', 'vue-router', 'pinia'],
-        resolvers: [
-          ElementPlusResolver(),
-          IconsResolver({
-            prefix: 'Icon'
-          })
-        ],
-        dts: 'src/types/auto-imports.d.ts',
+        resolvers: [ElementPlusResolver()],
+        dts: 'src/types/auto-imports.d.ts'
       }),
       Components({
         resolvers: [
-          IconsResolver({
-            enabledCollections: ['ep']
-          }),
+          (componentName) => {
+            if (componentName === 'Icon') return { name: componentName, from: '@iconify/vue' }
+          },
           ElementPlusResolver()
         ],
-        dts: 'src/types/components.d.ts',
-      }),
-      Icons({
-        autoInstall: true
+        dts: 'src/types/components.d.ts'
       })
     ],
     resolve: {

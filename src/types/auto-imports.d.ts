@@ -7,6 +7,7 @@ export {}
 declare global {
   const EffectScope: typeof import('vue')['EffectScope']
   const ElMessage: typeof import('element-plus/es')['ElMessage']
+  const IconEpChatLineRound: typeof import('~icons/ep/chat-line-round')['default']
   const IconEpDataAnalysis: typeof import('~icons/ep/data-analysis')['default']
   const IconEpEdit: typeof import('~icons/ep/edit')['default']
   const IconEpNoteBook: typeof import('~icons/ep/note-book')['default']

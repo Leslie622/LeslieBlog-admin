@@ -2,7 +2,7 @@
   <el-container class="home">
     <!-- aside -->
     <el-aside width="150px">
-      <el-menu :default-active="activeMenu"  @open="handleOpen" @close="handleClose" router>
+      <el-menu :default-active="activeMenu" @open="handleOpen" @close="handleClose" router>
         <tree-menu :menuList="menuList"></tree-menu>
       </el-menu>
     </el-aside>
@@ -26,17 +26,25 @@
             :label="item.title"
             :name="item.name"
           >
+            <router-view></router-view>
           </el-tab-pane>
         </el-tabs>
-        <router-view></router-view>
       </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script setup lang="ts">
-import TreeMenu from '@/components/TreeMenu/index.vue'
+// import TreeMenu from '@/components/TreeMenu/index.vue'
 import menuList from '@/config/menuList.js'
+import apiUser from '@/api/modules/user'
+// const menuList = ref()
+// async function getMenuList() {
+//   const res = await apiUser.menuList()
+
+//   menuList.value = res.data.menuList
+// }
+// getMenuList()
 const route = useRoute()
 const router = useRouter()
 console.log(route)
@@ -99,7 +107,6 @@ watch(
   },
   { immediate: true, deep: true }
 )
-
 
 const tabClick = (pane, event) => {
   console.log(pane.index, event)

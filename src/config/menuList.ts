@@ -8,7 +8,7 @@ const menuList: MenuItem[] = [
   {
     menuType: 'list',
     menuName: '仪表盘',
-    icon: IconEpDataAnalysis,
+    icon: 'tabler:24-hours',
     path: '/home',
     children: [
       {
@@ -29,14 +29,14 @@ const menuList: MenuItem[] = [
     menuType: 'router',
     menuName: '用户管理',
     path: '/home/UserManage',
-    icon: IconEpUser,
+    icon: 'IconEpUser',
     component: 'UserManage'
   },
   {
     menuType: 'router',
     menuName: '文章管理',
     path: '/home/ArticleManage',
-    icon: IconEpNotebook,
+    icon: 'IconEpNotebook',
     component: 'ArticleManage'
   }
 ]

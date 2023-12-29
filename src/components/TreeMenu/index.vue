@@ -3,8 +3,12 @@
     <!-- 菜单类型是list,渲染成sub-menu -->
     <el-sub-menu :index="menu.path" v-if="menu.menuType === 'list'">
       <template #title>
-        <el-icon v-if="menu.icon">
-          <component :is="menu.icon"></component>
+        <el-icon >
+          <!-- <i class="iconfont icon-menu"></i> -->
+          <!-- <component :is="menu.icon"></component> -->
+          <!-- <i-ep-dataAnalysis></i-ep-dataAnalysis> -->
+          <!-- arrow-down -->
+          <Icon v-if="menu.icon" :icon="menu.icon" />
         </el-icon>
         <span>{{ menu.menuName }}</span>
       </template>
@@ -14,9 +18,9 @@
     <!-- 菜单类型是router,渲染成menu-item -->
     <el-menu-item :index="menu.path" v-else-if="menu.menuType === 'router'">
       <template #title>
-        <el-icon v-if="menu.icon">
+        <!-- <el-icon v-if="menu.icon">
           <component :is="menu.icon"></component>
-        </el-icon>
+        </el-icon> -->
         <span>{{ menu.menuName }}</span>
       </template>
     </el-menu-item>
@@ -24,10 +28,16 @@
 </template>
 
 <script setup lang="ts">
+
 import TreeMenu from '@/components/TreeMenu/index.vue'
+// const props = defineProps<{
+//   menuList: Array<MenuItem>
+// }>()
+
 const props = defineProps({
   menuList: Array<MenuItem>
 })
+console.log(props.menuList)
 </script>
 
 <style lang="scss" scoped></style>
