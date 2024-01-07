@@ -47,7 +47,6 @@ import apiUser from '@/api/modules/user'
 // getMenuList()
 const route = useRoute()
 const router = useRouter()
-console.log(route)
 
 const routes = computed(() => {
   return route.matched
@@ -86,11 +85,9 @@ const editableTabs = ref([
 watch(
   () => router.currentRoute.value.path,
   (toPath) => {
-    console.log(router)
     //点击tab 切换路由
     router.push(toPath)
     editableTabsValue.value = router.currentRoute.value.name
-    // console.log(router.currentRoute.value.name);
 
     //如果添加相同的路由，则直接跳转，否则新建
     const checkValueInArray = (key, value, array) => array.some((obj) => obj[key] === value)
@@ -102,14 +99,12 @@ watch(
         name: router.currentRoute.value.name,
         path: router.currentRoute.value.path
       })
-      console.log(editableTabs.value)
     }
   },
   { immediate: true, deep: true }
 )
 
 const tabClick = (pane, event) => {
-  console.log(pane.index, event)
   router.push(editableTabs.value[pane.index].path)
 }
 

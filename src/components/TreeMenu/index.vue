@@ -37,7 +37,6 @@ import TreeMenu from '@/components/TreeMenu/index.vue'
 const props = defineProps({
   menuList: Array<MenuItem>
 })
-console.log(props.menuList)
 </script>
 
 <style lang="scss" scoped></style>
