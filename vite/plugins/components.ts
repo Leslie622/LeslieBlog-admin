@@ -9,6 +9,7 @@ export default function createComponents() {
       },
       ElementPlusResolver()
     ],
-    dts: 'src/types/components.d.ts'
+    dts: 'src/types/components.d.ts',
+    dirs: ['src/components','src/layout'],
   })
 }

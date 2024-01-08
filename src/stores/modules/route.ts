@@ -7,7 +7,7 @@ export const useRouteStore = defineStore('route', () => {
 
   /* 将用户菜单转换为路由 */
   async function getAsyncRoute() {
-    asyncRoute.value = generateRoute(menuStore.menuList.menuList)
+    asyncRoute.value = generateRoute(menuStore.menuList)
   }
 
   /* 根据动态菜单生成路由 */

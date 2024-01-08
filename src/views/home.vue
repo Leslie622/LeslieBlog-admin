@@ -3,7 +3,7 @@
     <!-- aside -->
     <el-aside width="150px">
       <el-menu :default-active="activeMenu" @open="handleOpen" @close="handleClose" router>
-        <tree-menu :menuList="menuList"></tree-menu>
+        <tree-menu :menuList="menuStore.menuList"></tree-menu>
       </el-menu>
     </el-aside>
 
@@ -35,22 +35,14 @@
 </template>
 
 <script setup lang="ts">
-// import TreeMenu from '@/components/TreeMenu/index.vue'
-import menuList from '@/config/menuList.js'
-import apiUser from '@/api/modules/user'
-// const menuList = ref()
-// async function getMenuList() {
-//   const res = await apiUser.menuList()
+// import menuList from '@/config/menuList.js'
 
-//   menuList.value = res.data.menuList
-// }
-// getMenuList()
+import { useMenuStore } from '@/stores/modules/menu';
+const menuStore = useMenuStore()
+
+
 const route = useRoute()
 const router = useRouter()
-
-const routes = computed(() => {
-  return route.matched
-})
 
 const handleOpen = (key: string, keyPath: string[]) => {
   console.log(key, keyPath)
@@ -63,24 +55,8 @@ const activeMenu = computed(() => {
   return route.path
 })
 
-const routerName = computed(() => {
-  return router.currentRoute.value.name
-})
-
-// let tabIndex = 2
 const editableTabsValue = ref()
-const editableTabs = ref([
-  // {
-  //   title: 'Tab 1',
-  //   name: '1',
-  //   content: 'Tab 1 content'
-  // },
-  // {
-  //   title: 'Tab 2',
-  //   name: '2',
-  //   content: 'Tab 2 content'
-  // }
-])
+const editableTabs = ref([])
 
 watch(
   () => router.currentRoute.value.path,

@@ -1,43 +1,78 @@
 /* 菜单列表 */
 
-/* 
-  menuType: 1：列表 2：路由
-*/
-
-const menuList: MenuItem[] = [
+const menuList = [
   {
-    menuType: 'list',
-    menuName: '仪表盘',
-    icon: 'tabler:24-hours',
-    path: '/home',
+    id: 1,
+    menuType: 1,
+    menuName: '系统管理',
+    menuCode: '',
+    path: '/system',
+    icon: '',
+    parentId: null,
     children: [
       {
-        menuType: 'router',
-        menuName: '文章数据',
-        path: '/home/ArticleData',
-        component: 'ArticleData'
+        id: 10,
+        menuType: 2,
+        menuName: '角色管理',
+        menuCode: '',
+        path: '/system/userManage',
+        icon: '',
+        parentId: 1,
+        children: [
+          {
+            id: 100,
+            menuType: 3,
+            menuName: '新增角色',
+            menuCode: 'user-create',
+            path: '',
+            icon: '',
+            parentId: 10,
+            children: []
+          },
+          {
+            id: 101,
+            menuType: 3,
+            menuName: '删除角色',
+            menuCode: 'user-delete',
+            path: '',
+            icon: '',
+            parentId: 10,
+            children: []
+          }
+        ]
       },
       {
-        menuType: 'router',
-        menuName: '日记数据',
-        path: '/home/DiaryData',
-        component: 'DiaryData'
+        id: 11,
+        menuType: 2,
+        menuName: '菜单管理',
+        menuCode: '',
+        path: '/system/menuManage',
+        icon: '',
+        parentId: 1,
+        children: [
+          {
+            id: 111,
+            menuType: 3,
+            menuName: '新增菜单',
+            menuCode: 'menu-create',
+            path: '',
+            icon: '',
+            parentId: 11,
+            children: []
+          },
+          {
+            id: 112,
+            menuType: 3,
+            menuName: '删除菜单',
+            menuCode: 'menu-delete',
+            path: '',
+            icon: '',
+            parentId: 11,
+            children: []
+          }
+        ]
       }
     ]
-  },
-  {
-    menuType: 'router',
-    menuName: '用户管理',
-    path: '/home/UserManage',
-    icon: 'IconEpUser',
-    component: 'UserManage'
-  },
-  {
-    menuType: 'router',
-    menuName: '文章管理',
-    path: '/home/ArticleManage',
-    icon: 'IconEpNotebook',
-    component: 'ArticleManage'
   }
 ]
 
