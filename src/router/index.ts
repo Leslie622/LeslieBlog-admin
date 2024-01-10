@@ -7,6 +7,7 @@ const home = () => import('@/views/home/index.vue')
 const layout = () => import('@/layout/index.vue')
 const userManage = () => import('@/views/user-manage/index.vue')
 const menuManage = () => import('@/views/menu-manage/index.vue')
+const roleManage = () => import('@/views/role-manage/index.vue')
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,6 +35,10 @@ const router = createRouter({
         {
           path: '/system/menuManage',
           component: menuManage
+        },
+        {
+          path: '/system/roleManage',
+          component: roleManage
         }
       ]
     },

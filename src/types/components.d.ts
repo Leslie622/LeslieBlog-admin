@@ -45,6 +45,7 @@ declare module 'vue' {
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTimePicker: typeof import('element-plus/es')['ElTimePicker']
+    ElTree: typeof import('element-plus/es')['ElTree']
     Icon: typeof import('@iconify/vue')['Icon']
     Layout: typeof import('./../layout/index.vue')['default']
     Navbar: typeof import('./../layout/components/Navbar.vue')['default']

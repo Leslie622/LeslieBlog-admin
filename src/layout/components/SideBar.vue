@@ -18,6 +18,9 @@
     <el-menu-item index="/system/menuManage">
       <span>菜单</span>
     </el-menu-item>
+    <el-menu-item index="/system/roleManage">
+      <span>角色</span>
+    </el-menu-item>
   </el-menu>
 </template>
 
