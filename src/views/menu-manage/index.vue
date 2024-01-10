@@ -1,14 +1,10 @@
 <template>
   <el-button type="primary" @click="createMenuHandler({ menuType: 0, id: 0 })">新增菜单</el-button>
+  <el-button type="primary" @click="createMenuHandler({ menuType: 1, id: 0 })">新增路由</el-button>
   <!-- 菜单列表 -->
-  <el-table
-    :data="menuList"
-    row-key="id"
-    stripe
-    default-expand-all
-  >
-    <el-table-column prop="menuName" label="菜单名称" />
-    <el-table-column prop="menuType" label="菜单类型">
+  <el-table :data="menuList" row-key="id" stripe default-expand-all>
+    <el-table-column prop="menuName" label="名称" />
+    <el-table-column prop="menuType" label="类型">
       <template v-slot="{ row }">
         <span>{{ menuTypeMap[row.menuType] }}</span>
       </template>
@@ -23,7 +19,7 @@
           type="primary"
           @click="createMenuHandler(scope.row)"
           v-if="scope.row.menuType !== 3"
-          >{{ scope.row.menuType === 1 ? '新增路由' : '新增按钮' }}</el-button
+          >{{ '新增' + menuTypeMap[scope.row.menuType] }}</el-button
         >
         <el-button size="small" @click="editMenuHandler(scope.row)">编辑</el-button>
         <el-popconfirm title="确定要删除吗？" @confirm="deleteMenuHandler(scope.row)">
@@ -37,28 +33,29 @@
   <!-- 新增菜单弹框 -->
   <el-dialog
     v-model="dialogCreateMenu"
-    :title="MenuDialogData['title']"
+    :title="'新增' + menuTypeMap[menuForm.menuType]"
     @closed="dialogCloseHandler"
   >
     <el-form :model="menuForm" label-width="120px">
-      <el-form-item label="菜单名称">
+      <el-form-item :label="menuTypeMap[menuForm.menuType] + '名称'">
         <el-input v-model="menuForm.menuName" />
       </el-form-item>
+      <!-- 新增菜单时展示 -->
       <template v-if="menuForm.menuType === 1">
-        <el-form-item label="菜单路径">
+        <el-form-item :label="menuTypeMap[menuForm.menuType] + '路径'">
           <el-input v-model="menuForm.path" />
         </el-form-item>
         <el-form-item label="菜单图标">
           <el-input v-model="menuForm.icon" />
         </el-form-item>
       </template>
-      <!-- 新建路由时展示 -->
+      <!-- 新增路由时展示 -->
       <template v-else-if="menuForm.menuType === 2">
-        <el-form-item label="菜单路径">
+        <el-form-item :label="menuTypeMap[menuForm.menuType] + '路径'">
           <el-input v-model="menuForm.path" />
         </el-form-item>
       </template>
-      <!-- 新建按钮时展示 -->
+      <!-- 新增按钮时展示 -->
       <template v-else-if="menuForm.menuType === 3">
         <el-form-item label="权限标识">
           <el-input v-model="menuForm.menuCode" />
@@ -81,14 +78,13 @@ import apiMenu from '@/api/modules/menu'
 
 const menuList = ref() //菜单列表
 const dialogCreateMenu = ref(false) //弹框控制
+//弹框数据
 const MenuDialogData = reactive({
-  //弹框数据
-  title: '',
   submitName: '',
   submitEvent: null
 })
+//菜单类型字典
 const menuTypeMap = {
-  //菜单类型字典
   1: '菜单',
   2: '路由',
   3: '按钮'
@@ -112,12 +108,11 @@ function getMenuList() {
 }
 getMenuList()
 
-/* 创建菜单处理函数 */
+/* 新增菜单处理函数 */
 async function createMenuHandler(row) {
   dialogCreateMenu.value = true
   //改变弹框数据
-  MenuDialogData.title = '创建菜单'
-  MenuDialogData.submitName = '创建'
+  MenuDialogData.submitName = '新增'
   MenuDialogData.submitEvent = createMenuSubmit
   //根据menuType渲染相应的表单内容
   menuForm.menuType = row.menuType + 1
@@ -125,10 +120,10 @@ async function createMenuHandler(row) {
   menuForm.parentId = row.id
 }
 
-/* 创建菜单 */
+/* 新增菜单 */
 function createMenuSubmit() {
   apiMenu.createMenu(menuForm)
-  //创建成功后关闭弹窗并重新获取菜单列表
+  //新增成功后关闭弹窗并重新获取菜单列表
   dialogCreateMenu.value = false
   getMenuList()
 }
@@ -137,7 +132,6 @@ function createMenuSubmit() {
 const editMenuHandler = (row) => {
   dialogCreateMenu.value = true
   //改变弹框数据
-  MenuDialogData.title = '编辑菜单'
   MenuDialogData.submitName = '编辑'
   MenuDialogData.submitEvent = editMenuSubmit
   //将菜单内容赋值到menuForm
@@ -183,6 +177,4 @@ function dialogCloseHandler() {
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
