@@ -19,7 +19,7 @@
           type="primary"
           @click="createMenuHandler(scope.row)"
           v-if="scope.row.menuType !== 3"
-          >{{ '新增' + menuTypeMap[scope.row.menuType] }}</el-button
+          >{{ '新增' + menuTypeMap[scope.row.menuType + 1] }}</el-button
         >
         <el-button size="small" @click="editMenuHandler(scope.row)">编辑</el-button>
         <el-popconfirm title="确定要删除吗？" @confirm="deleteMenuHandler(scope.row)">

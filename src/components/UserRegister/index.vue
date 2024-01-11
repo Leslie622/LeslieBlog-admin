@@ -28,6 +28,7 @@ const userStore = useUserStore()
 interface RegisterForm {
   account: string
   password: string
+  roleId: string
 }
 
 /* 注册表单ref */
@@ -36,7 +37,8 @@ const registerFormRef = ref<FormInstance>()
 /* 注册表单 */
 const registerForm = reactive<RegisterForm>({
   account: '',
-  password: ''
+  password: '',
+  roleId: null
 })
 
 /* 注册表单规则 */
