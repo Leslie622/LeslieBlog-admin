@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useRouteStore } from '@/stores/modules/route'
-import { useMenuStore } from '@/stores/modules/menu'
 
 const welcome = () => import('@/views/welcome/index.vue')
 const home = () => import('@/views/home/index.vue')
@@ -14,6 +13,7 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      name: 'layout',
       component: layout,
       redirect: '/home',
       children: [
@@ -23,25 +23,25 @@ const router = createRouter({
         }
       ]
     },
-    {
-      path: '/system',
-      component: layout,
-      redirect: '/system/userManage',
-      children: [
-        {
-          path: '/system/userManage',
-          component: userManage
-        },
-        {
-          path: '/system/menuManage',
-          component: menuManage
-        },
-        {
-          path: '/system/roleManage',
-          component: roleManage
-        }
-      ]
-    },
+    // {
+    //   path: '/system',
+    //   component: layout,
+    //   redirect: '/system/userManage',
+    //   children: [
+    //     {
+    //       path: '/system/userManage',
+    //       component: userManage
+    //     },
+    //     {
+    //       path: '/system/menuManage',
+    //       component: menuManage
+    //     },
+    //     {
+    //       path: '/system/roleManage',
+    //       component: roleManage
+    //     }
+    //   ]
+    // },
     {
       path: '/welcome',
       name: 'welcome',
@@ -63,30 +63,23 @@ router.beforeEach(async (to, from, next) => {
       next({ name: 'welcome' })
     } else {
       /* 用户登录成功 注册动态路由 */
-      // const routeStore = useRouteStore()
-      // const menuStore = useMenuStore()
-      // //获取动态菜单
-      // const asyncMenu = await menuStore.getAsyncMenuList()
+      const routeStore = useRouteStore()
       // //拿到动态路由
-      //  routeStore.getAsyncRoute()
-      // const asyncRoute = routeStore.asyncRoute
+      routeStore.getAsyncRoute()
+      const asyncRoute = routeStore.asyncRoute
 
-      // if (registerRouteFresh) {
-      //   console.log("注册");
-
-      //   asyncRoute.forEach((route) => {
-      //     router.addRoute('home', {
-      //       path: route.path,
-      //       name: route.menuName,
-      //       component: () => import(`@/views/HomeChildren/${route.component}.vue`)
-      //     })
-      //   })
-      //   next({ ...to, replace: true })
-      //   registerRouteFresh = false
-      // } else {
-      //   next()
-      // }
-      next()
+      if (registerRouteFresh) {
+        asyncRoute.forEach((route) => {
+          router.addRoute('layout', {
+            path: route.path,
+            component: () => import(`@/views/${route.component}/index.vue`)
+          })
+        })
+        next({ ...to, replace: true })
+        registerRouteFresh = false
+      } else {
+        next()
+      }
     }
   }
 })

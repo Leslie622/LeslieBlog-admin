@@ -2,7 +2,7 @@
   <el-button type="primary" @click="createMenuHandler({ menuType: 0, id: 0 })">新增菜单</el-button>
   <el-button type="primary" @click="createMenuHandler({ menuType: 1, id: 0 })">新增路由</el-button>
   <!-- 菜单列表 -->
-  <el-table :data="menuList" row-key="id" stripe default-expand-all>
+  <el-table :data="menuList" row-key="id" stripe >
     <el-table-column prop="menuName" label="名称" />
     <el-table-column prop="menuType" label="类型">
       <template v-slot="{ row }">
@@ -11,6 +11,7 @@
     </el-table-column>
     <el-table-column prop="menuCode" label="权限标识" />
     <el-table-column prop="path" label="路径" />
+    <el-table-column prop="component" label="组件名" />
     <el-table-column prop="icon" label="图标" />
     <el-table-column label="Operations">
       <template #default="scope">
@@ -54,6 +55,9 @@
         <el-form-item :label="menuTypeMap[menuForm.menuType] + '路径'">
           <el-input v-model="menuForm.path" />
         </el-form-item>
+        <el-form-item label="组件名">
+          <el-input v-model="menuForm.component" />
+        </el-form-item>
       </template>
       <!-- 新增按钮时展示 -->
       <template v-else-if="menuForm.menuType === 3">
@@ -96,6 +100,7 @@ const menuForm = reactive({
   menuName: '', //表单名称
   menuCode: '', //权限标识:默认为空
   path: '', //路径
+  component: '', //组件
   icon: '' //图标
 })
 const menuId = ref() //临时存储菜单id
@@ -103,6 +108,8 @@ const menuId = ref() //临时存储菜单id
 /* 获取菜单 */
 function getMenuList() {
   apiMenu.getMenuList().then((res) => {
+    console.log(res.data)
+
     menuList.value = res.data
   })
 }
