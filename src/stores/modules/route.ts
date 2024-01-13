@@ -1,13 +1,14 @@
-import { useUserStore } from '@/stores/modules/user'
+import { useMenuStore } from '@/stores/modules/menu'
 
 export const useRouteStore = defineStore('route', () => {
   /* state */
   const asyncRoute = ref()
-  const userStore = useUserStore()
+  const menuStore = useMenuStore()
   
   /* 将用户菜单转换为路由 */
   async function getAsyncRoute() {
-    asyncRoute.value = generateRoute(userStore.menuList)
+    
+    asyncRoute.value = generateRoute(menuStore.menuList)
   }
 
   /* 根据用户菜单生成路由 */

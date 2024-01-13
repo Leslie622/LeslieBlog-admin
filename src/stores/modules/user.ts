@@ -4,8 +4,8 @@ export const useUserStore = defineStore('user', () => {
   /* pinia state */
   const account = ref(localStorage.account ?? '')
   const token = ref(localStorage.token ?? '')
-  const permissionList = ref(JSON.parse(localStorage.permissionList) ?? '')
-  const menuList = ref(JSON.parse(localStorage.menuList) ?? '')
+  const permissionList = ref()
+  const menuList = ref()
 
   /* 用户登录操作 */
   async function login(data: { account: string; password: string }) {
@@ -15,8 +15,8 @@ export const useUserStore = defineStore('user', () => {
     //用户信息存储到localstorage
     localStorage.setItem('account', userInfo.account)
     localStorage.setItem('token', userInfo.token)
-    localStorage.setItem('permissionList', JSON.stringify(userInfo.permissionList))
-    localStorage.setItem('menuList', JSON.stringify(userInfo.menuList))
+    // localStorage.setItem('permissionList', JSON.stringify(userInfo.permissionList))
+    // localStorage.setItem('menuList', JSON.stringify(userInfo.menuList))
     //用户信息存储到Pinia
     account.value = userInfo.account
     token.value = userInfo.token

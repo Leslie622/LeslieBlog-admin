@@ -10,8 +10,11 @@ import 'normalize.css'
 import '@/assets/styles/globals.scss'
 
 const app = createApp(App)
+// import { useMenuStore } from '@/stores/modules/menu'
 
-app.use(createPinia())
 app.use(router)
+app.use(createPinia())
+// const menuStore = useMenuStore()
+// await menuStore.getMenuList()
 
 app.mount('#app')

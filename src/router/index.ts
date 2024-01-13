@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useRouteStore } from '@/stores/modules/route'
+import { useMenuStore } from '@/stores/modules/menu'
 
 const welcome = () => import('@/views/welcome/index.vue')
 const home = () => import('@/views/home/index.vue')
@@ -64,7 +65,11 @@ router.beforeEach(async (to, from, next) => {
     } else {
       /* 用户登录成功 注册动态路由 */
       const routeStore = useRouteStore()
-      // //拿到动态路由
+      const menuStore = useMenuStore()
+      // //拿到菜单
+      console.log("1");
+      
+      await menuStore.getMenuList()
       routeStore.getAsyncRoute()
       const asyncRoute = routeStore.asyncRoute
 
@@ -75,8 +80,8 @@ router.beforeEach(async (to, from, next) => {
             component: () => import(`@/views/${route.component}/index.vue`)
           })
         })
-        next({ ...to, replace: true })
         registerRouteFresh = false
+        next({ ...to, replace: true })
       } else {
         next()
       }

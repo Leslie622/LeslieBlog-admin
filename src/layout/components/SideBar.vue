@@ -7,13 +7,13 @@
     text-color="#fff"
     router
   >
-    <tree-menu :menuList="userStore.menuList"></tree-menu>
+    <tree-menu :menuList="menuStore.menuList"></tree-menu>
   </el-menu>
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from '@/stores/modules/user'
-const userStore = useUserStore()
+import { useMenuStore } from '@/stores/modules/menu'
+const menuStore = useMenuStore()
 const route = useRoute()
 console.log(route);
 
