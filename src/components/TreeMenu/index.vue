@@ -3,6 +3,9 @@
     <!-- 菜单类型是1,渲染成sub-menu -->
     <el-sub-menu :index="menu.path" v-if="menu.menuType === 1">
       <template #title>
+        <el-icon v-if="menu.icon">
+          <Icon :icon="menu.icon"></Icon>
+        </el-icon>
         <span>{{ menu.menuName }}</span>
       </template>
       <!-- 递归渲染 -->
@@ -11,9 +14,9 @@
     <!-- 菜单类型是2,渲染成menu-item -->
     <el-menu-item :index="menu.path" v-else-if="menu.menuType === 2">
       <template #title>
-        <!-- <el-icon v-if="menu.icon">
-          <component :is="menu.icon"></component>
-        </el-icon> -->
+        <el-icon v-if="menu.icon">
+          <Icon :icon="menu.icon"></Icon>
+        </el-icon>
         <span>{{ menu.menuName }}</span>
       </template>
     </el-menu-item>
@@ -24,8 +27,7 @@
 import TreeMenu from '@/components/TreeMenu/index.vue'
 
 const props = defineProps(['menuList'])
-console.log(props.menuList);
-
+console.log(props.menuList)
 </script>
 
 <style lang="scss" scoped></style>

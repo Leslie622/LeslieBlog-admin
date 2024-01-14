@@ -12,7 +12,11 @@
     <el-table-column prop="menuCode" label="权限标识" />
     <el-table-column prop="path" label="路径" />
     <el-table-column prop="component" label="组件名" />
-    <el-table-column prop="icon" label="图标" />
+    <el-table-column prop="icon" label="图标">
+      <template #default="scope">
+        <Icon :icon="scope.row.icon" width="20px" />
+      </template>
+    </el-table-column>
     <el-table-column label="Operations">
       <template #default="scope">
         <el-button
@@ -79,6 +83,7 @@
 
 <script setup lang="ts">
 import apiMenu from '@/api/modules/menu'
+import { Icon } from '@iconify/vue/dist/iconify.js'
 
 const menuList = ref() //菜单列表
 const dialogCreateMenu = ref(false) //弹框控制
