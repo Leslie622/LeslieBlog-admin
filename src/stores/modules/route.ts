@@ -1,14 +1,14 @@
-import { useMenuStore } from '@/stores/modules/menu'
+import { usePermissionStore } from '@/stores/modules/permission'
 
 export const useRouteStore = defineStore('route', () => {
   /* state */
-  const asyncRoute = ref()
-  const menuStore = useMenuStore()
-  
-  /* 将用户菜单转换为路由 */
+  const asyncRoute = ref([])
+  const permissionStore = usePermissionStore()
+
+  /* 获取异步路由 */
   async function getAsyncRoute() {
-    
-    asyncRoute.value = generateRoute(menuStore.menuList)
+    await permissionStore.getPermission()
+    asyncRoute.value = generateRoute(permissionStore.menu)
   }
 
   /* 根据用户菜单生成路由 */

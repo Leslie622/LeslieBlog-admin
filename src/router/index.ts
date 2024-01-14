@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useRouteStore } from '@/stores/modules/route'
-import { useMenuStore } from '@/stores/modules/menu'
+import { usePermissionStore } from '@/stores/modules/permission'
 
 const welcome = () => import('@/views/welcome/index.vue')
 const home = () => import('@/views/home/index.vue')
@@ -24,25 +24,6 @@ const router = createRouter({
         }
       ]
     },
-    // {
-    //   path: '/system',
-    //   component: layout,
-    //   redirect: '/system/userManage',
-    //   children: [
-    //     {
-    //       path: '/system/userManage',
-    //       component: userManage
-    //     },
-    //     {
-    //       path: '/system/menuManage',
-    //       component: menuManage
-    //     },
-    //     {
-    //       path: '/system/roleManage',
-    //       component: roleManage
-    //     }
-    //   ]
-    // },
     {
       path: '/welcome',
       name: 'welcome',
@@ -65,14 +46,8 @@ router.beforeEach(async (to, from, next) => {
     } else {
       /* 用户登录成功 注册动态路由 */
       const routeStore = useRouteStore()
-      const menuStore = useMenuStore()
-      // //拿到菜单
-      console.log("1");
-      
-      await menuStore.getMenuList()
-      routeStore.getAsyncRoute()
+      await routeStore.getAsyncRoute()
       const asyncRoute = routeStore.asyncRoute
-
       if (registerRouteFresh) {
         asyncRoute.forEach((route) => {
           router.addRoute('layout', {

@@ -2,7 +2,7 @@
   <el-button type="primary" @click="createMenuHandler({ menuType: 0, id: 0 })">新增菜单</el-button>
   <el-button type="primary" @click="createMenuHandler({ menuType: 1, id: 0 })">新增路由</el-button>
   <!-- 菜单列表 -->
-  <el-table :data="menuList" row-key="id" stripe >
+  <el-table :data="menuList" row-key="id" stripe>
     <el-table-column prop="menuName" label="名称" />
     <el-table-column prop="menuType" label="类型">
       <template v-slot="{ row }">

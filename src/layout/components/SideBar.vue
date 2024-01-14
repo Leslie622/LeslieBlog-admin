@@ -7,16 +7,14 @@
     text-color="#fff"
     router
   >
-    <tree-menu :menuList="menuStore.menuList"></tree-menu>
+    <tree-menu :menuList="permissionStore.menu"></tree-menu>
   </el-menu>
 </template>
 
 <script setup lang="ts">
-import { useMenuStore } from '@/stores/modules/menu'
-const menuStore = useMenuStore()
+import { usePermissionStore } from '@/stores/modules/permission'
+const permissionStore = usePermissionStore()
 const route = useRoute()
-console.log(route);
-
 </script>
 
 <style lang="scss" scoped>
