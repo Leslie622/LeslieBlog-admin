@@ -23,7 +23,7 @@ api.interceptors.response.use(
   (response) => {
     // 根据status返回不同的信息
     if (response.data.status === 200) {
-      ElMessage.success(response.data.message)
+      //成功
     } else {
       ElMessage.error(response.data.message)
       return Promise.reject(response.data)
