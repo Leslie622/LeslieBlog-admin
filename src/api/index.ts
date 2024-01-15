@@ -1,4 +1,5 @@
 import axios from 'axios'
+import router from '@/router/index.ts'
 
 const api = axios.create({
   baseURL:
@@ -21,14 +22,19 @@ api.interceptors.request.use((request) => {
 /* 响应拦截 */
 api.interceptors.response.use(
   (response) => {
+    const { data } = response
     // 根据status返回不同的信息
-    if (response.data.status === 200) {
+    if (data.status === 200) {
       //成功
     } else {
-      ElMessage.error(response.data.message)
-      return Promise.reject(response.data)
+      ElMessage.error(data.message)
+      //token失效跳转到登录页
+      if (data.status === 401) {
+        router.push('/welcome')
+      }
+      return Promise.reject(data)
     }
-    return Promise.resolve(response.data)
+    return Promise.resolve(data)
   },
   (error) => {
     let message = error.message
