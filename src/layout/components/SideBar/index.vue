@@ -1,11 +1,15 @@
 <template>
   <div class="sidebar">
     <div class="sidebar__logo">Logo</div>
-    <Menu class="sidebar__menu"></Menu>
+    <Menu class="sidebar__menu" :isCollapse="props.isCollapse"></Menu>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const props = defineProps(['isCollapse'])
+console.log(props.isCollapse);
+
+</script>
 
 <style lang="scss" scoped>
 .sidebar {
@@ -17,7 +21,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 60px;
+    height: 50px;
     font-size: 20px;
     color: red;
     background-color: #343a40;

@@ -1,15 +1,57 @@
 <template>
   <div class="navbar">
-
+    <div class="navbar__menu-control" @click="commonStore.controlMenuCollapse()">
+      <Icon
+        icon="ant-design:menu-fold-outlined"
+        width="20px"
+        v-if="commonStore.isMenuCollapse"
+      ></Icon>
+      <Icon icon="ant-design:menu-unfold-outlined" width="20px" v-else></Icon>
+    </div>
+    <div class="navbar__action">
+      <div class="action__setting"></div>
+      <div class="action__user">
+        <el-dropdown>
+          <el-avatar :size="30" />
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item>退出登录</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
+    </div>
   </div>
 </template>
 
-<script setup lang='ts'>
-
+<script setup lang="ts">
+import { useCommonStore } from '@/stores/modules/common'
+const commonStore = useCommonStore()
 </script>
 
-<style lang='scss' scoped>
-.navbar{
+<style lang="scss" scoped>
+.navbar {
+  display: flex;
+  justify-content: space-between;
   height: 100%;
+  // background-color: red;
+}
+.navbar__menu-control {
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  width: 30px;
+  // background-color: yellow;
+}
+.navbar__action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 300px;
+  // background-color: black;
+
+  .action__user {
+    background-color: beige;
+  }
 }
 </style>
