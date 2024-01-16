@@ -14,6 +14,6 @@ export default function createComponents() {
       })
     ],
     dts: 'src/types/components.d.ts',
-    dirs: ['src/components', 'src/layout']
+    dirs: ['src/components', 'src/layout','src/layout/components']
   })
 }
