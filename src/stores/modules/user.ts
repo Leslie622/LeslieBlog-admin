@@ -23,6 +23,15 @@ export const useUserStore = defineStore('user', () => {
     const response = await apiUser.register(data)
   }
 
+  /* 用户退出登录 */
+  function logout() {
+    //清除用户信息
+    account.value = ''
+    token.value = ''
+    localStorage.removeItem('account')
+    localStorage.removeItem('token')
+  }
+
   /* return */
-  return { account, token, login, register }
+  return { account, token, login, register,logout }
 })

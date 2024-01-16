@@ -15,7 +15,7 @@
           <el-avatar :size="30" />
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item>退出登录</el-dropdown-item>
+              <el-dropdown-item @click="logoutHandler">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -26,7 +26,22 @@
 
 <script setup lang="ts">
 import { useCommonStore } from '@/stores/modules/common'
+import { useUserStore } from '@/stores/modules/user'
 const commonStore = useCommonStore()
+const userStore = useUserStore()
+const router = useRouter()
+
+/* 用户退出登录 */
+async function logoutHandler() {
+  ElMessageBox.confirm('确定要退出登录吗？', {
+    confirmButtonText: '退出',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(() => {
+    userStore.logout()
+    router.push('/welcome')
+  })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -50,8 +65,6 @@ const commonStore = useCommonStore()
   width: 300px;
   // background-color: black;
 
-  .action__user {
-    background-color: beige;
-  }
+
 }
 </style>
