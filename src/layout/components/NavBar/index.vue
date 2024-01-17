@@ -8,6 +8,9 @@
       ></Icon>
       <Icon icon="ant-design:menu-unfold-outlined" width="20px" v-else></Icon>
     </div>
+    <div class="navbar__breadcrumb">
+      <bread-crumb></bread-crumb>
+    </div>
     <div class="navbar__action">
       <div class="action__setting"></div>
       <div class="action__user">
@@ -47,7 +50,7 @@ async function logoutHandler() {
 <style lang="scss" scoped>
 .navbar {
   display: flex;
-  justify-content: space-between;
+  // justify-content: space-between;
   height: 100%;
   // background-color: red;
 }
@@ -58,13 +61,19 @@ async function logoutHandler() {
   width: 30px;
   // background-color: yellow;
 }
+.navbar__breadcrumb {
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  flex: 1;
+  // background-color: saddlebrown;
+}
 .navbar__action {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 300px;
-  // background-color: black;
-
-
+  justify-content: flex-end;
+  flex: 1;
+  // width: 300px;
+  background-color: #ffffff;
 }
 </style>

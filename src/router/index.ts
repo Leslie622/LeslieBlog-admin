@@ -17,6 +17,9 @@ const router = createRouter({
       name: 'layout',
       component: layout,
       redirect: '/home',
+      meta:{
+        title:"主页",
+      },
       children: [
         {
           path: '/home',
@@ -52,6 +55,9 @@ router.beforeEach(async (to, from, next) => {
         asyncRoute.forEach((route) => {
           router.addRoute('layout', {
             path: route.path,
+            meta: {
+              title: route.menuName
+            },
             component: () => import(`@/views/${route.component}/index.vue`)
           })
         })
