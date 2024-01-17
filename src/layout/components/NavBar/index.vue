@@ -50,30 +50,27 @@ async function logoutHandler() {
 <style lang="scss" scoped>
 .navbar {
   display: flex;
-  // justify-content: space-between;
   height: 100%;
-  // background-color: red;
 }
+
 .navbar__menu-control {
   display: grid;
   place-content: center;
-  cursor: pointer;
   width: 30px;
-  // background-color: yellow;
+  cursor: pointer;
 }
+
 .navbar__breadcrumb {
   display: flex;
   align-items: center;
   padding-left: 20px;
   flex: 1;
-  // background-color: saddlebrown;
 }
+
 .navbar__action {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   flex: 1;
-  // width: 300px;
-  background-color: #ffffff;
 }
 </style>

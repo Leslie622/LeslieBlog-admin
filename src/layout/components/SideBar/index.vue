@@ -7,7 +7,6 @@
 
 <script setup lang="ts">
 const props = defineProps(['isCollapse'])
-console.log(props.isCollapse);
 
 </script>
 

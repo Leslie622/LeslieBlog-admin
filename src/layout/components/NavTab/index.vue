@@ -80,6 +80,7 @@ function removeTab(targetName) {
 <style lang="scss" scoped>
 .tabs {
   :deep(.el-tabs__header) {
+    margin: 0px;
     --el-tabs-header-height: 35px;
     .el-tabs__item {
       font-size: 12px;
