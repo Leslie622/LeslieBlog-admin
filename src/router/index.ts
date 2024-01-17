@@ -16,14 +16,17 @@ const router = createRouter({
       path: '/',
       name: 'layout',
       component: layout,
-      redirect: '/home',
-      meta:{
-        title:"主页",
+      meta: {
+        title: '主页'
       },
+      redirect: '/home',
       children: [
         {
           path: '/home',
-          component: home
+          component: home,
+          meta: {
+            title: '主页'
+          }
         }
       ]
     },

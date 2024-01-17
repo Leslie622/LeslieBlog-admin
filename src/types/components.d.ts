@@ -40,6 +40,7 @@ declare module 'vue' {
     Menu: typeof import('./../layout/components/Menu/index.vue')['default']
     MenuTree: typeof import('./../layout/components/Menu/MenuTree.vue')['default']
     NavBar: typeof import('./../layout/components/NavBar/index.vue')['default']
+    NavTab: typeof import('./../layout/components/NavTab/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SideBar: typeof import('./../layout/components/SideBar/index.vue')['default']
