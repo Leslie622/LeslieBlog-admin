@@ -32,12 +32,13 @@ export const useUserStore = defineStore('user', () => {
     localStorage.removeItem('account')
     localStorage.removeItem('token')
     //清除动态路由
-    removeRouteList.forEach((item)=>{
+    removeRouteList.forEach((item) => {
       item()
     })
-    // console.log(removeRouteList)
+    //清除tabs
+    localStorage.removeItem('tabs')
   }
 
   /* return */
-  return { account, token, login, register,logout }
+  return { account, token, login, register, logout }
 })
