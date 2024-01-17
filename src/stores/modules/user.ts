@@ -1,4 +1,5 @@
 import apiUser from '@/api/modules/user'
+import { removeRouteList } from '@/router'
 
 export const useUserStore = defineStore('user', () => {
   /* pinia state */
@@ -30,6 +31,11 @@ export const useUserStore = defineStore('user', () => {
     token.value = ''
     localStorage.removeItem('account')
     localStorage.removeItem('token')
+    //清除动态路由
+    removeRouteList.forEach((item)=>{
+      item()
+    })
+    // console.log(removeRouteList)
   }
 
   /* return */

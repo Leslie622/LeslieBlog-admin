@@ -30,6 +30,7 @@
 <script setup lang="ts">
 import { useCommonStore } from '@/stores/modules/common'
 import { useUserStore } from '@/stores/modules/user'
+
 const commonStore = useCommonStore()
 const userStore = useUserStore()
 const router = useRouter()

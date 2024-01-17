@@ -38,6 +38,9 @@ const router = createRouter({
   ]
 })
 
+//路由回调列表
+export const removeRouteList = []
+
 /* 全局前置守卫 */
 let registerRouteFresh = true
 router.beforeEach(async (to, from, next) => {
@@ -55,18 +58,23 @@ router.beforeEach(async (to, from, next) => {
       await routeStore.getAsyncRoute()
       const asyncRoute = routeStore.asyncRoute
       if (registerRouteFresh) {
+        console.log('注册')
         asyncRoute.forEach((route) => {
-          router.addRoute('layout', {
-            path: route.path,
-            meta: {
-              title: route.menuName
-            },
-            component: () => import(`@/views/${route.component}/index.vue`)
-          })
+          //注册路由的同时保存回调，以便后续清空
+          removeRouteList.push(
+            router.addRoute('layout', {
+              path: route.path,
+              meta: {
+                title: route.menuName
+              },
+              component: () => import(`@/views/${route.component}/index.vue`)
+            })
+          )
         })
         registerRouteFresh = false
         next({ ...to, replace: true })
       } else {
+        registerRouteFresh = true
         next()
       }
     }
