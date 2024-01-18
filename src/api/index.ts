@@ -1,5 +1,6 @@
 import axios from 'axios'
 import router from '@/router/index.ts'
+import NProgress from "@/utils/nprogress"
 
 const api = axios.create({
   baseURL:
@@ -11,6 +12,7 @@ const api = axios.create({
 
 /* 请求拦截 */
 api.interceptors.request.use((request) => {
+  NProgress.start();
   //如果存在token，每次请求带上token信息
   const token = localStorage.getItem('token')
   if (token) {
@@ -34,6 +36,7 @@ api.interceptors.response.use(
       }
       return Promise.reject(data)
     }
+    NProgress.done();
     return Promise.resolve(data)
   },
   (error) => {
