@@ -8,7 +8,7 @@
         <el-button type="primary" size="small" @click="editRoleHandler(scope.row)">编辑</el-button>
         <el-popconfirm title="确定要删除该角色吗？" @confirm="deleteRoleSubmit(scope.row)">
           <template #reference>
-            <el-button size="small" type="danger"> 删除 </el-button>
+            <el-button size="small" type="danger" :disabled="scope.row.isDefault === true"> 删除 </el-button>
           </template>
         </el-popconfirm>
         <el-button size="small" @click="setDafaultRole(scope.row)" v-if="!scope.row.isDefault"
