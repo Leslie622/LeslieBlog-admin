@@ -24,25 +24,17 @@ import { useUserStore } from '@/stores/modules/user'
 import { type FormInstance, type FormRules } from 'element-plus'
 const userStore = useUserStore()
 
-/* 定义注册表单接口 */
-interface RegisterForm {
-  account: string
-  password: string
-  roleId: string
-}
-
 /* 注册表单ref */
 const registerFormRef = ref<FormInstance>()
 
 /* 注册表单 */
-const registerForm = reactive<RegisterForm>({
+const registerForm = reactive<User.registerReqData>({
   account: '',
-  password: '',
-  roleId: null
+  password: ''
 })
 
 /* 注册表单规则 */
-const rules = reactive<FormRules<RegisterForm>>({
+const rules = reactive<FormRules<User.registerReqData>>({
   account: [
     { required: true, message: '请输入您的用户名', trigger: 'blur' },
     { min: 5, max: 20, message: '用户名长度必须大于 5', trigger: 'blur' }
@@ -54,7 +46,7 @@ const rules = reactive<FormRules<RegisterForm>>({
 })
 
 /* 注册操作 */
-const emit = defineEmits()
+const emit = defineEmits(['change-tab'])
 let isLoading = ref(false) //控制注册加载
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return

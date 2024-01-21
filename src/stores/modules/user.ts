@@ -7,7 +7,7 @@ export const useUserStore = defineStore('user', () => {
   const token = ref(localStorage.token ?? '')
 
   /* 用户登录操作 */
-  async function login(data: { account: string; password: string }) {
+  async function login(data: User.loginReqData) {
     //调用登录接口
     const response = await apiUser.login(data)
     const userInfo = response.data
@@ -20,7 +20,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   /* 用户注册操作 */
-  async function register(data: { account: string; password: string }) {
+  async function register(data: User.registerReqData) {
     const response = await apiUser.register(data)
   }
 

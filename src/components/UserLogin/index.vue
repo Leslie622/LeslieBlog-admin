@@ -21,27 +21,21 @@
 
 <script setup lang="ts">
 import { useUserStore } from '@/stores/modules/user'
-import { ElMessage, type FormInstance, type FormRules } from 'element-plus'
+import { type FormInstance, type FormRules } from 'element-plus'
 const router = useRouter()
 const userStore = useUserStore()
-
-/* 定义登录表单接口 */
-interface LoginForm {
-  account: string
-  password: string
-}
 
 /* 登录表单ref */
 const loginFormRef = ref<FormInstance>()
 
 /* 登录表单 */
-const loginForm = reactive<LoginForm>({
+const loginForm = reactive<User.loginReqData>({
   account: '17671448657',
   password: 'lyf001211'
 })
 
 /* 登录表单规则 */
-const rules = reactive<FormRules<LoginForm>>({
+const rules = reactive<FormRules<User.loginReqData>>({
   account: [
     { required: true, message: '请输入您的用户名', trigger: 'blur' },
     { min: 5, max: 20, message: '用户名长度必须大于 5', trigger: 'blur' }

@@ -1,12 +1,12 @@
-import api from '../index'
+import ApiService from '../index'
 
 export default {
-  //创建菜单
-  createRole: (data) => api.post('role/createRole', data),
-  //删除菜单
-  deleteRole: (data) => api.post('role/deleteRole', data),
-  //编辑菜单
-  editRole: (data) => api.post('role/editRole', data),
-  //获取菜单
-  getRoleList: () => api.get('role/getRoleList')
+  //创建角色
+  createRole: (data: Role.createRoleReqData) => ApiService.post('role/createRole', data),
+  //删除角色
+  deleteRole: (data: Role.deleteRoleReqData) => ApiService.post('role/deleteRole', data),
+  //编辑角色
+  editRole: (data: Role.editRoleReqData) => ApiService.post('role/editRole', data),
+  //获取角色列表
+  getRoleList: () => ApiService.get<Role.roleListResData>('role/getRoleList')
 }

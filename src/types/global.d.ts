@@ -2,8 +2,9 @@
 interface MenuItem {
   menuType: string
   menuName: string
-  icon?: string
+  menuCode: string
+  icon: string
   path: string
-  component?: string
-  children?: MenuItem[]
+  component: string
+  children: MenuItem[]
 }

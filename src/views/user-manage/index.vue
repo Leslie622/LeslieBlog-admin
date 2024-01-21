@@ -4,7 +4,7 @@
     <el-table-column prop="roleId.roleName" label="角色" />
     <el-table-column label="Operations">
       <template #default="scope">
-        <el-button type="primary" size="small" @click="editRoleHandler(scope.row)">编辑</el-button>
+        <el-button type="primary" size="small" @click="editUserHandler(scope.row)">编辑</el-button>
         <el-popconfirm title="确定要删除该用户吗？" @confirm="deleteUserSubmit(scope.row)">
           <template #reference>
             <el-button size="small" type="danger"> 删除 </el-button>
@@ -14,7 +14,7 @@
     </el-table-column>
   </el-table>
 
-  <el-dialog v-model="dialogFormVisible" @closed="dialogCloseHandler" title="编辑角色">
+  <el-dialog v-model="dialogFormVisible" title="编辑角色">
     <el-form :model="userForm" :key="Math.random()">
       <el-form-item label="账号" prop="account">
         <el-input v-model="userForm.account" disabled />
@@ -25,7 +25,7 @@
             v-for="item in roleList"
             :key="item.roleName"
             :label="item.roleName"
-            :value="item._id"
+            :value="item.id!"
           />
         </el-select>
       </el-form-item>
@@ -43,62 +43,62 @@
 import apiUser from '@/api/modules/user'
 import apiRole from '@/api/modules/role'
 
+//弹框控制
 const dialogFormVisible = ref(false)
-
-const userForm = reactive({
+//用户表单
+const userForm = reactive<User.userInfo>({
   id: '',
   account: '',
-  roleId: '659f9879210e92a7deb9a647'
+  roleId: ''
+})
+//用户列表
+const userList = ref<User.userListResData>()
+//角色列表
+const roleList = ref<Role.roleListResData>()
+
+onBeforeMount(() => {
+  getUserList()
+  getRoleList()
 })
 
-const userList = ref([])
-const roleList = ref([])
 /* 获取用户列表 */
-async function getUserList() {
+const getUserList = async () => {
   const res = await apiUser.getUserList()
   userList.value = res.data
 }
-getUserList()
 
 /* 获取角色列表 */
-async function getRoleList() {
+const getRoleList = async () => {
   const res = await apiRole.getRoleList()
   roleList.value = res.data
-  console.log(roleList.value)
 }
-getRoleList()
 
-function editRoleHandler(row) {
+/* 编辑用户信息处理函数 */
+const editUserHandler = (row: User.userInfo) => {
   dialogFormVisible.value = true
-  //赋值
-  userForm.id = row._id
+  userForm.id = row.id
   userForm.account = row.account
-  userForm.roleId = row.roleId._id
+  userForm.roleId = row.roleId
 }
-async function editUserSubmit() {
-  //编辑角色
+
+/* 编辑用户信息 */
+const editUserSubmit = async () => {
   await apiUser.editUser({
     id: userForm.id,
-    userInfo: {
-      roleId: userForm.roleId
-    }
+    roleId: userForm.roleId
   })
-  //编辑成功后关闭弹窗并且重新渲染
   dialogFormVisible.value = false
   getUserList()
 }
 
-async function deleteUserSubmit(row) {
-  //删除角色
+/* 删除用户 */
+const deleteUserSubmit = async (row: User.userInfo) => {
   await apiUser.deleteUser({
-    id: row._id
+    id: row.id
   })
-  //删除成功后关闭弹窗并且重新渲染
   dialogFormVisible.value = false
   getUserList()
 }
-
-function dialogCloseHandler() {}
 </script>
 
 <style lang="scss" scoped></style>

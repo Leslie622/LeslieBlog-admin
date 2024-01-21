@@ -8,7 +8,9 @@
         <el-button type="primary" size="small" @click="editRoleHandler(scope.row)">编辑</el-button>
         <el-popconfirm title="确定要删除该角色吗？" @confirm="deleteRoleSubmit(scope.row)">
           <template #reference>
-            <el-button size="small" type="danger" :disabled="scope.row.isDefault === true"> 删除 </el-button>
+            <el-button size="small" type="danger" :disabled="scope.row.isDefault === true">
+              删除
+            </el-button>
           </template>
         </el-popconfirm>
         <el-button size="small" @click="setDafaultRole(scope.row)" v-if="!scope.row.isDefault"
@@ -50,44 +52,51 @@
 <script setup lang="ts">
 import apiMenu from '@/api/modules/menu'
 import apiRole from '@/api/modules/role'
-const menuList = ref() //菜单列表
-const roleList = ref() //角色列表
-const dialogFormVisible = ref(false)
-const treeRef = ref()
-const roleId = ref()
 
-const roleDialogData = reactive({
-  //弹框数据
+const menuList = ref() //菜单列表
+const roleList = ref<Role.roleListResData>() //角色列表
+const dialogFormVisible = ref(false) //弹框控制
+const treeRef = ref() //树形组件ref
+//树形控件数据
+const defaultProps = {
+  children: 'children',
+  label: 'menuName'
+}
+//弹框数据
+const roleDialogData = reactive<{
+  title: string
+  submitName: string
+  submitEvent: null | (() => void)
+}>({
   title: '',
   submitName: '',
   submitEvent: null
 })
-
-const roleForm = reactive({
+//角色表单
+const roleForm = reactive<Role.RoleInfo>({
+  id: '',
   roleName: '',
   permissionList: [],
   menuList: [],
   isDefault: false
 })
 
-const defaultProps = {
-  children: 'children',
-  label: 'menuName'
-}
+onBeforeMount(() => {
+  getMenuList()
+  getRoleList()
+})
 
 /* 获取菜单 */
 async function getMenuList() {
   const res = await apiMenu.getMenuList()
   menuList.value = res.data
 }
-getMenuList()
 
 /* 获取角色列表 */
-async function getRoleList() {
+const getRoleList = async () => {
   const res = await apiRole.getRoleList()
   roleList.value = res.data
 }
-getRoleList()
 
 /* 新增角色处理函数 */
 function createRoleHandler() {
@@ -98,14 +107,15 @@ function createRoleHandler() {
   roleDialogData.submitEvent = createRoleSubmit
 }
 
-/* 获取权限节点的id */
+/* 获取树形控件权限节点的id */
 function generatePermissionList() {
   const checkedNodes = treeRef.value.getCheckedNodes()
   const halfCheckedNodes = treeRef.value.getHalfCheckedNodes()
   const checkedMenuList = [...checkedNodes, ...halfCheckedNodes]
-  const permissionList = []
-  const menuList = []
+  const permissionList: string[] = []
+  const menuList: string[] = []
   checkedMenuList.forEach((menu) => {
+    //将按钮id赋值给permission，菜单和路由id赋值给menu
     if (menu.menuType === 3) {
       permissionList.push(menu.id)
     }
@@ -119,15 +129,20 @@ async function createRoleSubmit() {
   const { permissionList, menuList } = generatePermissionList()
   roleForm.permissionList = permissionList
   roleForm.menuList = menuList
-  //新增角色
-  await apiRole.createRole(roleForm)
-  //新增完成后关闭弹窗并重新渲染角色列表
+
+  await apiRole.createRole({
+    roleName: roleForm.roleName,
+    permissionList: roleForm.permissionList,
+    menuList: roleForm.menuList,
+    isDefault: roleForm.isDefault
+  })
+
   dialogFormVisible.value = false
   getRoleList()
 }
 
 /* 编辑角色处理函数 */
-function editRoleHandler(row) {
+function editRoleHandler(row: Role.RoleInfo) {
   dialogFormVisible.value = true
   //改变弹框数据
   roleDialogData.title = '编辑角色'
@@ -136,8 +151,8 @@ function editRoleHandler(row) {
   //赋值
   nextTick(() => {
     roleForm.roleName = row.roleName
-    roleForm.isDefault = row.isDefault
-    roleId.value = row._id
+    roleForm.id = row.id
+    //只需要给底层的（也就是按钮）全选中的树赋值即可
     treeRef.value.setCheckedKeys(row.permissionList)
   })
 }
@@ -147,25 +162,27 @@ async function editRoleSubmit() {
   const { permissionList, menuList } = generatePermissionList()
   roleForm.permissionList = permissionList
   roleForm.menuList = menuList
-  //编辑角色
-  await apiRole.editRole({ id: roleId.value, roleInfo: roleForm })
+  await apiRole.editRole({
+    id: roleForm.id,
+    permissionList: roleForm.permissionList,
+    menuList: roleForm.menuList
+  })
   //编辑完成后关闭弹窗并重新渲染角色列表
   dialogFormVisible.value = false
   getRoleList()
 }
 
 /* 删除角色 */
-async function deleteRoleSubmit(row) {
-  const roleId = row._id
-  await apiRole.deleteRole({ id: roleId })
+async function deleteRoleSubmit(row: Role.RoleInfo) {
+  await apiRole.deleteRole({ id: row.id })
   //删除完成后关闭弹窗并重新渲染角色列表
   dialogFormVisible.value = false
   getRoleList()
 }
 
 /* 设置默认角色 */
-async function setDafaultRole(row) {
-  await apiRole.editRole({ id: row._id, roleInfo: { isDefault: true } })
+async function setDafaultRole(row: Role.RoleInfo) {
+  await apiRole.editRole({ id: row.id, isDefault: true })
   //设置完成后关闭弹窗并重新渲染角色列表
   dialogFormVisible.value = false
   getRoleList()
