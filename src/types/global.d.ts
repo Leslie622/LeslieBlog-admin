@@ -1,6 +1,6 @@
 /* 定义菜单结构 */
-interface MenuItem {
-  menuType: string
+type MenuItem = {
+  menuType: number
   menuName: string
   menuCode: string
   icon: string
