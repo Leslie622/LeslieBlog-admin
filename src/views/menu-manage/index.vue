@@ -1,6 +1,14 @@
 <template>
-  <el-button type="primary" @click="createMenuHandler({ menuType: 0, id: 0 })">新增菜单</el-button>
-  <el-button type="primary" @click="createMenuHandler({ menuType: 1, id: 0 })">新增路由</el-button>
+  <el-button
+    type="primary"
+    @click="createMenuHandler({ ...menuForm, menuType: 0, id: 0, children: [] })"
+    >新增菜单</el-button
+  >
+  <el-button
+    type="primary"
+    @click="createMenuHandler({ ...menuForm, menuType: 1, id: 0, children: [] })"
+    >新增路由</el-button
+  >
   <!-- 菜单列表 -->
   <el-table :data="menuList" row-key="id" stripe>
     <el-table-column prop="menuName" label="名称" />
@@ -83,23 +91,26 @@
 
 <script setup lang="ts">
 import apiMenu from '@/api/modules/menu'
-import { Icon } from '@iconify/vue/dist/iconify.js'
 
-const menuList = ref() //菜单列表
+const menuList = ref<Menu.menuListResData>() //菜单列表
 const dialogCreateMenu = ref(false) //弹框控制
 //弹框数据
-const MenuDialogData = reactive({
+const MenuDialogData = reactive<{
+  submitName: string
+  submitEvent: null | Function
+}>({
   submitName: '',
   submitEvent: null
 })
 //菜单类型字典
-const menuTypeMap = {
-  1: '菜单',
-  2: '路由',
-  3: '按钮'
+enum menuTypeMap {
+  '菜单' = 1,
+  '路由' = 2,
+  '按钮' = 3
 }
-const menuForm = reactive({
+const menuForm = reactive<Menu.menuInfo>({
   //菜单表单
+  id: '',
   parentId: 0, //父级菜单:默认为空
   menuType: 1, //表单类型:默认为菜单(1)
   menuName: '', //表单名称
@@ -108,20 +119,19 @@ const menuForm = reactive({
   component: '', //组件
   icon: '' //图标
 })
-const menuId = ref() //临时存储菜单id
+
+onBeforeMount(() => {
+  getMenuList()
+})
 
 /* 获取菜单 */
-function getMenuList() {
-  apiMenu.getMenuList().then((res) => {
-    console.log(res.data)
-
-    menuList.value = res.data
-  })
+async function getMenuList() {
+  const res = await apiMenu.getMenuList()
+  menuList.value = res.data
 }
-getMenuList()
 
-/* 新增菜单处理函数 */
-async function createMenuHandler(row) {
+/* 新增菜单“子项”处理函数 */
+async function createMenuHandler(row: Menu.menuResData) {
   dialogCreateMenu.value = true
   //改变弹框数据
   MenuDialogData.submitName = '新增'
@@ -133,15 +143,15 @@ async function createMenuHandler(row) {
 }
 
 /* 新增菜单 */
-function createMenuSubmit() {
-  apiMenu.createMenu(menuForm)
+async function createMenuSubmit() {
+  await apiMenu.createMenu(menuForm)
   //新增成功后关闭弹窗并重新获取菜单列表
   dialogCreateMenu.value = false
   getMenuList()
 }
 
 /* 编辑菜单处理函数 */
-const editMenuHandler = (row) => {
+const editMenuHandler = (row: Menu.menuResData) => {
   dialogCreateMenu.value = true
   //改变弹框数据
   MenuDialogData.submitName = '编辑'
@@ -150,26 +160,21 @@ const editMenuHandler = (row) => {
   for (const key in menuForm) {
     menuForm[key] = row[key]
   }
-  //保存菜单id
-  menuId.value = row.id
 }
 
 /* 编辑菜单 */
-function editMenuSubmit() {
-  apiMenu.editMenu({
-    id: menuId.value,
-    menuInfo: menuForm
-  })
+async function editMenuSubmit() {
+  await apiMenu.editMenu(menuForm)
   //编辑成功后关闭弹窗并重新获取菜单列表
   dialogCreateMenu.value = false
   getMenuList()
 }
 
 /* 删除菜单处理函数 */
-const deleteMenuHandler = (row) => {
+const deleteMenuHandler = async (row: Menu.menuResData) => {
   //获取该菜单和所有children的id
-  apiMenu.deleteMenu({
-    id: row.id
+  await apiMenu.deleteMenu({
+    id: row.id as string
   })
   //删除成功后关闭弹窗并重新获取菜单列表
   dialogCreateMenu.value = false

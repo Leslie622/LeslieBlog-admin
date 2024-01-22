@@ -74,7 +74,7 @@ const getRoleList = async () => {
 }
 
 /* 编辑用户信息处理函数 */
-const editUserHandler = (row: User.userInfo) => {
+const editUserHandler = (row: User.userResData) => {
   dialogFormVisible.value = true
   userForm.id = row.id
   userForm.account = row.account
@@ -92,7 +92,7 @@ const editUserSubmit = async () => {
 }
 
 /* 删除用户 */
-const deleteUserSubmit = async (row: User.userInfo) => {
+const deleteUserSubmit = async (row: User.userResData) => {
   await apiUser.deleteUser({
     id: row.id
   })

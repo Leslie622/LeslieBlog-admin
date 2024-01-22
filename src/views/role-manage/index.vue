@@ -142,7 +142,7 @@ async function createRoleSubmit() {
 }
 
 /* 编辑角色处理函数 */
-function editRoleHandler(row: Role.RoleInfo) {
+function editRoleHandler(row: Role.roleResData) {
   dialogFormVisible.value = true
   //改变弹框数据
   roleDialogData.title = '编辑角色'
@@ -173,7 +173,7 @@ async function editRoleSubmit() {
 }
 
 /* 删除角色 */
-async function deleteRoleSubmit(row: Role.RoleInfo) {
+async function deleteRoleSubmit(row: Role.roleResData) {
   await apiRole.deleteRole({ id: row.id })
   //删除完成后关闭弹窗并重新渲染角色列表
   dialogFormVisible.value = false
@@ -181,7 +181,7 @@ async function deleteRoleSubmit(row: Role.RoleInfo) {
 }
 
 /* 设置默认角色 */
-async function setDafaultRole(row: Role.RoleInfo) {
+async function setDafaultRole(row: Role.roleResData) {
   await apiRole.editRole({ id: row.id, isDefault: true })
   //设置完成后关闭弹窗并重新渲染角色列表
   dialogFormVisible.value = false

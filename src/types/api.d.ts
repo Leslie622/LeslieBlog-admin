@@ -37,8 +37,9 @@ namespace User {
   /* 编辑用户信息：不能编辑 account */
   type editUserReqData = Omit<userInfo, 'account'>
 
-  /* 获取用户列表：返回一个userInfo数组 */
-  type userListResData = userInfo[]
+  /* 获取用户列表：返回一个userResData数组 */
+  type userResData = userInfo
+  type userListResData = userResData[]
 
   /* 获取用户权限 */
   type permissionResData = {
@@ -71,5 +72,39 @@ namespace Role {
   }
 
   /* 查询角色列表：返回roleInfo数组 */
-  type roleListResData = RoleInfo[]
+  type roleResData = RoleInfo
+  type roleListResData = roleResData[]
+}
+
+namespace Menu {
+  type menuInfo = {
+    [key: string]: string | number | menuInfo[] | null
+    id: string | 0 //这里可以为0是为了处理要创建根菜单的情况,父级id可以为0
+    parentId: string | null | 0 //前端传0，后端返回的是null
+    menuType: number
+    menuName: string
+    menuCode: string
+    icon: string
+    path: string
+    component: string
+  }
+
+  /* 创建菜单：去除掉id字段 */
+  type createMenuReqData = Omit<menuInfo, 'id'>
+
+  /* 编辑菜单，id必传，其他选传(这里的id类型只能为string，不能为空) */
+  type editMenuReqData = Partial<RoleInfo> & {
+    id: string
+  }
+
+  /* 删除菜单：只需传id字段 */
+  type deleteMenuReqData = {
+    id: string
+  }
+
+  /* 后端返回的menu树中会带有children字段 */
+  type menuResData = menuInfo & {
+    children: menuListResData
+  }
+  type menuListResData = menuResData[]
 }
