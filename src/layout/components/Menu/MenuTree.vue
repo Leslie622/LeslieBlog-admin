@@ -1,7 +1,12 @@
 <template>
   <template v-for="menu in props.menuList">
     <!-- 菜单类型是1,渲染成sub-menu -->
-    <el-sub-menu :index="menu.path" v-if="menu.menuType === 1" popper-class="popper">
+    <el-sub-menu
+      :index="menu.path"
+      v-if="menu.menuType === 1"
+      popper-class="popper"
+      :key="menu.menuName"
+    >
       <template #title>
         <el-icon v-if="menu.icon">
           <Icon :icon="menu.icon"></Icon>
@@ -12,7 +17,7 @@
       <menu-tree :menuList="menu.children"></menu-tree>
     </el-sub-menu>
     <!-- 菜单类型是2,渲染成menu-item -->
-    <el-menu-item :index="menu.path" v-else-if="menu.menuType === 2">
+    <el-menu-item :index="menu.path" v-else-if="menu.menuType === 2" :key="menu.path">
       <template #title>
         <el-icon v-if="menu.icon">
           <Icon :icon="menu.icon"></Icon>
@@ -24,7 +29,9 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps(['menuList'])
+const props = defineProps<{
+  menuList: Menu.menuListResData
+}>()
 </script>
 
 <style lang="scss" scoped>

@@ -15,7 +15,7 @@ export const useRouteStore = defineStore('route', () => {
   }
 
   /* 根据用户菜单生成路由 */
-  function generateRoute(menuList: MenuItem[] = [], route: RouteRecordRaw[] = []) {
+  function generateRoute(menuList: Menu.menuResData[] = [], route: RouteRecordRaw[] = []) {
     menuList.forEach((item) => {
       if (item.menuType === 2) {
         route.push({

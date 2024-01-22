@@ -13,17 +13,22 @@
 </template>
 
 <script setup lang="ts">
+import type { TabPaneName, TabsPaneContext } from 'element-plus'
+
 const route = useRoute()
 const router = useRouter()
-const activeTabName = ref() //默认tab项
-const tabs = ref(localStorage.tabs ? JSON.parse(localStorage.tabs) : []) //tabs数组
+const activeTabName = ref<TabPaneName>() //默认tab项
+//定义tabs类型
+type Tabs = {
+  name: string
+  path: string
+}[]
+const tabs = ref<Tabs>(localStorage.tabs ? JSON.parse(localStorage.tabs) : []) //tabs数组
 
 /* 监听tabs变化,每次改变将信息存储到localStorage */
 watch(
   () => tabs,
   () => {
-    console.log(JSON.stringify(tabs.value))
-
     localStorage.setItem('tabs', JSON.stringify(tabs.value))
   },
   { deep: true, immediate: true }
@@ -33,8 +38,8 @@ watch(
 watch(
   () => route,
   (newRoute) => {
-    const name = newRoute.meta.title
-    const path = newRoute.path
+    const name = newRoute.meta.title as string
+    const path = newRoute.path as string
     //每次路由变化，添加tab项
     activeTabName.value = name
     //如果tab不存在，则新增
@@ -47,12 +52,13 @@ watch(
 )
 
 /* 点击tab更改路由 */
-function changeTab({ index }) {
+function changeTab(tab: TabsPaneContext) {
+  const index = Number(tab.index)
   router.push(tabs.value[index].path)
 }
 
 /* 删除tab */
-function removeTab(targetName) {
+function removeTab(targetName: TabPaneName) {
   const tabArr = tabs.value
   //如果剩最后一个tab，则不能删除
   if (tabs.value.length === 1) {

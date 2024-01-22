@@ -3,7 +3,7 @@
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(item, index) in breadcrumbData" :to="item.path" :key="item.path">
         <!-- 不可点击项 -->
-        <span v-if="index === breadcrumbData.length - 1" class="no-redirect">{{
+        <span v-if="index === breadcrumbData?.length! - 1" class="no-redirect">{{
           item.meta.title
         }}</span>
         <!-- 可点击项 -->
@@ -14,8 +14,10 @@
 </template>
 
 <script setup lang="ts">
+import type { RouteLocationMatched } from 'vue-router'
+
 const route = useRoute()
-const breadcrumbData = ref([])
+const breadcrumbData = ref<RouteLocationMatched[]>()
 const getBreadcrumbData = () => {
   breadcrumbData.value = route.matched.filter((item) => item.meta && item.meta.title)
 }

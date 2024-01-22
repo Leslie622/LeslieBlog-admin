@@ -1,17 +1,15 @@
 <template>
   <el-menu :collapse="commonStore.isMenuCollapse" class="menu" :default-active="route.path" router>
-    <menu-tree :menuList="permissionStore.menu"></menu-tree>
+    <menu-tree :menuList="permissionStore.menu ?? []"></menu-tree>
   </el-menu>
 </template>
 
 <script setup lang="ts">
 import { usePermissionStore } from '@/stores/modules/permission'
-import { useCommonStore } from '@/stores/modules/common';
+import { useCommonStore } from '@/stores/modules/common'
 const permissionStore = usePermissionStore()
 const commonStore = useCommonStore()
 const route = useRoute()
-
-
 </script>
 
 <style lang="scss" scoped>

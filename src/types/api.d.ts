@@ -44,7 +44,7 @@ namespace User {
   /* 获取用户权限 */
   type permissionResData = {
     permission: string[]
-    menu: MenuItem[]
+    menu: Menu.menuResData[]
   }
 }
 

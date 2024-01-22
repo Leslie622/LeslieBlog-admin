@@ -1,14 +1,11 @@
 <template>
   <div class="sidebar">
     <div class="sidebar__logo">Logo</div>
-    <Menu class="sidebar__menu" :isCollapse="props.isCollapse"></Menu>
+    <Menu></Menu>
   </div>
 </template>
 
-<script setup lang="ts">
-const props = defineProps(['isCollapse'])
-
-</script>
+<script setup lang="ts"></script>
 
 <style lang="scss" scoped>
 .sidebar {
