@@ -24,8 +24,9 @@
     v-model="dialogFormVisible"
     @closed="dialogCloseHandler"
     :title="roleDialogData['title']"
+    width="40%"
   >
-    <el-form :model="roleForm" :key="Math.random()">
+    <el-form :model="roleForm" :rules="rules" :key="Math.random()" ref="roleFormRef">
       <el-form-item label="角色名称" prop="roleName">
         <el-input v-model="roleForm.roleName" />
       </el-form-item>
@@ -39,24 +40,26 @@
           default-expand-all
         />
       </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="roleDialogData['submitEvent'](roleFormRef)">{{
+          roleDialogData['submitName']
+        }}</el-button>
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+      </el-form-item>
     </el-form>
-    <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="roleDialogData['submitEvent']"> Confirm </el-button>
-      </span>
-    </template>
   </el-dialog>
 </template>
 
 <script setup lang="ts">
 import apiMenu from '@/api/modules/menu'
 import apiRole from '@/api/modules/role'
+import type { FormInstance, FormRules } from 'element-plus'
 
 const menuList = ref() //菜单列表
 const roleList = ref<Role.roleListResData>() //角色列表
 const dialogFormVisible = ref(false) //弹框控制
 const treeRef = ref() //树形组件ref
+const roleFormRef = ref<FormInstance>() //表单ref
 //树形控件数据
 const defaultProps = {
   children: 'children',
@@ -66,11 +69,11 @@ const defaultProps = {
 const roleDialogData = reactive<{
   title: string
   submitName: string
-  submitEvent: null | (() => void)
+  submitEvent: Function
 }>({
   title: '',
   submitName: '',
-  submitEvent: null
+  submitEvent: () => {}
 })
 //角色表单
 const roleForm = reactive<Role.RoleInfo>({
@@ -79,6 +82,10 @@ const roleForm = reactive<Role.RoleInfo>({
   permissionList: [],
   menuList: [],
   isDefault: false
+})
+//表单验证规则
+const rules = reactive<FormRules>({
+  roleName: [{ required: true, message: '请输入角色名称', trigger: 'blur' }]
 })
 
 onBeforeMount(() => {
@@ -125,20 +132,24 @@ function generatePermissionList() {
 }
 
 /* 新增角色 */
-async function createRoleSubmit() {
-  const { permissionList, menuList } = generatePermissionList()
-  roleForm.permissionList = permissionList
-  roleForm.menuList = menuList
-
-  await apiRole.createRole({
-    roleName: roleForm.roleName,
-    permissionList: roleForm.permissionList,
-    menuList: roleForm.menuList,
-    isDefault: roleForm.isDefault
+async function createRoleSubmit(formEl: FormInstance | undefined) {
+  if (!formEl) return
+  await formEl.validate(async (valid, fields) => {
+    if (valid) {
+      //表单验证通过
+      const { permissionList, menuList } = generatePermissionList()
+      roleForm.permissionList = permissionList
+      roleForm.menuList = menuList
+      await apiRole.createRole({
+        roleName: roleForm.roleName,
+        permissionList: roleForm.permissionList,
+        menuList: roleForm.menuList,
+        isDefault: roleForm.isDefault
+      })
+      dialogFormVisible.value = false
+      getRoleList()
+    }
   })
-
-  dialogFormVisible.value = false
-  getRoleList()
 }
 
 /* 编辑角色处理函数 */
