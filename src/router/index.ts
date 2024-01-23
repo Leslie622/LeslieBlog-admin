@@ -6,6 +6,7 @@ import {
   type Router
 } from 'vue-router'
 import { useRouteStore } from '@/stores/modules/route'
+import { useCommonStore } from '@/stores/modules/common'
 
 const welcome = () => import('@/views/welcome/index.vue')
 const home = () => import('@/views/home/index.vue')
@@ -29,11 +30,6 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '主页'
         }
-      },
-      {
-        path: '/:pathMatch(.*)*',
-        name: '404',
-        component: notFound
       }
     ]
   },
@@ -57,7 +53,6 @@ const router: Router = createRouter(options)
 export const removeRouteList: Function[] = []
 
 /* 全局前置守卫 */
-let registerRouteFresh = true
 router.beforeEach(async (to, from, next) => {
   if (to.name === 'welcome') {
     next()
@@ -68,19 +63,31 @@ router.beforeEach(async (to, from, next) => {
       ElMessage.error({ message: '您未登录，请先登录' })
       next({ name: 'welcome' })
     } else {
-      /* 用户登录成功 注册动态路由 */
-      const routeStore = useRouteStore()
-      await routeStore.getAsyncRoute()
-      const asyncRoute = routeStore.asyncRoute
-      if (registerRouteFresh) {
+      /* 用户登录成功 如果没有注册动态路由则注册 */
+      const commonStore = useCommonStore()
+      if (!commonStore.isRegisterAsyncRoute) {
+        console.log('注册')
+        //拿到动态路由
+        const routeStore = useRouteStore()
+        await routeStore.getAsyncRoute()
+        const asyncRoute = routeStore.asyncRoute
+        //循环注册：注册的同时保存路由回调
         asyncRoute.forEach((route) => {
-          //注册路由的同时保存回调
           removeRouteList.push(router.addRoute('layout', route))
         })
-        registerRouteFresh = false
+        //注册公共动态路由：暂时解决刷新页面会被捕捉到404的bug
+        router.addRoute('layout', {
+          path: '/:pathMatch(.*)*',
+          name: '404',
+          meta: {
+            title: '404'
+          },
+          component: notFound
+        })
+        //注册成功后改变状态，避免重复注册
+        commonStore.isRegisterAsyncRoute = true
         next({ ...to, replace: true })
       } else {
-        registerRouteFresh = true
         next()
       }
     }

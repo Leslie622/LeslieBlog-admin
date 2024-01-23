@@ -1,5 +1,7 @@
 import apiUser from '@/api/modules/user'
 import { removeRouteList } from '@/router'
+import { useCommonStore } from './common'
+const commonStore = useCommonStore()
 
 export const useUserStore = defineStore('user', () => {
   /* pinia state */
@@ -35,6 +37,7 @@ export const useUserStore = defineStore('user', () => {
     removeRouteList.forEach((item) => {
       item()
     })
+    commonStore.isRegisterAsyncRoute = false
     //清除tabs
     localStorage.removeItem('tabs')
   }
