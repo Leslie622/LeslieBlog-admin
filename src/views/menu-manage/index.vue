@@ -25,7 +25,7 @@
         <Icon :icon="scope.row.icon" width="20px" />
       </template>
     </el-table-column>
-    <el-table-column label="Operations">
+    <el-table-column label="Operations" width="230" fixed="right">
       <template #default="scope">
         <el-button
           size="small"
@@ -49,8 +49,14 @@
     :title="'新增' + menuTypeMap[menuForm.menuType]"
     @closed="dialogCloseHandler"
   >
-    <el-form :model="menuForm" label-width="120px">
-      <el-form-item :label="menuTypeMap[menuForm.menuType] + '名称'">
+    <el-form
+      :model="menuForm"
+      :rules="rules"
+      ref="menuFormRef"
+      label-width="100"
+      :key="Math.random()"
+    >
+      <el-form-item :label="menuTypeMap[menuForm.menuType] + '名称'" prop="menuName">
         <el-input v-model="menuForm.menuName" />
       </el-form-item>
       <!-- 新增菜单时展示 -->
@@ -64,10 +70,10 @@
       </template>
       <!-- 新增路由时展示 -->
       <template v-else-if="menuForm.menuType === 2">
-        <el-form-item :label="menuTypeMap[menuForm.menuType] + '路径'">
+        <el-form-item :label="menuTypeMap[menuForm.menuType] + '路径'" prop="path">
           <el-input v-model="menuForm.path" />
         </el-form-item>
-        <el-form-item label="组件名">
+        <el-form-item label="组件名" prop="component">
           <el-input v-model="menuForm.component" />
         </el-form-item>
       </template>
@@ -77,30 +83,30 @@
           <el-input v-model="menuForm.menuCode" />
         </el-form-item>
       </template>
-    </el-form>
-    <template #footer>
-      <span class="dialog-footer">
+      <el-form-item>
         <el-button @click="dialogCreateMenu = false">取消</el-button>
-        <el-button type="primary" @click="MenuDialogData['submitEvent']">
+        <el-button type="primary" @click="MenuDialogData['submitEvent'](menuFormRef)">
           {{ MenuDialogData['submitName'] }}
         </el-button>
-      </span>
-    </template>
+      </el-form-item>
+    </el-form>
   </el-dialog>
 </template>
 
 <script setup lang="ts">
 import apiMenu from '@/api/modules/menu'
+import type { FormInstance, FormRules } from 'element-plus'
 
 const menuList = ref<Menu.menuListResData>() //菜单列表
 const dialogCreateMenu = ref(false) //弹框控制
+const menuFormRef = ref<FormInstance>() //表单ref
 //弹框数据
 const MenuDialogData = reactive<{
   submitName: string
-  submitEvent: null | Function
+  submitEvent: Function
 }>({
   submitName: '',
-  submitEvent: null
+  submitEvent: () => {}
 })
 //菜单类型字典
 enum menuTypeMap {
@@ -118,6 +124,12 @@ const menuForm = reactive<Menu.menuInfo>({
   path: '', //路径
   component: '', //组件
   icon: '' //图标
+})
+//表单验证规则
+const rules = reactive<FormRules<Menu.menuInfo>>({
+  menuName: [{ required: true, message: '请输入菜单名称', trigger: 'blur' }],
+  path: [{ required: true, message: '请输入路径', trigger: 'blur' }],
+  component: [{ required: true, message: '请输入组件名', trigger: 'blur' }]
 })
 
 onBeforeMount(() => {
@@ -143,11 +155,16 @@ async function createMenuHandler(row: Menu.menuResData) {
 }
 
 /* 新增菜单 */
-async function createMenuSubmit() {
-  await apiMenu.createMenu(menuForm)
-  //新增成功后关闭弹窗并重新获取菜单列表
-  dialogCreateMenu.value = false
-  getMenuList()
+async function createMenuSubmit(formEl: FormInstance | undefined) {
+  if (!formEl) return
+  await formEl.validate(async (valid, fields) => {
+    if (valid) {
+      //表单验证通过
+      await apiMenu.createMenu(menuForm)
+      dialogCreateMenu.value = false
+      getMenuList()
+    }
+  })
 }
 
 /* 编辑菜单处理函数 */
@@ -157,17 +174,21 @@ const editMenuHandler = (row: Menu.menuResData) => {
   MenuDialogData.submitName = '编辑'
   MenuDialogData.submitEvent = editMenuSubmit
   //将菜单内容赋值到menuForm
-  for (const key in menuForm) {
-    menuForm[key] = row[key]
-  }
+  const { children, ...menuInfo } = row
+  Object.assign(menuForm, menuInfo)
 }
 
 /* 编辑菜单 */
-async function editMenuSubmit() {
-  await apiMenu.editMenu(menuForm)
-  //编辑成功后关闭弹窗并重新获取菜单列表
-  dialogCreateMenu.value = false
-  getMenuList()
+async function editMenuSubmit(formEl: FormInstance | undefined) {
+  if (!formEl) return
+  await formEl.validate(async (valid, fields) => {
+    if (valid) {
+      //表单验证通过
+      await apiMenu.editMenu(menuForm)
+      dialogCreateMenu.value = false
+      getMenuList()
+    }
+  })
 }
 
 /* 删除菜单处理函数 */
@@ -176,7 +197,6 @@ const deleteMenuHandler = async (row: Menu.menuResData) => {
   await apiMenu.deleteMenu({
     id: row.id as string
   })
-  //删除成功后关闭弹窗并重新获取菜单列表
   dialogCreateMenu.value = false
   getMenuList()
 }
@@ -184,7 +204,8 @@ const deleteMenuHandler = async (row: Menu.menuResData) => {
 /* 弹框关闭处理函数 */
 function dialogCloseHandler() {
   //每次弹框关闭,重置menuForm数据
-  for (let key in menuForm) {
+  let key: keyof Menu.menuInfo
+  for (key in menuForm) {
     if (key === 'menuType') {
       menuForm[key] = 1
     } else {
