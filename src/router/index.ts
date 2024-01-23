@@ -10,6 +10,7 @@ import { useRouteStore } from '@/stores/modules/route'
 const welcome = () => import('@/views/welcome/index.vue')
 const home = () => import('@/views/home/index.vue')
 const layout = () => import('@/layout/index.vue')
+const notFound = () => import('@/views/404/index.vue')
 
 /* routes */
 const routes: RouteRecordRaw[] = [
@@ -28,6 +29,11 @@ const routes: RouteRecordRaw[] = [
         meta: {
           title: '主页'
         }
+      },
+      {
+        path: '/:pathMatch(.*)*',
+        name: '404',
+        component: notFound
       }
     ]
   },
