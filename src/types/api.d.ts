@@ -24,21 +24,30 @@ namespace User {
     account: string
     password: string
   }
-
   type loginResData = {
+    id: string
+    account: string
+    roleId: string
     token: string
-  } & userInfo
+  }
 
   /* 删除用户：只需id字段 */
   type deleteUserReqData = {
     id: string
   }
 
-  /* 编辑用户信息：不能编辑 account */
-  type editUserReqData = Omit<userInfo, 'account'>
+  /* 编辑用户信息：id字段必传,且不能编辑 account */
+  type editUserReqData = {
+    id: string
+    roleId: string
+  }
 
   /* 获取用户列表：返回一个userResData数组 */
-  type userResData = userInfo
+  type userResData = {
+    id: string
+    account: string
+    roleId: string
+  }
   type userListResData = userResData[]
 
   /* 获取用户权限 */
@@ -59,7 +68,12 @@ namespace Role {
   }
 
   /* 创建角色：排除id字段 */
-  type createRoleReqData = Omit<RoleInfo, 'id'>
+  type createRoleReqData = {
+    roleName: string
+    permissionList: string[]
+    menuList: string[]
+    isDefault: boolean
+  }
 
   /* 删除角色：只传id字段 */
   type deleteRoleReqData = {
@@ -67,12 +81,22 @@ namespace Role {
   }
 
   /* 编辑角色:id字段必传，其他字段选传 */
-  type editRoleReqData = Partial<RoleInfo> & {
+  type editRoleReqData = {
     id: string
+    roleName?: string
+    permissionList?: string[]
+    menuList?: string[]
+    isDefault?: boolean
   }
 
   /* 查询角色列表：返回roleInfo数组 */
-  type roleResData = RoleInfo
+  type roleResData = {
+    id: string
+    roleName: string
+    permissionList: string[]
+    menuList: string[]
+    isDefault: boolean
+  }
   type roleListResData = roleResData[]
 }
 
