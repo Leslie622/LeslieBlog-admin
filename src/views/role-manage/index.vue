@@ -52,6 +52,7 @@
 
 <script setup lang="ts">
 import apiMenu from '@/api/modules/menu'
+import role from '@/api/modules/role'
 import apiRole from '@/api/modules/role'
 import type { FormInstance, FormRules } from 'element-plus'
 
@@ -169,18 +170,25 @@ function editRoleHandler(row: Role.roleResData) {
 }
 
 /* 编辑角色 */
-async function editRoleSubmit() {
-  const { permissionList, menuList } = generatePermissionList()
-  roleForm.permissionList = permissionList
-  roleForm.menuList = menuList
-  await apiRole.editRole({
-    id: roleForm.id,
-    permissionList: roleForm.permissionList,
-    menuList: roleForm.menuList
+async function editRoleSubmit(formEl: FormInstance | undefined) {
+  if (!formEl) return
+  await formEl.validate(async (valid, fields) => {
+    if (valid) {
+      //表单验证通过
+      const { permissionList, menuList } = generatePermissionList()
+      roleForm.permissionList = permissionList
+      roleForm.menuList = menuList
+      await apiRole.editRole({
+        id: roleForm.id,
+        roleName: roleForm.roleName,
+        permissionList: roleForm.permissionList,
+        menuList: roleForm.menuList
+      })
+      //编辑完成后关闭弹窗并重新渲染角色列表
+      dialogFormVisible.value = false
+      getRoleList()
+    }
   })
-  //编辑完成后关闭弹窗并重新渲染角色列表
-  dialogFormVisible.value = false
-  getRoleList()
 }
 
 /* 删除角色 */
