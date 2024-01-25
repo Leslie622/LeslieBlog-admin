@@ -36,10 +36,12 @@ namespace User {
     id: string
   }
 
-  /* 编辑用户信息：id字段必传,且不能编辑 account */
+  /* 编辑用户信息：id字段必传，其他选传，且不能编辑 account */
   type editUserReqData = {
     id: string
-    roleId: string
+    roleId?: string
+    avatar?: string
+    introduce?: string
   }
 
   /* 获取用户列表：返回一个userResData数组 */
