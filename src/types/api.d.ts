@@ -8,9 +8,11 @@ type Result<T> = {
 namespace User {
   /* 用户信息 */
   type userInfo = {
-    id: string
-    account: string
-    roleId: string
+    id?: string
+    account?: string
+    roleId?: string
+    avatar?: string
+    introduce?: string
   }
 
   /* 用户注册 */
@@ -27,8 +29,13 @@ namespace User {
   type loginResData = {
     id: string
     account: string
-    roleId: string
+    role: {
+      roleId: string
+      roleName: stirng
+    }
     token: string
+    avatar: string
+    introduce: string
   }
 
   /* 删除用户：只需id字段 */
@@ -42,6 +49,18 @@ namespace User {
     roleId?: string
     avatar?: string
     introduce?: string
+  }
+
+  /* 获取当前用户信息 */
+  type userInfoResData = {
+    id: string
+    account: string
+    role: {
+      roleId: string
+      roleName: stirng
+    }
+    avatar: string
+    introduce: string
   }
 
   /* 获取用户列表：返回一个userResData数组 */
@@ -156,4 +175,8 @@ namespace Menu {
   }
 
   type menuListResData = menuResData[]
+}
+
+namespace Upload {
+  type UploadImageData = FormData
 }

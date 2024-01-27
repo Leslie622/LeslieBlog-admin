@@ -5,6 +5,8 @@ export default {
   login: (data: User.loginReqData) => ApiService.post<User.loginResData>('users/login', data),
   // 注册
   register: (data: User.registerReqData) => ApiService.post('users/register', data),
+  // 获取当前用户信息
+  getUserInfo: () => ApiService.get<User.userInfoResData>('users/getUserInfo'),
   // 获取用户菜单和权限
   getPermission: () => ApiService.get<User.permissionResData>('users/getPermission'),
   // // 获取用户列表

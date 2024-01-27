@@ -10,6 +10,7 @@ import 'normalize.css'
 import '@/assets/styles/globals.scss'
 
 const app = createApp(App)
+app.config.globalProperties.$ImgPrefix = 'https://leslie-blog-1314141789.cos.ap-nanjing.myqcloud.com/'
 
 app.use(createPinia())
 app.use(router)
