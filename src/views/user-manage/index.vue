@@ -1,8 +1,8 @@
 <template>
   <el-table :data="userList">
     <el-table-column prop="account" label="账号" />
-    <el-table-column prop="roleId.roleName" label="角色" />
-    <el-table-column label="Operations">
+    <el-table-column prop="role.roleName" label="角色" />
+    <el-table-column label="操作">
       <template #default="scope">
         <el-button type="primary" size="small" @click="editUserHandler(scope.row)">编辑</el-button>
         <el-popconfirm title="确定要删除该用户吗？" @confirm="deleteUserSubmit(scope.row)">
@@ -15,24 +15,28 @@
   </el-table>
 
   <el-dialog v-model="dialogFormVisible" title="编辑角色">
-    <el-form :model="userForm" :key="Math.random()">
-      <el-form-item label="账号" prop="account">
-        <el-input v-model="userForm.account" disabled />
-      </el-form-item>
-      <el-form-item label="角色" prop="roleId">
-        <el-select v-model="userForm.roleId">
-          <el-option
-            v-for="item in roleList"
-            :key="item.roleName"
-            :label="item.roleName"
-            :value="item.id!"
-          />
-        </el-select>
-      </el-form-item>
-    </el-form>
+    <template #header="{ titleClass }">
+      <div class="my-header">
+        <span :class="titleClass">编辑用户 </span>
+        <el-tag>{{ userInfo.account }}</el-tag>
+      </div>
+    </template>
+
+    <div>
+      <span>角色：</span>
+      <el-select v-model="userInfo.role.roleId">
+        <el-option
+          v-for="item in roleList"
+          :key="item.roleName"
+          :label="item.roleName"
+          :value="item.id!"
+        />
+      </el-select>
+    </div>
+
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">Cancel</el-button>
+        <el-button @click="dialogFormVisible = false">取消</el-button>
         <el-button type="primary" @click="editUserSubmit"> 编辑 </el-button>
       </span>
     </template>
@@ -45,11 +49,14 @@ import apiRole from '@/api/modules/role'
 
 //弹框控制
 const dialogFormVisible = ref(false)
-//用户表单
-const userForm = reactive<User.userInfo>({
+//用户信息
+const userInfo = reactive<User.userResData>({
   id: '',
   account: '',
-  roleId: ''
+  role: {
+    roleId: '',
+    roleName: ''
+  }
 })
 //用户列表
 const userList = ref<User.userListResData>()
@@ -76,16 +83,17 @@ const getRoleList = async () => {
 /* 编辑用户信息处理函数 */
 const editUserHandler = (row: User.userResData) => {
   dialogFormVisible.value = true
-  userForm.id = row.id
-  userForm.account = row.account
-  userForm.roleId = row.roleId
+  //回显
+  userInfo.id = row.id
+  userInfo.account = row.account
+  userInfo.role.roleId = row.role.roleId
 }
 
 /* 编辑用户信息 */
 const editUserSubmit = async () => {
   await apiUser.editUser({
-    id: userForm.id,
-    roleId: userForm.roleId
+    id: userInfo.id,
+    roleId: userInfo.role.roleId
   })
   dialogFormVisible.value = false
   getUserList()
@@ -102,3 +110,4 @@ const deleteUserSubmit = async (row: User.userResData) => {
 </script>
 
 <style lang="scss" scoped></style>
+<style></style>

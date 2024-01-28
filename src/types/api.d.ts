@@ -6,15 +6,6 @@ type Result<T> = {
 }
 
 namespace User {
-  /* 用户信息 */
-  type userInfo = {
-    id?: string
-    account?: string
-    roleId?: string
-    avatar?: string
-    introduce?: string
-  }
-
   /* 用户注册 */
   type registerReqData = {
     account: string
@@ -67,7 +58,10 @@ namespace User {
   type userResData = {
     id: string
     account: string
-    roleId: string
+    role: {
+      roleId: string
+      roleName: string
+    }
   }
   type userListResData = userResData[]
 
