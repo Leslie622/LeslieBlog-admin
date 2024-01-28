@@ -1,1 +1,23 @@
-// 全局样式
+/* 全局样式 */
+
+#app {
+  height: 100vh;
+}
+
+.app {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  overflow: hidden;
+  min-width: 1000px;
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  box-sizing: border-box;
+  border-radius: 5px;
+  box-shadow:
+    rgba(0, 0, 0, 0.05) 0px 0px 0px 1px,
+    rgb(209, 213, 219) 0px 0px 0px 1px inset;
+}
