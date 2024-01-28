@@ -118,7 +118,7 @@ namespace Role {
 namespace Menu {
   type menuInfo = {
     id: string
-    parentId: string | null //前端传0，后端返回的是null
+    parentId: string
     menuType: number
     menuName: string
     menuCode: string
@@ -129,7 +129,7 @@ namespace Menu {
 
   /* 创建菜单：去除掉id字段 */
   type createMenuReqData = {
-    parentId: string | null
+    parentId: string
     menuType: number
     menuName: string
     menuCode: string
@@ -141,7 +141,7 @@ namespace Menu {
   /* 编辑菜单，id必传，其他选传(这里的id类型只能为string，不能为空) */
   type editMenuReqData = {
     id: string
-    parentId?: string | null
+    parentId?: string
     menuType?: number
     menuName?: string
     menuCode?: string
@@ -158,7 +158,7 @@ namespace Menu {
   /* 后端返回的menu树中会带有children字段 */
   type menuResData = {
     id: string
-    parentId: string | null
+    parentId: string | null //根菜单的parentId为null
     menuType: number
     menuName: string
     menuCode: string
