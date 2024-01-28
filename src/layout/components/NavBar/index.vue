@@ -1,7 +1,11 @@
 <template>
   <div class="navbar">
     <div class="navbar__menu-control" @click="commonStore.controlMenuCollapse()">
-      <Icon icon="ant-design:menu-fold-outlined" width="20px" v-if="commonStore.isMenuCollapse"></Icon>
+      <Icon
+        icon="ant-design:menu-fold-outlined"
+        width="20px"
+        v-if="commonStore.isMenuCollapse"
+      ></Icon>
       <Icon icon="ant-design:menu-unfold-outlined" width="20px" v-else></Icon>
     </div>
     <div class="navbar__breadcrumb">
@@ -13,7 +17,13 @@
         <el-avatar :size="35" v-if="userInfo.avatar" :src="$ImgPrefix + userInfo.avatar" />
       </div>
     </div>
-    <el-drawer v-model="userInfoDrawer" :close="introduceEdit = false" direction="rtl" :size="300" class="user-info-drawer">
+    <el-drawer
+      v-model="userInfoDrawer"
+      :close="(introduceEdit = false)"
+      direction="rtl"
+      :size="300"
+      class="user-info-drawer"
+    >
       <template #header>
         <div>
           用户信息 <el-tag type="info">{{ userInfo.role.roleName }}</el-tag>
@@ -31,7 +41,15 @@
         <p class="introduce" v-if="introduceEdit === false">
           {{ userInfo.introduce === '' ? '点击右侧编辑按钮编辑个性签名' : userInfo.introduce }}
         </p>
-        <el-input v-model="userInfo.introduce" type="textarea" v-else @blur="sumbitIntroduce" :rows="1"></el-input>
+        <el-input
+          v-model="userInfo.introduce"
+          type="textarea"
+          v-else
+          @change="sumbitIntroduce"
+          @blur="introduceEdit = false"
+          ref="introInputRef"
+          :rows="1"
+        ></el-input>
         <Icon
           icon="material-symbols:edit-square-outline"
           width="18px"
@@ -40,12 +58,23 @@
           v-if="introduceEdit === false"
         ></Icon>
       </div>
+
       <div class="logout">
         <el-button type="primary" @click="logoutHandler">退出登录</el-button>
       </div>
     </el-drawer>
-    <el-dialog v-model="dialogCropperVisible" destroy-on-close title="修改用户头像" class="cropper-dailog" align-center>
-      <cropper-image :img="$ImgPrefix + userInfo.avatar" @submit-img="submitImg" v-bind="cropperOptions"></cropper-image>
+    <el-dialog
+      v-model="dialogCropperVisible"
+      destroy-on-close
+      title="修改用户头像"
+      class="cropper-dailog"
+      align-center
+    >
+      <cropper-image
+        :img="$ImgPrefix + userInfo.avatar"
+        @submit-img="submitImg"
+        v-bind="cropperOptions"
+      ></cropper-image>
     </el-dialog>
   </div>
 </template>
@@ -62,6 +91,7 @@ const userStore = useUserStore()
 const router = useRouter()
 const dialogCropperVisible = ref(false) //修改用户头像弹窗控制
 const userInfoDrawer = ref(false) //用户信息抽屉
+const introInputRef = ref()
 const introduceEdit = ref(false) //编辑个性签名控制
 //用户信息
 const userInfo = ref<User.userInfoResData>({
@@ -128,7 +158,9 @@ async function submitImg(blob: Blob) {
 /* 编辑个性签名处理函数 */
 function editIntroduceHandler() {
   introduceEdit.value = true
-  // userForm.introduce = userInfo.value.introduce
+  nextTick(() => {
+    introInputRef.value.focus()
+  })
 }
 
 /* 修改个性签名 */
@@ -137,7 +169,7 @@ async function sumbitIntroduce() {
     id: userInfo.value.id,
     introduce: userInfo.value.introduce
   })
-  introduceEdit.value = false
+
   //重新获取用户信息
   getUserInfo()
 }
