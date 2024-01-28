@@ -3,7 +3,7 @@
   <!-- 角色列表 -->
   <el-table :data="roleList" style="width: 100%">
     <el-table-column label="角色名称" prop="roleName" />
-    <el-table-column label="Operations">
+    <el-table-column label="操作">
       <template #default="scope">
         <el-button type="primary" size="small" @click="editRoleHandler(scope.row)">编辑</el-button>
         <el-popconfirm title="确定要删除该角色吗？" @confirm="deleteRoleSubmit(scope.row)">
@@ -13,46 +13,59 @@
             </el-button>
           </template>
         </el-popconfirm>
-        <el-button size="small" @click="setDafaultRole(scope.row)" v-if="!scope.row.isDefault"
-          >设置为默认角色</el-button
-        >
+        <el-button size="small" @click="setDafaultRole(scope.row)" v-if="!scope.row.isDefault">
+          设置为默认角色
+        </el-button>
         <el-button size="small" disabled v-else>默认角色</el-button>
       </template>
     </el-table-column>
   </el-table>
+
   <el-dialog
     v-model="dialogFormVisible"
     @closed="dialogCloseHandler"
     :title="roleDialogData['title']"
+    :align-center="true"
     width="40%"
   >
-    <el-form :model="roleForm" :rules="rules" :key="Math.random()" ref="roleFormRef">
-      <el-form-item label="角色名称" prop="roleName">
-        <el-input v-model="roleForm.roleName" />
-      </el-form-item>
-      <el-form-item label="权限设置" prop="permissionList">
-        <el-tree
-          ref="treeRef"
-          :data="menuList"
-          :props="defaultProps"
-          node-key="id"
-          show-checkbox
-          default-expand-all
-        />
-      </el-form-item>
-      <el-form-item>
+    <div>
+      <el-form
+        :model="roleForm"
+        :rules="rules"
+        :key="Math.random()"
+        ref="roleFormRef"
+        label-width="auto"
+      >
+        <el-form-item label="角色名称" prop="roleName">
+          <el-input v-model="roleForm.roleName" />
+        </el-form-item>
+        <el-form-item label="权限设置" prop="permissionList">
+          <div class="premission-tree">
+            <el-tree
+              ref="treeRef"
+              :data="menuList"
+              :props="defaultProps"
+              node-key="id"
+              show-checkbox
+              default-expand-all
+            />
+          </div>
+        </el-form-item>
+      </el-form>
+    </div>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取消</el-button>
         <el-button type="primary" @click="roleDialogData['submitEvent'](roleFormRef)">{{
           roleDialogData['submitName']
         }}</el-button>
-        <el-button @click="dialogFormVisible = false">取消</el-button>
-      </el-form-item>
-    </el-form>
+      </span>
+    </template>
   </el-dialog>
 </template>
 
 <script setup lang="ts">
 import apiMenu from '@/api/modules/menu'
-import role from '@/api/modules/role'
 import apiRole from '@/api/modules/role'
 import type { FormInstance, FormRules } from 'element-plus'
 
@@ -214,4 +227,10 @@ function dialogCloseHandler() {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.premission-tree {
+  width: 100%;
+  height: 400px;
+  overflow: auto;
+}
+</style>
