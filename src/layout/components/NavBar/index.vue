@@ -15,6 +15,7 @@
       <div class="action__setting"></div>
       <div class="action__user" @click="userInfoDrawer = true">
         <el-avatar :size="35" v-if="userInfo.avatar" :src="$ImgPrefix + userInfo.avatar" />
+        <Icon icon="ep:user" color="gray" width="16px" v-else></Icon>
       </div>
     </div>
     <el-drawer
@@ -32,8 +33,9 @@
       <div class="avatar__wrapper">
         <div class="avatar" @click="dialogCropperVisible = true">
           <img v-if="userInfo.avatar" :src="$ImgPrefix + userInfo.avatar" alt="头像" />
+          <Icon icon="material-symbols:upload-rounded" color="#cccccc" width="30px" v-else></Icon>
           <div class="imgMask">
-            <Icon icon="material-symbols:edit-square-outline" width="20px"></Icon>
+            <Icon icon="material-symbols:edit-square-outline" width="25px"></Icon>
           </div>
         </div>
       </div>
@@ -85,6 +87,7 @@ import { useUserStore } from '@/stores/modules/user'
 import apiUpload from '@/api/modules/upload'
 import apiUser from '@/api/modules/user'
 import type { CropperOptionsData } from '@/types/vue-cropper'
+import { Icon } from '@iconify/vue/dist/iconify.js'
 
 const commonStore = useCommonStore()
 const userStore = useUserStore()
@@ -202,13 +205,25 @@ async function sumbitIntroduce() {
   flex: 1;
 
   .action__user {
+    display: grid;
+    place-items: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    // background-color: red;
+    box-shadow:
+      rgba(9, 30, 66, 0.25) 0px 1px 1px,
+      rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
     cursor: pointer;
   }
 }
 
 //头像容器大小
 .avatar {
+  display: grid;
+  place-items: center;
   position: relative;
+
   width: 80px;
   height: 80px;
   border-radius: 50%;
