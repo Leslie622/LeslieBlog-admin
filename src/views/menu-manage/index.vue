@@ -1,12 +1,12 @@
 <template>
   <el-button
     type="primary"
-    @click="createMenuHandler({ ...menuForm, menuType: 0, id: 0, children: [] })"
+    @click="createMenuHandler({ ...menuForm, menuType: 0, id: '', children: [] })"
     >新增菜单</el-button
   >
   <el-button
     type="primary"
-    @click="createMenuHandler({ ...menuForm, menuType: 1, id: 0, children: [] })"
+    @click="createMenuHandler({ ...menuForm, menuType: 1, id: '', children: [] })"
     >新增路由</el-button
   >
   <!-- 菜单列表 -->
@@ -25,7 +25,7 @@
         <Icon :icon="scope.row.icon" width="20px" />
       </template>
     </el-table-column>
-    <el-table-column label="Operations" width="230" fixed="right">
+    <el-table-column label="操作" width="230" fixed="right">
       <template #default="scope">
         <el-button
           size="small"
@@ -48,12 +48,14 @@
     v-model="dialogCreateMenu"
     :title="'新增' + menuTypeMap[menuForm.menuType]"
     @closed="dialogCloseHandler"
+    :align-center="true"
+    width="500px"
   >
     <el-form
       :model="menuForm"
       :rules="rules"
       ref="menuFormRef"
-      label-width="100"
+      label-width="auto"
       :key="Math.random()"
     >
       <el-form-item :label="menuTypeMap[menuForm.menuType] + '名称'" prop="menuName">
@@ -83,13 +85,15 @@
           <el-input v-model="menuForm.menuCode" />
         </el-form-item>
       </template>
-      <el-form-item>
+    </el-form>
+    <template #footer>
+      <span>
         <el-button @click="dialogCreateMenu = false">取消</el-button>
         <el-button type="primary" @click="MenuDialogData['submitEvent'](menuFormRef)">
           {{ MenuDialogData['submitName'] }}
         </el-button>
-      </el-form-item>
-    </el-form>
+      </span>
+    </template>
   </el-dialog>
 </template>
 
@@ -117,7 +121,7 @@ enum menuTypeMap {
 const menuForm = reactive<Menu.menuInfo>({
   //菜单表单
   id: '',
-  parentId: 0, //父级菜单:默认为空
+  parentId: '', //父级菜单:默认为空
   menuType: 1, //表单类型:默认为菜单(1)
   menuName: '', //表单名称
   menuCode: '', //权限标识:默认为空
@@ -195,7 +199,7 @@ async function editMenuSubmit(formEl: FormInstance | undefined) {
 const deleteMenuHandler = async (row: Menu.menuResData) => {
   //获取该菜单和所有children的id
   await apiMenu.deleteMenu({
-    id: row.id as string
+    id: row.id
   })
   dialogCreateMenu.value = false
   getMenuList()
