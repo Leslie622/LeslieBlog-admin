@@ -51,5 +51,6 @@ declare module 'vue' {
     SideBar: typeof import('./../layout/components/SideBar/index.vue')['default']
     UserLogin: typeof import('./../components/UserLogin/index.vue')['default']
     UserRegister: typeof import('./../components/UserRegister/index.vue')['default']
+    VditorMd: typeof import('./../components/VditorMd/index.vue')['default']
   }
 }
