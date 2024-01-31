@@ -174,3 +174,34 @@ namespace Menu {
 namespace Upload {
   type UploadImageData = FormData
 }
+
+namespace BlogCategory {
+  /* 分类信息 */
+  type info = {
+    id: string
+    name: string
+    introduce: string
+    count: number
+  }
+
+  /* 创建博客分类 */
+  type createReqData = {
+    name: string
+    introduce: string
+  }
+
+  /* 删除博客分类 */
+  type deleteReqData = {
+    id: string
+  }
+
+  /* 编辑博客分类 */
+  type editReqData = {
+    id: string
+    name?: string
+    introduce?: string
+  }
+
+  /* 查询博客分类列表 */
+  type listResData = info[]
+}
