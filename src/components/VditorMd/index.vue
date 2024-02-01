@@ -17,7 +17,8 @@ const options = reactive<IOptions>({
   value: '',
   toolbar: [...myOptions.toolbarConfig],
   counter: {
-    enable: true
+    enable: true,
+    type: 'text'
   },
   preview: {
     delay: 0,
@@ -53,6 +54,17 @@ onMounted(() => {
   .vditor-reset {
     font-family: ''; //跟随用户浏览器字体
     font-size: 15px;
+  }
+  .vditor-counter {
+    &.vditor-tooltipped__nw::before {
+      top: auto;
+      bottom: -5px;
+      border-bottom-color: #3b3e43;
+      border-top-color: transparent;
+    }
+    &.vditor-tooltipped__nw::after {
+      bottom: -185%;
+    }
   }
   --toolbar-background-color: #ffffff;
   .vditor-ir pre.vditor-reset:focus,
