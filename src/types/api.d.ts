@@ -207,6 +207,22 @@ namespace BlogCategory {
 }
 
 namespace Blog {
+  /* 博客信息 */
+  type blogInfo = {
+    id: string
+    title: string
+    abstract: string
+    cover: string
+    content: string
+    category: string
+    author: string
+    views: number
+    isOriginal: boolean
+    isSticky: boolean
+    createTime: string
+    updateTime: string
+  }
+
   /* 创建博客 */
   type createReqData = {
     title: string
@@ -218,4 +234,25 @@ namespace Blog {
     isOriginal: boolean
     isSticky: boolean
   }
+
+  /* 编辑博客 */
+  type editReqData = {
+    id: string
+    title?: string
+    abstract?: string
+    cover?: string
+    content?: string
+    category?: string
+    author?: string
+    isOriginal?: boolean
+    isSticky?: boolean
+  }
+
+  /* 删除博客 */
+  type deleteReqData = {
+    id: string
+  }
+
+  /* 博客列表 */
+  type listResData = blogInfo[]
 }
