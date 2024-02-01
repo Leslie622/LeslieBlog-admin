@@ -205,3 +205,17 @@ namespace BlogCategory {
   /* 查询博客分类列表 */
   type listResData = info[]
 }
+
+namespace Blog {
+  /* 创建博客 */
+  type createReqData = {
+    title: string
+    abstract: string
+    cover: string
+    content: string
+    category: string
+    author: string
+    isOriginal: boolean
+    isSticky: boolean
+  }
+}
