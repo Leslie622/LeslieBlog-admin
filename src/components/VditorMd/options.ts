@@ -37,7 +37,8 @@ const toolbar = (): IMenuItem[] => {
     'code-theme',
     'content-theme',
     'export',
-    'fullscreen'
+    'fullscreen',
+    '|'
   ]
   //tool映射
   const toolMap: toolbarMapData = {}

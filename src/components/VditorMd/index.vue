@@ -9,13 +9,29 @@ import apiUpload from '@/api/modules/upload'
 import myOptions from './options'
 const globalProperties = getCurrentInstance()?.appContext.config.globalProperties //全局变量
 const vditor = ref<Vditor | null>(null) //实例
+const emit = defineEmits<{
+  publishBlog: [markdown: string]
+}>()
 
 //配置项
 const options = reactive<IOptions>({
   height: '100%',
   placeholder: '开始写文章...',
   value: '',
-  toolbar: [...myOptions.toolbarConfig],
+  toolbar: [
+    ...myOptions.toolbarConfig,
+    {
+      name: 'publish',
+      tipPosition: 'e',
+      tip: '发布文章',
+      icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="4 4 16 16"><g fill="none" stroke="#586069" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="14" stroke-dashoffset="14" d="M6 19h12"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.4s" values="14;0"/></path><path stroke-dasharray="18" stroke-dashoffset="18" d="M12 15 h2 v-6 h2.5 L12 4.5M12 15 h-2 v-6 h-2.5 L12 4.5"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="18;0"/><animate attributeName="d" calcMode="linear" dur="1.5s" keyTimes="0;0.7;1" repeatCount="indefinite" values="M12 15 h2 v-6 h2.5 L12 4.5M12 15 h-2 v-6 h-2.5 L12 4.5;M12 15 h2 v-3 h2.5 L12 7.5M12 15 h-2 v-3 h-2.5 L12 7.5;M12 15 h2 v-6 h2.5 L12 4.5M12 15 h-2 v-6 h-2.5 L12 4.5"/></path></g></svg>',
+      className: 'publish',
+      click: () => {
+        //获取md内容并发送给父组件
+        emit('publishBlog', vditor.value?.getValue()!)
+      }
+    }
+  ],
   counter: {
     enable: true,
     type: 'text'
