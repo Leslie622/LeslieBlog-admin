@@ -156,10 +156,4 @@ function dialogCloseHandler() {
 }
 </script>
 
-<style lang="scss" scoped>
-.premission-tree {
-  width: 100%;
-  height: 400px;
-  overflow: auto;
-}
-</style>
+<style lang="scss" scoped></style>
