@@ -230,7 +230,6 @@ namespace Blog {
     cover: string
     content: string
     category: string
-    author: string
     isOriginal: boolean
     isSticky: boolean
   }
@@ -243,7 +242,6 @@ namespace Blog {
     cover?: string
     content?: string
     category?: string
-    author?: string
     isOriginal?: boolean
     isSticky?: boolean
   }
