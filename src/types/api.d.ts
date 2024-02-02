@@ -252,5 +252,8 @@ namespace Blog {
   }
 
   /* 博客列表 */
-  type listResData = blogInfo[]
+  type listResData = {
+    total: number
+    blogList: blogInfo[]
+  }
 }

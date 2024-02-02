@@ -8,5 +8,5 @@ export default {
   //编辑博客
   edit: (data: Blog.editReqData) => ApiService.post('blog/edit', data),
   //获取分类列表
-  getList: () => ApiService.get<Blog.listResData>('blogCategory/list')
+  getList: (data:any) => ApiService.post<Blog.listResData>('blog/list',data)
 }
