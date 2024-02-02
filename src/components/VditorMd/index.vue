@@ -7,8 +7,12 @@ import Vditor from 'vditor'
 import 'vditor/dist/index.css'
 import apiUpload from '@/api/modules/upload'
 import myOptions from './options'
+
 const globalProperties = getCurrentInstance()?.appContext.config.globalProperties //全局变量
 const vditor = ref<Vditor | null>(null) //实例
+const props = withDefaults(defineProps<{ content: string }>(), {
+  content: ''
+})
 const emit = defineEmits<{
   publishBlog: [markdown: string]
 }>()
@@ -17,7 +21,9 @@ const emit = defineEmits<{
 const options = reactive<IOptions>({
   height: '100%',
   placeholder: '开始写文章...',
-  value: '',
+  after: () => {
+    vditor.value!.setValue(props.content)
+  },
   toolbar: [
     ...myOptions.toolbarConfig,
     {
