@@ -52,7 +52,9 @@
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
         <template #default="scope">
-          <el-button type="primary" size="small">编辑</el-button>
+          <el-button type="primary" size="small" @click="blogEditHandler(scope.row)"
+            >编辑</el-button
+          >
           <el-popconfirm title="确定要删除该博客吗？" @confirm="blogDeleteHandler(scope.row)">
             <template #reference>
               <el-button type="danger" size="small">删除</el-button>
@@ -86,6 +88,7 @@ type blogListConfigData = {
   //排序数组
   sortArr: Array<{ field: string; order: number }>
 }
+const router = useRouter()
 const categoryList = ref<BlogCategory.listResData>([]) //博客分类列表
 const blogList = ref<Blog.blogInfo[]>() //博客列表
 //博客列表配置：排序，分页等
@@ -167,6 +170,12 @@ async function blogDeleteHandler(row: Blog.blogInfo) {
     id: row.id
   })
   getBlogList()
+}
+
+/* 编辑博客处理函数 */
+function blogEditHandler(row: Blog.blogInfo) {
+  //跳转到写博客页面，携带博客id
+  router.push({ path: '/blog/write', query: { blogId: row.id } })
 }
 </script>
 

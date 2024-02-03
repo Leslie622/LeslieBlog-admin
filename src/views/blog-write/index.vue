@@ -1,27 +1,18 @@
 <template>
-  <vditor-md @publish-blog="publishBlogHandler"></vditor-md>
+  <vditor-md @publish-blog="publishBlogHandler" :content="blogForm.content"></vditor-md>
 
   <el-drawer title="发布博客" v-model="blogDrawer" direction="rtl" :size="400">
     <template #default>
-      <el-form :model="blogForm" ref="blogFormRef" :rules="rules" label-width="auto">
+      <el-form :model="blogForm" ref="blogFormRef" :validate-on-rule-change="false" :rules="rules" label-width="auto">
         <el-form-item label="博客标题" prop="title">
           <el-input v-model="blogForm.title" type="text"></el-input>
         </el-form-item>
         <el-form-item label="博客摘要">
-          <el-input
-            v-model="blogForm.abstract"
-            type="textarea"
-            :autosize="{ minRows: 2, maxRows: 6 }"
-          ></el-input>
+          <el-input v-model="blogForm.abstract" type="textarea" :autosize="{ minRows: 2, maxRows: 6 }"></el-input>
         </el-form-item>
         <el-form-item label="博客分类" prop="category">
           <el-select v-model="blogForm.category" placeholder="Select">
-            <el-option
-              v-for="item in categoryList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
+            <el-option v-for="item in categoryList" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="是否原创">
@@ -33,18 +24,8 @@
         <el-form-item label="博客封面">
           <div class="avatar__wrapper">
             <div class="avatar" @click="dialogCropperVisible = true">
-              <img
-                v-if="blogForm.cover"
-                :src="$ImgPrefix + blogForm.cover"
-                alt="头像"
-                ref="blogCoverRef"
-              />
-              <Icon
-                icon="material-symbols:upload-rounded"
-                color="#cccccc"
-                width="30px"
-                v-else
-              ></Icon>
+              <img v-if="blogForm.cover" :src="$ImgPrefix + blogForm.cover" alt="头像" ref="blogCoverRef" />
+              <Icon icon="material-symbols:upload-rounded" color="#cccccc" width="30px" v-else></Icon>
               <div class="imgMask">
                 <Icon icon="material-symbols:edit-square-outline" width="25px"></Icon>
               </div>
@@ -55,24 +36,14 @@
     </template>
     <template #footer>
       <div style="flex: auto">
-        <el-button>cancel</el-button>
-        <el-button type="primary" @click="publishBlog(blogFormRef)">confirm</el-button>
+        <el-button>取消</el-button>
+        <el-button type="primary" @click="blogDrawerData['submitEvent'](blogFormRef)">确定</el-button>
       </div>
     </template>
   </el-drawer>
 
-  <el-dialog
-    v-model="dialogCropperVisible"
-    destroy-on-close
-    title="修改用户头像"
-    class="cropper-dailog"
-    align-center
-  >
-    <cropper-image
-      :img="$ImgPrefix + blogForm.cover"
-      @submit-img="submitImg"
-      v-bind="cropperOptions"
-    ></cropper-image>
+  <el-dialog v-model="dialogCropperVisible" destroy-on-close title="修改用户头像" class="cropper-dailog" align-center>
+    <cropper-image :img="$ImgPrefix + blogForm.cover" @submit-img="submitImg" v-bind="cropperOptions"></cropper-image>
   </el-dialog>
 </template>
 
@@ -82,7 +53,8 @@ import apiBlog from '@/api/modules/blog'
 import apiUpload from '@/api/modules/upload'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { CropperOptionsData } from '@/types/vue-cropper'
-const blogDrawer = ref(true) //drawer控制
+const route = useRoute()
+const blogDrawer = ref(false) //drawer控制
 const blogFormRef = ref() //表单ref
 const blogCoverRef = ref() //博客封面img ref
 const dialogCropperVisible = ref(false) //修改用户头像弹窗控制
@@ -100,7 +72,7 @@ const blogForm = reactive<Blog.createReqData>({
 //表单验证规则
 const rules = reactive<FormRules<Blog.createReqData>>({
   title: [{ required: true, message: '请输入博客标题', trigger: 'blur' }],
-  category: [{ required: true, message: '请选择博客分类', trigger: 'change' }]
+  category: [{ required: true, message: '请选择博客分类', trigger: ['change'], type: 'string' }]
 })
 //cropper配置
 const cropperOptions = reactive<CropperOptionsData>({
@@ -110,9 +82,51 @@ const cropperOptions = reactive<CropperOptionsData>({
   fixedNumber: [16, 9],
   fillColor: ''
 })
+//控制写博客/编辑博客的事件
+const blogDrawerData = reactive<{
+  submitEvent: Function
+}>({
+  submitEvent: () => {}
+})
 
-onBeforeMount(() => {
+/* 监听路由变化 */
+watch(
+  () => route.query.blogId,
+  async () => {
+    //如果携带blogId，则请求博客数据
+    const blogId = route.query.blogId
+    if (blogId) {
+      const res = await apiBlog.singleBlog({ blogId })
+      blogForm.abstract = res.data.abstract
+      blogForm.title = res.data.title
+      blogForm.category = res.data.category
+      blogForm.cover = res.data.cover
+      blogForm.content = res.data.content
+      blogForm.isOriginal = res.data.isOriginal
+      blogForm.isSticky = res.data.isSticky
+    }
+  },
+  {
+    immediate: true,
+    deep: true
+  }
+)
+
+onBeforeMount(async () => {
   getBlogCategoryList()
+})
+
+onBeforeRouteLeave(() => {
+  //离开页面时，如果没有保存或者发布文章，需要询问
+
+  //如果已经保存或者发布文章，则清空blogFrom
+  blogForm.abstract = ''
+  blogForm.title = ''
+  blogForm.category = ''
+  blogForm.cover = ''
+  blogForm.content = ''
+  blogForm.isOriginal = true
+  blogForm.isSticky = false
 })
 
 /* 获取博客分类列表 */
@@ -121,10 +135,19 @@ async function getBlogCategoryList() {
   categoryList.value = res.data
 }
 
-/* 上传博客处理函数 */
+/* 上传博客处理函数：markdown为vditor组件返回 */
 function publishBlogHandler(markdown: string) {
   blogDrawer.value = true
+  nextTick(() => {
+    blogFormRef.value.clearValidate()
+  })
   blogForm.content = markdown
+  //如果路由携带id，则为编辑模式
+  if (route.query.blogId) {
+    blogDrawerData.submitEvent = editBlog
+  } else {
+    blogDrawerData.submitEvent = publishBlog
+  }
 }
 
 /* 上传博客 */
@@ -132,15 +155,39 @@ async function publishBlog(formEl: FormInstance | undefined) {
   if (!formEl) return
   await formEl.validate(async (valid, fields) => {
     if (valid) {
-      //确定上传博客的时候再上传封面，拿到封面path
-      const file = new File([imgBlob.value], `example.${cropperOptions.outputType}`)
-      const formData = new FormData()
-      formData.append('image', file)
-      const res = await apiUpload.uploadSingleImage(formData)
-      const path = res.data.path
-      blogForm.cover = path
+      //确定上传博客的时候，如果有封面，再上传封面
+      if (imgBlob.value) {
+        const file = new File([imgBlob.value], `example.${cropperOptions.outputType}`)
+        const formData = new FormData()
+        formData.append('image', file)
+        const res = await apiUpload.uploadSingleImage(formData)
+        const path = res.data.path
+        blogForm.cover = path
+      }
       //上传博客
       await apiBlog.create(blogForm)
+      blogDrawer.value = false
+    }
+  })
+}
+
+/* 编辑博客 */
+async function editBlog(formEl: FormInstance | undefined) {
+  if (!formEl) return
+  await formEl.validate(async (valid, fields) => {
+    if (valid) {
+      //确定上传博客的时候，如果有封面，再上传封面
+      if (imgBlob.value) {
+        const file = new File([imgBlob.value], `example.${cropperOptions.outputType}`)
+        const formData = new FormData()
+        formData.append('image', file)
+        const res = await apiUpload.uploadSingleImage(formData)
+        const path = res.data.path
+        blogForm.cover = path
+      }
+      //上传博客
+      await apiBlog.edit({ id: route.query.blogId as string, ...blogForm })
+      blogDrawer.value = false
     }
   })
 }

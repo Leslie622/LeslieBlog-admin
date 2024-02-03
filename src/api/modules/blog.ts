@@ -7,6 +7,8 @@ export default {
   delete: (data: Blog.deleteReqData) => ApiService.post('blog/delete', data),
   //编辑博客
   edit: (data: Blog.editReqData) => ApiService.post('blog/edit', data),
-  //获取分类列表
-  getList: (data:any) => ApiService.post<Blog.listResData>('blog/list',data)
+  //获取博客列表
+  getList: (data: any) => ApiService.post<Blog.listResData>('blog/list', data),
+  //查询单篇博客
+  singleBlog: (data: any) => ApiService.post<Blog.blogInfo>('blog/singleBlog', data)
 }

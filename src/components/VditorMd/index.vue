@@ -10,19 +10,33 @@ import myOptions from './options'
 
 const globalProperties = getCurrentInstance()?.appContext.config.globalProperties //全局变量
 const vditor = ref<Vditor | null>(null) //实例
-const props = withDefaults(defineProps<{ content: string }>(), {
-  content: ''
-})
 const emit = defineEmits<{
   publishBlog: [markdown: string]
+  getVidtorInstance: [vditor: any]
 }>()
+
+const props = withDefaults(
+  defineProps<{
+    content: string
+  }>(),
+  {
+    content: ''
+  }
+)
 
 //配置项
 const options = reactive<IOptions>({
   height: '100%',
   placeholder: '开始写文章...',
   after: () => {
-    vditor.value!.setValue(props.content)
+    //编辑器渲染完成，监听父组件传值
+    vditor.value?.setValue(props.content)
+    watch(
+      () => props.content,
+      (content) => {
+        vditor.value?.setValue(content)
+      }
+    )
   },
   toolbar: [
     ...myOptions.toolbarConfig,
@@ -41,6 +55,9 @@ const options = reactive<IOptions>({
   counter: {
     enable: true,
     type: 'text'
+  },
+  cache: {
+    enable: false
   },
   preview: {
     delay: 0,
