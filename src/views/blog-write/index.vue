@@ -1,5 +1,5 @@
 <template>
-  <vditor-md @publish-blog="publishBlogHandler" :content="blogForm.content"></vditor-md>
+  <vditor-md @publish-blog="publishBlogHandler" @blur="blurHandler" @recall="setBlogCache" ref="vditorRef" :content="blogForm.draft ? blogForm.draft : blogForm.content"></vditor-md>
 
   <el-drawer title="发布博客" v-model="blogDrawer" direction="rtl" :size="400">
     <template #default>
@@ -37,7 +37,8 @@
     <template #footer>
       <div style="flex: auto">
         <el-button>取消</el-button>
-        <el-button type="primary" @click="blogDrawerData['submitEvent'](blogFormRef)">确定</el-button>
+        <el-button type="warning" @click="publishAsDraft">保存草稿</el-button>
+        <el-button type="primary" @click="blogDrawerData['submitEvent'](blogFormRef)">上传</el-button>
       </div>
     </template>
   </el-drawer>
@@ -51,11 +52,14 @@
 import apiBlogCategory from '@/api/modules/blogCategory'
 import apiBlog from '@/api/modules/blog'
 import apiUpload from '@/api/modules/upload'
+import { useCommonStore } from '@/stores/modules/common'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { CropperOptionsData } from '@/types/vue-cropper'
 const route = useRoute()
+const commonStore = useCommonStore()
 const blogDrawer = ref(false) //drawer控制
 const blogFormRef = ref() //表单ref
+const vditorRef = ref() //vditorRef
 const blogCoverRef = ref() //博客封面img ref
 const dialogCropperVisible = ref(false) //修改用户头像弹窗控制
 const imgBlob = ref() //临时存储Blob
@@ -65,6 +69,7 @@ const blogForm = reactive<Blog.createReqData>({
   abstract: '',
   cover: '',
   content: '',
+  draft: '',
   category: '',
   isOriginal: true,
   isSticky: false
@@ -102,6 +107,7 @@ watch(
       blogForm.category = res.data.category
       blogForm.cover = res.data.cover
       blogForm.content = res.data.content
+      blogForm.draft = res.data.draft
       blogForm.isOriginal = res.data.isOriginal
       blogForm.isSticky = res.data.isSticky
     }
@@ -116,18 +122,50 @@ onBeforeMount(async () => {
   getBlogCategoryList()
 })
 
-onBeforeRouteLeave(() => {
-  //离开页面时，如果没有保存或者发布文章，需要询问
+/* 浏览器刷新时缓存博客，以便回溯 */
+window.addEventListener('beforeunload', function () {
+  const vidtor = vditorRef.value.getVditorInstance()
+  const value = vidtor.getValue()
+  localStorage.setItem('blogCache', JSON.stringify({ ...blogForm, content: value }))
+})
 
-  //如果已经保存或者发布文章，则清空blogFrom
+/* 编辑器失焦缓存博客数据，以便回溯 */
+function blurHandler(value: string) {
+  localStorage.setItem('blogCache', JSON.stringify({ ...blogForm, content: value }))
+}
+
+onBeforeRouteLeave((to, from, next) => {
+  //离开页面时，如果没有发布文章，需要询问
+  if (!commonStore.isBlogPublished) {
+    ElMessageBox.confirm('您还没有上传博客或保存为草稿，离开页面会丢失博客内容，确定离开吗？', '离开页面提醒', {
+      confirmButtonText: '不离开',
+      cancelButtonText: '离开',
+      closeOnClickModal: false,
+      type: 'warning'
+    })
+      .then(() => {})
+      .catch(() => {
+        resetBlogFrom()
+        next()
+      })
+  } else {
+    //离开页面清空blogFrom
+    resetBlogFrom()
+    next()
+    commonStore.isBlogPublished = false
+  }
+})
+
+function resetBlogFrom() {
   blogForm.abstract = ''
   blogForm.title = ''
   blogForm.category = ''
   blogForm.cover = ''
   blogForm.content = ''
+  blogForm.draft = ''
   blogForm.isOriginal = true
   blogForm.isSticky = false
-})
+}
 
 /* 获取博客分类列表 */
 async function getBlogCategoryList() {
@@ -164,9 +202,12 @@ async function publishBlog(formEl: FormInstance | undefined) {
         const path = res.data.path
         blogForm.cover = path
       }
-      //上传博客
+      //上传博客：清空draft
+      blogForm.draft = ''
       await apiBlog.create(blogForm)
       blogDrawer.value = false
+      commonStore.isBlogPublished = true
+      resetBlogFrom()
     }
   })
 }
@@ -185,11 +226,38 @@ async function editBlog(formEl: FormInstance | undefined) {
         const path = res.data.path
         blogForm.cover = path
       }
-      //上传博客
+      //上传博客：清空draft
+      blogForm.draft = ''
       await apiBlog.edit({ id: route.query.blogId as string, ...blogForm })
       blogDrawer.value = false
+      commonStore.isBlogPublished = true
+      resetBlogFrom()
     }
   })
+}
+
+/* 上传草稿 */
+async function publishAsDraft() {
+  //确定上传博客的时候，如果有封面，再上传封面
+  if (imgBlob.value) {
+    const file = new File([imgBlob.value], `example.${cropperOptions.outputType}`)
+    const formData = new FormData()
+    formData.append('image', file)
+    const res = await apiUpload.uploadSingleImage(formData)
+    const path = res.data.path
+    blogForm.cover = path
+  }
+  //上传草稿：
+  blogForm.draft = blogForm.content
+  //编辑草稿，调用编辑接口，否则调用创建接口
+  if (route.query.blogId) {
+    await apiBlog.edit({ id: route.query.blogId as string, ...blogForm })
+  } else {
+    await apiBlog.create(blogForm)
+  }
+  blogDrawer.value = false
+  commonStore.isBlogPublished = true
+  resetBlogFrom()
 }
 
 /* 上传头像处理函数 */
@@ -203,6 +271,21 @@ async function submitImg(blob: Blob) {
     blogCoverRef.value.src = blobUrl
   })
   dialogCropperVisible.value = false
+}
+
+/* 填充博客缓存数据 */
+function setBlogCache(vidtor: any) {
+  if (localStorage.getItem('blogCache')) {
+    const blogInfo = JSON.parse(localStorage.getItem('blogCache')!)
+    blogForm.abstract = blogInfo.abstract
+    blogForm.title = blogInfo.title
+    blogForm.category = blogInfo.category
+    blogForm.cover = blogInfo.cover
+    blogForm.content = blogInfo.content
+    blogForm.draft = blogInfo.draft
+    blogForm.isOriginal = blogInfo.isOriginal
+    blogForm.isSticky = blogInfo.isSticky
+  }
 }
 </script>
 

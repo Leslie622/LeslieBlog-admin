@@ -214,6 +214,7 @@ namespace Blog {
     abstract: string
     cover: string
     content: string
+    draft: string
     category: string
     author: string
     views: number
@@ -229,6 +230,7 @@ namespace Blog {
     abstract: string
     cover: string
     content: string
+    draft: string
     category: string
     isOriginal: boolean
     isSticky: boolean
@@ -241,6 +243,7 @@ namespace Blog {
     abstract?: string
     cover?: string
     content?: string
+    draft?: string
     category?: string
     isOriginal?: boolean
     isSticky?: boolean

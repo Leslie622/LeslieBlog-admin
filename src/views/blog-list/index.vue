@@ -16,20 +16,9 @@
       <el-table-column label="标题" prop="title" />
       <el-table-column label="所属分类" prop="category">
         <template #header>
-          <el-select
-            v-model="blogListConfig.category"
-            style="width: 150px"
-            size="small"
-            placeholder="选择分类进行筛选"
-            @change="findByCategory"
-          >
+          <el-select v-model="blogListConfig.category" style="width: 150px" size="small" placeholder="选择分类进行筛选" @change="findByCategory">
             <el-option label="所有" value=""></el-option>
-            <el-option
-              v-for="item in categoryList"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            />
+            <el-option v-for="item in categoryList" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
         </template>
       </el-table-column>
@@ -44,17 +33,19 @@
       </el-table-column>
       <el-table-column label="是否原创" prop="isOriginal" width="120px" sortable="custom">
         <template #default="scope">
-          <el-tag v-if="scope.row.isOriginal" type="warning" size="small" class="tag">
-            原创
-          </el-tag>
+          <el-tag v-if="scope.row.isOriginal" type="warning" size="small" class="tag"> 原创 </el-tag>
+          <span v-else></span>
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" prop="draft" width="120px">
+        <template #default="scope">
+          <el-tag v-if="scope.row.draft != ''" type="warning" size="small" class="tag"> 草稿 </el-tag>
           <span v-else></span>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
         <template #default="scope">
-          <el-button type="primary" size="small" @click="blogEditHandler(scope.row)"
-            >编辑</el-button
-          >
+          <el-button type="primary" size="small" @click="blogEditHandler(scope.row)">编辑</el-button>
           <el-popconfirm title="确定要删除该博客吗？" @confirm="blogDeleteHandler(scope.row)">
             <template #reference>
               <el-button type="danger" size="small">删除</el-button>
@@ -64,14 +55,7 @@
       </el-table-column>
     </el-table>
     <div class="pagination">
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        :page-size="blogListConfig.pageSize"
-        :total="blogTotal"
-        v-model:current-page="blogListConfig.pageNum"
-        @update:current-page="findByPage"
-      />
+      <el-pagination background layout="prev, pager, next" :page-size="blogListConfig.pageSize" :total="blogTotal" v-model:current-page="blogListConfig.pageNum" @update:current-page="findByPage" />
     </div>
   </div>
 </template>
