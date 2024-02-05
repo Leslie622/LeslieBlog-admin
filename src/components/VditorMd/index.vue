@@ -58,6 +58,21 @@ const options = reactive<IOptions>({
   },
   toolbar: [
     ...myOptions.toolbarConfig,
+
+    {
+      name: 'recall',
+      tipPosition: 'e',
+      tip: '获取缓存',
+      icon: '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 28 28"><circle cx="7" cy="7" r="1" fill="#586069"/><circle cx="7" cy="15" r="1" fill="#586069"/><circle cx="7" cy="23" r="1" fill="#586069"/><path fill="#586069" d="M12 26H4v-6h8v-2H4v-6h18V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v22a2 2 0 0 0 2 2h8ZM4 4h16v6H4Z"/><path fill="#586069" d="M28 17v2.413A6.996 6.996 0 1 0 22 30v-2a5 5 0 1 1 4.576-7H24v2h6v-6Z"/></svg>',
+      className: 'recall',
+      click: () => {
+        //获取缓存内容
+        emit('recall', vditor.value)
+      }
+    },
+    {
+      name: '|'
+    },
     {
       name: 'publish',
       tipPosition: 'e',
@@ -67,17 +82,6 @@ const options = reactive<IOptions>({
       click: () => {
         //获取md内容并发送给父组件
         emit('publishBlog', vditor.value?.getValue()!)
-      }
-    },
-    {
-      name: 'recall',
-      tipPosition: 'e',
-      tip: '获取缓存',
-      icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="4 4 16 16"><g fill="none" stroke="#586069" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="14" stroke-dashoffset="14" d="M6 19h12"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.4s" values="14;0"/></path><path stroke-dasharray="18" stroke-dashoffset="18" d="M12 15 h2 v-6 h2.5 L12 4.5M12 15 h-2 v-6 h-2.5 L12 4.5"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.4s" values="18;0"/><animate attributeName="d" calcMode="linear" dur="1.5s" keyTimes="0;0.7;1" repeatCount="indefinite" values="M12 15 h2 v-6 h2.5 L12 4.5M12 15 h-2 v-6 h-2.5 L12 4.5;M12 15 h2 v-3 h2.5 L12 7.5M12 15 h-2 v-3 h-2.5 L12 7.5;M12 15 h2 v-6 h2.5 L12 4.5M12 15 h-2 v-6 h-2.5 L12 4.5"/></path></g></svg>',
-      className: 'recall',
-      click: () => {
-        //获取缓存内容
-        emit('recall', vditor.value)
       }
     }
   ],
