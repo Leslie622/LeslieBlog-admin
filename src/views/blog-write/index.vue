@@ -51,7 +51,7 @@
   </el-drawer>
 
   <el-dialog v-model="dialogCropperVisible" destroy-on-close title="修改用户头像" class="cropper-dailog" align-center>
-    <cropper-image :img="$ImgPrefix + blogForm.cover" @submit-img="submitImg" v-bind="cropperOptions"></cropper-image>
+    <cropper-image :img="blogForm.cover === '' ? '' : $ImgPrefix + blogForm.cover" @submit-img="submitImg" v-bind="cropperOptions"></cropper-image>
   </el-dialog>
 </template>
 
