@@ -1,5 +1,12 @@
 <template>
-  <vditor-md @publish-blog="publishBlogHandler" @blur="blurHandler" @recall="setBlogCache" ref="vditorRef" :content="blogForm.draft ? blogForm.draft : blogForm.content"></vditor-md>
+  <vditor-md
+    @publish-blog="publishBlogHandler"
+    @blur="blurHandler"
+    @input="inputHandler"
+    @recall="setBlogCache"
+    ref="vditorRef"
+    :content="blogForm.draft ? blogForm.draft : blogForm.content"
+  ></vditor-md>
 
   <el-drawer title="发布博客" v-model="blogDrawer" direction="rtl" :size="400">
     <template #default>
@@ -55,6 +62,7 @@ import apiUpload from '@/api/modules/upload'
 import { useCommonStore } from '@/stores/modules/common'
 import type { FormInstance, FormRules } from 'element-plus'
 import type { CropperOptionsData } from '@/types/vue-cropper'
+
 const route = useRoute()
 const commonStore = useCommonStore()
 const blogDrawer = ref(false) //drawer控制
@@ -63,7 +71,8 @@ const vditorRef = ref() //vditorRef
 const blogCoverRef = ref() //博客封面img ref
 const dialogCropperVisible = ref(false) //修改用户头像弹窗控制
 const imgBlob = ref() //临时存储Blob
-const categoryList = ref<BlogCategory.listResData>([])
+const categoryList = ref<BlogCategory.listResData>([]) //博客分类列表
+//博客内容表单
 const blogForm = reactive<Blog.createReqData>({
   title: '',
   abstract: '',
@@ -74,7 +83,7 @@ const blogForm = reactive<Blog.createReqData>({
   isOriginal: true,
   isSticky: false
 })
-//表单验证规则
+//博客表单验证规则
 const rules = reactive<FormRules<Blog.createReqData>>({
   title: [{ required: true, message: '请输入博客标题', trigger: 'blur' }],
   category: [{ required: true, message: '请选择博客分类', trigger: ['change'], type: 'string' }]
@@ -87,18 +96,47 @@ const cropperOptions = reactive<CropperOptionsData>({
   fixedNumber: [16, 9],
   fillColor: ''
 })
-//控制写博客/编辑博客的事件
+//弹窗数据：控制写博客/编辑的事件
 const blogDrawerData = reactive<{
   submitEvent: Function
 }>({
   submitEvent: () => {}
 })
 
-/* 监听路由变化 */
+onBeforeMount(async () => {
+  getBlogCategoryList()
+})
+
+onBeforeRouteLeave((to, from, next) => {
+  //离开页面时，如果编辑器有内容，且没有发布文章，需要询问
+  if (commonStore.isHaveBlogCotent) {
+    ElMessageBox.confirm('您还没有上传博客或保存为草稿，离开页面会丢失博客内容，确定离开吗？', '离开页面提醒', {
+      confirmButtonText: '不离开',
+      cancelButtonText: '离开',
+      closeOnClickModal: false,
+      type: 'warning'
+    })
+      .then(() => {})
+      .catch(() => {
+        resetBlogFrom()
+        //清空编辑器内容：因为keepAlive复用组件会留存编辑器内容
+        const vidtor = vditorRef.value.getVditorInstance()
+        vidtor.setValue('')
+        commonStore.isHaveBlogCotent = false
+        next()
+      })
+  } else {
+    //离开页面清空blogFrom
+    resetBlogFrom()
+    next()
+    commonStore.isHaveBlogCotent = false
+  }
+})
+
+/* 监听路由query变化:如果携带blogId，则请求博客数据 */
 watch(
   () => route.query.blogId,
   async () => {
-    //如果携带blogId，则请求博客数据
     const blogId = route.query.blogId
     if (blogId) {
       const res = await apiBlog.singleBlog({ blogId })
@@ -118,10 +156,6 @@ watch(
   }
 )
 
-onBeforeMount(async () => {
-  getBlogCategoryList()
-})
-
 /* 浏览器刷新时缓存博客，以便回溯 */
 window.addEventListener('beforeunload', function () {
   const vidtor = vditorRef.value.getVditorInstance()
@@ -134,37 +168,9 @@ function blurHandler(value: string) {
   localStorage.setItem('blogCache', JSON.stringify({ ...blogForm, content: value }))
 }
 
-onBeforeRouteLeave((to, from, next) => {
-  //离开页面时，如果没有发布文章，需要询问
-  if (!commonStore.isBlogPublished) {
-    ElMessageBox.confirm('您还没有上传博客或保存为草稿，离开页面会丢失博客内容，确定离开吗？', '离开页面提醒', {
-      confirmButtonText: '不离开',
-      cancelButtonText: '离开',
-      closeOnClickModal: false,
-      type: 'warning'
-    })
-      .then(() => {})
-      .catch(() => {
-        resetBlogFrom()
-        next()
-      })
-  } else {
-    //离开页面清空blogFrom
-    resetBlogFrom()
-    next()
-    commonStore.isBlogPublished = false
-  }
-})
-
-function resetBlogFrom() {
-  blogForm.abstract = ''
-  blogForm.title = ''
-  blogForm.category = ''
-  blogForm.cover = ''
-  blogForm.content = ''
-  blogForm.draft = ''
-  blogForm.isOriginal = true
-  blogForm.isSticky = false
+/* 编辑器有内容输入则标记博客为未发表状态，触发离开页面提醒 */
+function inputHandler(value: string) {
+  commonStore.isHaveBlogCotent = true
 }
 
 /* 获取博客分类列表 */
@@ -173,12 +179,14 @@ async function getBlogCategoryList() {
   categoryList.value = res.data
 }
 
-/* 上传博客处理函数：markdown为vditor组件返回 */
+/* 上传博客处理函数 */
 function publishBlogHandler(markdown: string) {
   blogDrawer.value = true
+  //处理element form验证bug
   nextTick(() => {
     blogFormRef.value.clearValidate()
   })
+  //获取编辑器内容
   blogForm.content = markdown
   //如果路由携带id，则为编辑模式
   if (route.query.blogId) {
@@ -206,8 +214,8 @@ async function publishBlog(formEl: FormInstance | undefined) {
       blogForm.draft = ''
       await apiBlog.create(blogForm)
       blogDrawer.value = false
-      commonStore.isBlogPublished = true
       resetBlogFrom()
+      commonStore.isHaveBlogCotent = false
     }
   })
 }
@@ -230,8 +238,8 @@ async function editBlog(formEl: FormInstance | undefined) {
       blogForm.draft = ''
       await apiBlog.edit({ id: route.query.blogId as string, ...blogForm })
       blogDrawer.value = false
-      commonStore.isBlogPublished = true
       resetBlogFrom()
+      commonStore.isHaveBlogCotent = false
     }
   })
 }
@@ -256,8 +264,8 @@ async function publishAsDraft() {
     await apiBlog.create(blogForm)
   }
   blogDrawer.value = false
-  commonStore.isBlogPublished = true
   resetBlogFrom()
+  commonStore.isHaveBlogCotent = false
 }
 
 /* 上传头像处理函数 */
@@ -286,6 +294,18 @@ function setBlogCache(vidtor: any) {
     blogForm.isOriginal = blogInfo.isOriginal
     blogForm.isSticky = blogInfo.isSticky
   }
+}
+
+/* 重置博客表单数据 */
+function resetBlogFrom() {
+  blogForm.abstract = ''
+  blogForm.title = ''
+  blogForm.category = ''
+  blogForm.cover = ''
+  blogForm.content = ''
+  blogForm.draft = ''
+  blogForm.isOriginal = true
+  blogForm.isSticky = false
 }
 </script>
 

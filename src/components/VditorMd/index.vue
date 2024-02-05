@@ -14,6 +14,7 @@ const emit = defineEmits<{
   publishBlog: [markdown: string]
   recall: [vditor: any]
   blur: [value: string]
+  input: [value: string]
 }>()
 
 const props = withDefaults(
@@ -50,8 +51,10 @@ const options = reactive<IOptions>({
     )
   },
   blur: (value: string) => {
-    //失焦时保存数据，以便回溯
     emit('blur', value)
+  },
+  input: (value: string) => {
+    emit('input', value)
   },
   toolbar: [
     ...myOptions.toolbarConfig,
