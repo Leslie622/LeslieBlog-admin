@@ -1,22 +1,11 @@
 <template>
   <div class="cropper">
     <div class="cropper__main" :style="{ height: height + 'px', width: width + 'px' }">
-      <vue-cropper
-        v-bind="props"
-        :img="imageInfo.url ? imageInfo.url : img"
-        ref="cropperRef"
-      ></vue-cropper>
+      <vue-cropper v-bind="props" :img="imageInfo.url ? imageInfo.url : img" ref="cropperRef"></vue-cropper>
     </div>
     <div class="cropper__action">
       <div>
-        <el-upload
-          ref="uploadRef"
-          class="upload-demo"
-          :showFileList="false"
-          action="#"
-          :auto-upload="false"
-          :on-change="uploadImage"
-        >
+        <el-upload ref="uploadRef" class="upload-demo" :showFileList="false" action="#" :auto-upload="false" :on-change="uploadImage">
           <el-button>选择图片</el-button>
         </el-upload>
       </div>
@@ -31,7 +20,7 @@
         </el-button>
       </div>
       <div>
-        <el-button @click="getClippedImg">剪裁</el-button>
+        <el-button @click="getClippedImg" :disabled="!imageInfo.url">剪裁</el-button>
       </div>
     </div>
   </div>
