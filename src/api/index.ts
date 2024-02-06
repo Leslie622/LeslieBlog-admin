@@ -52,6 +52,7 @@ export class Request {
             router.push('/welcome')
           }
           ElMessage.error(message)
+          NProgress.done()
           return Promise.reject(response.data)
         }
         NProgress.done()
