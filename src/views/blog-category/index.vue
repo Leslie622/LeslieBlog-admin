@@ -3,12 +3,11 @@
   <!-- 分类列表 -->
   <el-table :data="categoryList" style="width: 100%">
     <el-table-column label="分类名称" prop="name" />
+    <el-table-column label="博客数量" prop="count" />
     <el-table-column label="分类介绍" prop="introduce" />
     <el-table-column label="操作">
       <template #default="scope">
-        <el-button type="primary" size="small" @click="editCategoryHandler(scope.row)">
-          编辑
-        </el-button>
+        <el-button type="primary" size="small" @click="editCategoryHandler(scope.row)"> 编辑 </el-button>
         <el-popconfirm title="确定要删除该分类吗？" @confirm="deleteCategorySubmit(scope.row)">
           <template #reference>
             <el-button size="small" type="danger"> 删除 </el-button>
@@ -18,13 +17,7 @@
     </el-table-column>
   </el-table>
 
-  <el-dialog
-    v-model="dialogFormVisible"
-    @closed="dialogCloseHandler"
-    :title="categoryDialogData['title']"
-    :align-center="true"
-    width="40%"
-  >
+  <el-dialog v-model="dialogFormVisible" @closed="dialogCloseHandler" :title="categoryDialogData['title']" :align-center="true" width="40%">
     <div>
       <el-form :model="categoryForm" :rules="rules" ref="categoryFormRef" label-width="auto">
         <el-form-item label="分类名称" prop="name">
@@ -38,9 +31,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="categoryDialogData['submitEvent'](categoryFormRef)">{{
-          categoryDialogData['submitName']
-        }}</el-button>
+        <el-button type="primary" @click="categoryDialogData['submitEvent'](categoryFormRef)">{{ categoryDialogData['submitName'] }}</el-button>
       </span>
     </template>
   </el-dialog>
@@ -76,6 +67,10 @@ const rules = reactive<FormRules>({
 })
 
 onBeforeMount(() => {
+  getCategoryList()
+})
+
+onActivated(() => {
   getCategoryList()
 })
 
