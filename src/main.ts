@@ -8,11 +8,15 @@ import router from './router'
 import 'normalize.css'
 //全局CSS
 import '@/assets/styles/globals.scss'
+//自定义指令
+import directives from '@/directives/index'
 
 const app = createApp(App)
 app.config.globalProperties.$ImgPrefix = 'https://leslie-blog-1314141789.cos.ap-nanjing.myqcloud.com/'
 
 app.use(createPinia())
 app.use(router)
+app.use(directives)
 
 app.mount('#app')
+
