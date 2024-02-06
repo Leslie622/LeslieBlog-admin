@@ -16,7 +16,7 @@
       <el-table-column label="标题" prop="title" />
       <el-table-column label="所属分类" prop="category">
         <template #header>
-          <el-select v-model="blogListConfig.category" style="width: 150px" size="small" placeholder="选择分类进行筛选" @change="findByCategory">
+          <el-select v-model="blogListConfig.category" style="width: 140px" size="small" placeholder="选择分类进行筛选" @change="findByCategory">
             <el-option label="所有" value=""></el-option>
             <el-option v-for="item in categoryList" :key="item.id" :label="item.name" :value="item.id" />
           </el-select>
@@ -88,6 +88,11 @@ const sortField = new Map<string, any>()
 const blogTotal = ref(blogListConfig.pageSize)
 
 onBeforeMount(() => {
+  getBlogCategoryList()
+  getBlogList()
+})
+
+onActivated(() => {
   getBlogCategoryList()
   getBlogList()
 })
