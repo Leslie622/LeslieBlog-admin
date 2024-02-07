@@ -296,6 +296,7 @@ function setBlogCache(vidtor: any) {
     blogForm.draft = blogInfo.draft
     blogForm.isOriginal = blogInfo.isOriginal
     blogForm.isSticky = blogInfo.isSticky
+    ElMessage.success("获取本地缓存成功")
   }
 }
 
