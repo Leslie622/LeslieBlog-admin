@@ -20,7 +20,7 @@
     height: 50px;
     font-size: 20px;
     color: red;
-    background-color: #343a40;
+    background-image: $backImgDark;
   }
 }
 </style>

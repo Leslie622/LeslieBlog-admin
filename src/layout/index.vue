@@ -32,6 +32,7 @@
 }
 
 .layout__header {
+  background-image: $backImgLight;
   height: 50px;
   box-shadow: 0 1px 3px hsla(0, 0%, 7%, 0.1);
 }

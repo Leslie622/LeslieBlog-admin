@@ -16,9 +16,11 @@ const route = useRoute()
 .menu {
   height: 100%;
   border: none;
-  --el-menu-bg-color: #343a40;
   --el-menu-text-color: #c2c7d0;
   --el-menu-hover-bg-color: rgba(255, 255, 255, 0.1);
-  --el-menu-active-color: #ffffff;
+  background-image: $backImgDark;
+  :deep(.el-menu) {
+    background-image: $backImgDark;
+  }
 }
 </style>

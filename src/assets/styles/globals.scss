@@ -1,4 +1,6 @@
-/* 全局样式 */
+/* 
+ * 全局样式
+ */
 
 #app {
   height: 100vh;
@@ -20,4 +22,14 @@
   box-shadow:
     rgba(0, 0, 0, 0.05) 0px 0px 0px 1px,
     rgb(209, 213, 219) 0px 0px 0px 1px inset;
+}
+
+/* 
+ * element样式覆盖
+ */
+
+//重置el-drawer el-dialog背景
+.el-drawer,
+.el-dialog {
+  background-image: $backImgLight;
 }
