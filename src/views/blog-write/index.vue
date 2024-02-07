@@ -107,6 +107,10 @@ onBeforeMount(async () => {
   getBlogCategoryList()
 })
 
+onActivated(() => {
+  getBlogCategoryList()
+})
+
 onBeforeRouteLeave((to, from, next) => {
   //离开页面时，如果编辑器有内容，且没有发布文章，需要询问
   if (commonStore.isHaveBlogCotent) {
@@ -213,7 +217,7 @@ async function publishBlog(formEl: FormInstance | undefined) {
       //上传博客：清空draft
       blogForm.draft = ''
       await apiBlog.create(blogForm)
-      ElMessage.success("上传博客成功")
+      ElMessage.success('上传博客成功')
       blogDrawer.value = false
       resetBlogFrom()
       commonStore.isHaveBlogCotent = false
@@ -238,7 +242,7 @@ async function editBlog(formEl: FormInstance | undefined) {
       //上传博客：清空draft
       blogForm.draft = ''
       await apiBlog.edit({ id: route.query.blogId as string, ...blogForm })
-      ElMessage.success("编辑博客成功")
+      ElMessage.success('编辑博客成功')
       blogDrawer.value = false
       resetBlogFrom()
       commonStore.isHaveBlogCotent = false
@@ -265,7 +269,7 @@ async function publishAsDraft() {
   } else {
     await apiBlog.create(blogForm)
   }
-  ElMessage.success("保存草稿成功")
+  ElMessage.success('保存草稿成功')
   blogDrawer.value = false
   resetBlogFrom()
   commonStore.isHaveBlogCotent = false
@@ -296,7 +300,7 @@ function setBlogCache(vidtor: any) {
     blogForm.draft = blogInfo.draft
     blogForm.isOriginal = blogInfo.isOriginal
     blogForm.isSticky = blogInfo.isSticky
-    ElMessage.success("获取本地缓存成功")
+    ElMessage.success('获取本地缓存成功')
   }
 }
 
