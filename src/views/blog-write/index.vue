@@ -128,7 +128,7 @@ onBeforeRouteLeave((to, from, next) => {
     })
       .then(() => {})
       .catch(() => {
-        resetBlogFrom()
+        resetBlogData()
         //清空编辑器内容：因为keepAlive复用组件会留存编辑器内容
         const vidtor = vditorRef.value.getVditorInstance()
         vidtor.setValue('')
@@ -137,7 +137,7 @@ onBeforeRouteLeave((to, from, next) => {
       })
   } else {
     //离开页面清空blogFrom
-    resetBlogFrom()
+    resetBlogData()
     next()
     commonStore.isHaveBlogCotent = false
   }
@@ -225,7 +225,7 @@ async function publishBlog(formEl: FormInstance | undefined) {
       await apiBlog.create(blogForm)
       ElMessage.success('上传博客成功')
       blogDrawer.value = false
-      resetBlogFrom()
+      resetBlogData()
       commonStore.isHaveBlogCotent = false
     }
   })
@@ -250,9 +250,9 @@ async function editBlog(formEl: FormInstance | undefined) {
       await apiBlog.edit({ id: route.query.blogId as string, ...blogForm })
       ElMessage.success('编辑博客成功')
       blogDrawer.value = false
-      resetBlogFrom()
+      resetBlogData()
       commonStore.isHaveBlogCotent = false
-      router.push("/blog/write")
+      router.push('/blog/write')
     }
   })
 }
@@ -278,7 +278,7 @@ async function publishAsDraft() {
   }
   ElMessage.success('保存草稿成功')
   blogDrawer.value = false
-  resetBlogFrom()
+  resetBlogData()
   commonStore.isHaveBlogCotent = false
 }
 
@@ -311,8 +311,8 @@ function setBlogCache(vidtor: any) {
   }
 }
 
-/* 重置博客表单数据 */
-function resetBlogFrom() {
+/* 重置博客数据 */
+function resetBlogData() {
   blogForm.abstract = ''
   blogForm.title = ''
   blogForm.category = ''
@@ -321,6 +321,7 @@ function resetBlogFrom() {
   blogForm.draft = ''
   blogForm.isOriginal = true
   blogForm.isSticky = false
+  imgBlob.value = ''
 }
 </script>
 
