@@ -69,6 +69,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 import type { CropperOptionsData } from '@/types/vue-cropper'
 
 const route = useRoute()
+const router = useRouter()
 const commonStore = useCommonStore()
 const blogDrawer = ref(false) //drawer控制
 const blogFormRef = ref() //表单ref
@@ -251,6 +252,7 @@ async function editBlog(formEl: FormInstance | undefined) {
       blogDrawer.value = false
       resetBlogFrom()
       commonStore.isHaveBlogCotent = false
+      router.push("/blog/write")
     }
   })
 }
