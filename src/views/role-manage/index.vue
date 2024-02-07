@@ -160,6 +160,7 @@ async function createRoleSubmit(formEl: FormInstance | undefined) {
         menuList: roleForm.menuList,
         isDefault: roleForm.isDefault
       })
+      ElMessage.success("新增成功")
       dialogFormVisible.value = false
       getRoleList()
     }
@@ -197,7 +198,7 @@ async function editRoleSubmit(formEl: FormInstance | undefined) {
         permissionList: roleForm.permissionList,
         menuList: roleForm.menuList
       })
-      //编辑完成后关闭弹窗并重新渲染角色列表
+      ElMessage.success("编辑成功")
       dialogFormVisible.value = false
       getRoleList()
     }
@@ -207,7 +208,7 @@ async function editRoleSubmit(formEl: FormInstance | undefined) {
 /* 删除角色 */
 async function deleteRoleSubmit(row: Role.roleResData) {
   await apiRole.deleteRole({ id: row.id })
-  //删除完成后关闭弹窗并重新渲染角色列表
+  ElMessage.success("删除成功")
   dialogFormVisible.value = false
   getRoleList()
 }
@@ -215,7 +216,7 @@ async function deleteRoleSubmit(row: Role.roleResData) {
 /* 设置默认角色 */
 async function setDafaultRole(row: Role.roleResData) {
   await apiRole.editRole({ id: row.id, isDefault: true })
-  //设置完成后关闭弹窗并重新渲染角色列表
+  ElMessage.success("设置默认角色成功")
   dialogFormVisible.value = false
   getRoleList()
 }

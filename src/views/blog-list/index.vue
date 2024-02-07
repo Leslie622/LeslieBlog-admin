@@ -143,7 +143,6 @@ function setHeaderClass(params: any) {
 
 /* 按照分类查询 */
 function findByCategory(value: string) {
-  console.log(value)
   blogListConfig.category = value
   getBlogList()
 }
@@ -158,6 +157,7 @@ async function blogDeleteHandler(row: Blog.blogInfo) {
   await apiBlog.delete({
     id: row.id
   })
+  ElMessage.success("删除成功")
   getBlogList()
 }
 

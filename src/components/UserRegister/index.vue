@@ -57,6 +57,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       try {
         //请求注册接口：该逻辑在store/user中处理
         await userStore.register(registerForm)
+        ElMessage.success("注册成功，开始登录吧！")
         emit('change-tab', 'login')
         isLoading.value = false
       } catch {

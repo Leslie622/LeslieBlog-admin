@@ -57,6 +57,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
       try {
         //请求登录接口：该逻辑在store/user中处理
         await userStore.login(loginForm)
+        ElMessage.success("登录成功，欢迎！")
         isLoading.value = false
         router.push('/home')
       } catch {

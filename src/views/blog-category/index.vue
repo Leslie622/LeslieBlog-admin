@@ -99,6 +99,7 @@ async function createCategorySubmit(formEl: FormInstance | undefined) {
         name: categoryForm.name,
         introduce: categoryForm.introduce
       })
+      ElMessage.success("新增成功")
       dialogFormVisible.value = false
       getCategoryList()
     }
@@ -130,6 +131,7 @@ async function editCategorySubmit(formEl: FormInstance | undefined) {
         name: categoryForm.name,
         introduce: categoryForm.introduce
       })
+      ElMessage.success("编辑成功")
       dialogFormVisible.value = false
       getCategoryList()
     }
@@ -139,6 +141,7 @@ async function editCategorySubmit(formEl: FormInstance | undefined) {
 /* 删除分类 */
 async function deleteCategorySubmit(row: BlogCategory.info) {
   await apiBlogCategory.delete({ id: row.id })
+  ElMessage.success("删除成功")
   dialogFormVisible.value = false
   getCategoryList()
 }

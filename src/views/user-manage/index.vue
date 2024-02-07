@@ -95,6 +95,7 @@ const editUserSubmit = async () => {
     id: userInfo.id,
     roleId: userInfo.role.roleId
   })
+  ElMessage.success("编辑成功")
   dialogFormVisible.value = false
   getUserList()
 }
@@ -104,6 +105,7 @@ const deleteUserSubmit = async (row: User.userResData) => {
   await apiUser.deleteUser({
     id: row.id
   })
+  ElMessage.success("删除成功")
   dialogFormVisible.value = false
   getUserList()
 }

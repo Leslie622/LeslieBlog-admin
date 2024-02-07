@@ -165,6 +165,7 @@ async function createMenuSubmit(formEl: FormInstance | undefined) {
     if (valid) {
       //表单验证通过
       await apiMenu.createMenu(menuForm)
+      ElMessage.success("新增成功")
       dialogCreateMenu.value = false
       getMenuList()
     }
@@ -189,6 +190,7 @@ async function editMenuSubmit(formEl: FormInstance | undefined) {
     if (valid) {
       //表单验证通过
       await apiMenu.editMenu(menuForm)
+      ElMessage.success("编辑成功")
       dialogCreateMenu.value = false
       getMenuList()
     }
@@ -201,6 +203,7 @@ const deleteMenuHandler = async (row: Menu.menuResData) => {
   await apiMenu.deleteMenu({
     id: row.id
   })
+  ElMessage.success("删除成功")
   dialogCreateMenu.value = false
   getMenuList()
 }

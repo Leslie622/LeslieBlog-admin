@@ -213,6 +213,7 @@ async function publishBlog(formEl: FormInstance | undefined) {
       //上传博客：清空draft
       blogForm.draft = ''
       await apiBlog.create(blogForm)
+      ElMessage.success("上传博客成功")
       blogDrawer.value = false
       resetBlogFrom()
       commonStore.isHaveBlogCotent = false
@@ -237,6 +238,7 @@ async function editBlog(formEl: FormInstance | undefined) {
       //上传博客：清空draft
       blogForm.draft = ''
       await apiBlog.edit({ id: route.query.blogId as string, ...blogForm })
+      ElMessage.success("编辑博客成功")
       blogDrawer.value = false
       resetBlogFrom()
       commonStore.isHaveBlogCotent = false
@@ -263,6 +265,7 @@ async function publishAsDraft() {
   } else {
     await apiBlog.create(blogForm)
   }
+  ElMessage.success("保存草稿成功")
   blogDrawer.value = false
   resetBlogFrom()
   commonStore.isHaveBlogCotent = false
