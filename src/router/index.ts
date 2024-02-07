@@ -66,7 +66,6 @@ router.beforeEach(async (to, from, next) => {
       /* 用户登录成功 如果没有注册动态路由则注册 */
       const commonStore = useCommonStore()
       if (!commonStore.isRegisterAsyncRoute) {
-        console.log('注册')
         //拿到动态路由
         const routeStore = useRouteStore()
         await routeStore.getAsyncRoute()
