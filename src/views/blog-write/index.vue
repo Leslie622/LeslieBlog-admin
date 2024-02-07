@@ -30,11 +30,16 @@
         </el-form-item>
         <el-form-item label="博客封面">
           <div class="avatar__wrapper">
-            <div class="avatar" @click="dialogCropperVisible = true">
+            <div class="avatar">
               <img v-if="blogForm.cover" :src="$ImgPrefix + blogForm.cover" alt="头像" ref="blogCoverRef" />
               <Icon icon="material-symbols:upload-rounded" color="#cccccc" width="30px" v-else></Icon>
-              <div class="imgMask">
-                <Icon icon="material-symbols:edit-square-outline" width="25px"></Icon>
+              <div class="img-mask">
+                <div class="img-mask__delete" @click="blogForm.cover = ''" v-if="blogForm.cover">
+                  <Icon icon="material-symbols:delete-outline-rounded" width="25px"></Icon>
+                </div>
+                <div class="img-mask__edit" @click="dialogCropperVisible = true">
+                  <Icon icon="material-symbols:edit-square-outline" width="25px"></Icon>
+                </div>
               </div>
             </div>
           </div>
@@ -276,7 +281,7 @@ async function publishAsDraft() {
 }
 
 /* 上传头像处理函数 */
-async function submitImg(blob: Blob) {
+function submitImg(blob: Blob) {
   //存储blob
   imgBlob.value = blob
   const blobUrl = URL.createObjectURL(blob)
@@ -335,7 +340,7 @@ function resetBlogFrom() {
     border-radius: 10px;
     cursor: pointer;
     overflow: hidden;
-    &:hover .imgMask {
+    &:hover .img-mask {
       opacity: 1;
     }
     img {
@@ -343,17 +348,36 @@ function resetBlogFrom() {
       height: 100%;
       object-fit: cover;
     }
-    .imgMask {
-      position: absolute;
+    .img-mask {
       opacity: 0;
+      position: absolute;
       display: flex;
-      align-items: center;
-      justify-content: center;
       width: 100%;
       height: 100%;
-      color: rgba(239, 239, 239, 0.5);
-      background-color: rgba(0, 0, 0, 0.5); /* 遮罩的背景颜色和透明度 */
-      transition: opacity 0.2s;
+      background-color: rgba(0, 0, 0, 0.2);
+      color: rgba(239, 239, 239, 0.4);
+      transition: opacity 0.3s;
+
+      .img-mask__delete,
+      .img-mask__edit {
+        flex: 1;
+        display: grid;
+        place-items: center;
+        transition: all 0.3s;
+      }
+
+      .img-mask__edit {
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.5);
+          color: rgba(239, 239, 239, 0.7);
+        }
+      }
+      .img-mask__delete {
+        &:hover {
+          background-color: rgba(255, 0, 0, 0.3);
+          color: rgba(239, 239, 239, 0.7);
+        }
+      }
     }
   }
 }
