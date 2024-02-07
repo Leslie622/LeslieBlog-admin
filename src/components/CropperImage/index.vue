@@ -20,7 +20,7 @@
         </el-button>
       </div>
       <div>
-        <el-button @click="getClippedImg" :disabled="!imageInfo.url">剪裁</el-button>
+        <el-button @click="getClippedImg" :disabled="!imageInfo.url && !img">剪裁</el-button>
       </div>
     </div>
   </div>
