@@ -1,12 +1,7 @@
 <template>
   <template v-for="menu in props.menuList">
     <!-- 菜单类型是1,渲染成sub-menu -->
-    <el-sub-menu
-      :index="menu.path"
-      v-if="menu.menuType === 1"
-      popper-class="popper"
-      :key="menu.menuName"
-    >
+    <el-sub-menu :index="menu.path" v-if="menu.menuType === 1" popper-class="popper" :key="menu.menuName">
       <template #title>
         <el-icon v-if="menu.icon">
           <Icon :icon="menu.icon"></Icon>
@@ -69,10 +64,10 @@ const props = defineProps<{
   }
 }
 </style>
-<style>
+<style lang="scss">
 .popper {
   .el-menu--popup {
-    background-color: #343a40;
+    background-image: $backImgDark;
     min-width: 0px;
   }
 }
