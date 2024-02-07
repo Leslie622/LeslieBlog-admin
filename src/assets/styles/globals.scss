@@ -29,7 +29,9 @@
  */
 
 //重置el-drawer el-dialog背景
-.el-drawer,
-.el-dialog {
+.el-drawer {
   background-image: $backImgLight;
+}
+.el-dialog {
+  background-image: $backImgLight !important;
 }

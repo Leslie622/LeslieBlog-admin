@@ -271,6 +271,7 @@ async function sumbitIntroduce() {
     margin: 0;
     padding: 0 10px;
     font-size: 14px;
+    color: rgba(128, 128, 128, 0.7);
   }
   .introduce__edit {
     cursor: pointer;
