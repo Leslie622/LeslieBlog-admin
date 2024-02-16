@@ -1,8 +1,10 @@
 /// <reference types="vite/client" />
 
-// declare module 'axios' {
-//   interface AxiosResponse<T = any> {
-//     message: ''
-//   }
-//   export function create(config?: AxiosRequestConfig): AxiosInstance
-// }
+declare module '*.vue' {
+  import type { DefineComponent } from 'vue'
+  import Vue from 'vue'
+
+  const component: DefineComponent<{}, {}, any> | Vue
+
+  export default component
+}
