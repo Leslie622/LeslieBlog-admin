@@ -1,6 +1,6 @@
 <template>
   <div class="tabs">
-    <el-tabs type="border-card" v-model="activeName" class="tabs__content" @tab-click="handleClick">
+    <el-tabs type="border-card" v-model="activeName" class="tabs__content">
       <el-tab-pane label="登录" name="login">
         <user-login></user-login>
       </el-tab-pane>
@@ -12,14 +12,9 @@
 </template>
 
 <script setup lang="ts">
-import type { TabsPaneContext } from 'element-plus'
-import UserLogin from '@/components/UserLogin/index.vue'
-import UserRegister from '@/components/UserRegister/index.vue'
 const activeName = ref('login')
-
-const handleClick = (tab: TabsPaneContext, event: Event) => {}
-
-
+import UserLogin from './UserLogin/index.vue'
+import UserRegister from './UserRegister/index.vue'
 </script>
 
 <style lang="scss" scoped>
@@ -28,13 +23,18 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {}
   align-items: center;
   justify-content: center;
   height: 100vh;
+  background-image: url("../../assets/image/brillant.png");
+  
 
   .tabs__content {
-    width: 600px;
+    width: 500px;
     height: 300px;
-
+    border-radius: 5px;
+    overflow: hidden;
+   
     :deep(.el-tabs__content) {
       padding: 0;
+      box-sizing: content-box;
       height: calc(100% - 40px);
       display: flex;
       align-items: center;

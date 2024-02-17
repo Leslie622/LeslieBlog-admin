@@ -1,18 +1,18 @@
 <template>
-  <div class="login">
-    <div class="login__container">
-      <el-form ref="loginFormRef" :model="loginForm" :rules="rules" status-icon>
+  <div class="register">
+    <div class="register__container">
+      <el-form ref="registerFormRef" :model="registerForm" :rules="rules" status-icon>
         <el-form-item label="账号" prop="account">
-          <el-input v-model="loginForm.account" />
+          <el-input v-model="registerForm.account" />
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="loginForm.password" />
+          <el-input v-model="registerForm.password" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm(loginFormRef)" :loading="isLoading">
-            登录
+          <el-button type="primary" @click="submitForm(registerFormRef)" :loading="isLoading">
+            注册
           </el-button>
-          <el-button @click="resetForm(loginFormRef)">重置</el-button>
+          <el-button @click="resetForm(registerFormRef)">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -22,20 +22,19 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/modules/user'
 import { type FormInstance, type FormRules } from 'element-plus'
-const router = useRouter()
 const userStore = useUserStore()
 
-/* 登录表单ref */
-const loginFormRef = ref<FormInstance>()
+/* 注册表单ref */
+const registerFormRef = ref<FormInstance>()
 
-/* 登录表单 */
-const loginForm = reactive<User.loginReqData>({
-  account: '17671448657',
-  password: 'lyf001211'
+/* 注册表单 */
+const registerForm = reactive<User.registerReqData>({
+  account: '',
+  password: ''
 })
 
-/* 登录表单规则 */
-const rules = reactive<FormRules<User.loginReqData>>({
+/* 注册表单规则 */
+const rules = reactive<FormRules<User.registerReqData>>({
   account: [
     { required: true, message: '请输入您的用户名', trigger: 'blur' },
     { min: 5, max: 20, message: '用户名长度必须大于 5', trigger: 'blur' }
@@ -46,30 +45,32 @@ const rules = reactive<FormRules<User.loginReqData>>({
   ]
 })
 
-/* 登录操作 */
-let isLoading = ref(false) //控制登录加载
+/* 注册操作 */
+const emit = defineEmits(['change-tab'])
+let isLoading = ref(false) //控制注册加载
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   isLoading.value = true
-  await formEl.validate(async (valid, fields) => {
+  await formEl.validate(async (valid) => {
     //验证通过
     if (valid) {
       try {
-        //请求登录接口：该逻辑在store/user中处理
-        await userStore.login(loginForm)
-        ElMessage.success("登录成功，欢迎！")
+        //请求注册接口：该逻辑在store/user中处理
+        await userStore.register(registerForm)
+        ElMessage.success("注册成功，开始登录吧！")
+        emit('change-tab', 'login')
         isLoading.value = false
-        router.push('/home')
       } catch {
         isLoading.value = false
       }
     }
-    //验证失败
+    //注册失败
     else {
       isLoading.value = false
     }
   })
 }
+
 /* 重置表单操作 */
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
@@ -78,7 +79,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 </script>
 
 <style lang="scss" scoped>
-.login__container {
-  width: 500px;
+.register__container {
+  width: 400px;
 }
 </style>
