@@ -7,7 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    BreadCrumb: typeof import('./../layout/components/BreadCrumb/index.vue')['default']
+    BreadCrumb: typeof import('./../layout/components/NavBar/BreadCrumb/index.vue')['default']
     CropperImage: typeof import('./../components/CropperImage/index.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
@@ -48,6 +48,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SideBar: typeof import('./../layout/components/SideBar/index.vue')['default']
+    UserInfo: typeof import('./../layout/components/NavBar/UserInfo/index.vue')['default']
     VditorMd: typeof import('./../components/VditorMd/index.vue')['default']
   }
 }
