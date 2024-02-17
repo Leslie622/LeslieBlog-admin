@@ -40,7 +40,7 @@
         </div>
       </div>
       <div class="introduce__wrapper">
-        <p class="introduce" v-if="introduceEdit === false">
+        <p class="introduce" v-if="introduceEdit === false" :style="{ color: userInfo.introduce ? 'black':'silver'}">
           {{ userInfo.introduce === '' ? '点击右侧编辑按钮编辑个性签名' : userInfo.introduce }}
         </p>
         <el-input
@@ -271,7 +271,7 @@ async function sumbitIntroduce() {
     margin: 0;
     padding: 0 10px;
     font-size: 14px;
-    color: rgba(128, 128, 128, 0.7);
+    // color: rgba(128, 128, 128, 0.7);
   }
   .introduce__edit {
     cursor: pointer;
