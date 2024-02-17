@@ -111,5 +111,10 @@ const deleteUserSubmit = async (row: User.userResData) => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.my-header{
+  display: flex;
+  gap: 10px;
+}
+</style>
 <style></style>

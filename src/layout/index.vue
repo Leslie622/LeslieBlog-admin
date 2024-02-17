@@ -29,6 +29,7 @@
 <style lang="scss" scoped>
 .layout {
   height: 100%;
+  user-select: none;
 }
 
 .layout__header {
