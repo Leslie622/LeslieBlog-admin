@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar">
     <div class="sidebar__logo">
-      <img src="@/assets/image/logo.png" alt="" :class="[commonStore.isMenuCollapse ? 'small' : 'big']" />
+      <img src="@/assets/image/logoFont.png" alt="" :class="[commonStore.isMenuCollapse ? 'small' : 'big']" />
     </div>
     <Menu></Menu>
   </div>
