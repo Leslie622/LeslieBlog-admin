@@ -40,7 +40,7 @@ const props = defineProps<{
     --el-menu-sub-item-height: 35px;
     &.is-active {
       color: #343a40;
-      background-color: rgba(255, 255, 255, 0.9);
+      background-image: $backImgLight;
     }
     &:hover:not(.is-active) {
       color: #ffffff;
@@ -56,7 +56,8 @@ const props = defineProps<{
     color: #c2c7d0;
     &.is-active {
       color: #343a40;
-      background-color: rgba(255, 255, 255, 0.9);
+      // background-color: rgba(255, 255, 255, 0.9);
+      background-image: $backImgLight;
     }
     &:hover:not(.is-active) {
       color: #343a40;
