@@ -50,9 +50,6 @@
 }
 
 .layout__aside {
-  box-shadow:
-    0 3px 10px rgba(0, 0, 0, 0.25),
-    0 3px 3px rgba(0, 0, 0, 0.22);
   width: auto;
 }
 </style>

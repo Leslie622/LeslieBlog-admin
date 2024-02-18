@@ -23,6 +23,10 @@ onMounted(() => {
   init()
 })
 
+onActivated(() => {
+  onWindowResize()
+})
+
 function init() {
   camera = new THREE.PerspectiveCamera(40, width.value / height.value, 1, 10000)
   camera.position.set(0, -400, 600)
