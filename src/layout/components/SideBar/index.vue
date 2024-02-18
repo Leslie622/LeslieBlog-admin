@@ -25,12 +25,12 @@ const commonStore = useCommonStore()
     width: 100%;
     height: 50px;
     font-size: 20px;
-    color: red;
+    border-bottom: 1px solid rgb(47, 47, 47);
     background-image: $backImgDark;
     img {
-      transition: all 0.5s;
+      transition: all 0.25s;
       &.big {
-        height: 45%;
+        height: 50%;
       }
       &.small {
         height: 30%;
