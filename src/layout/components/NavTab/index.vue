@@ -1,14 +1,6 @@
 <template>
-  <el-tabs
-    v-model="activeTabName"
-    type="card"
-    class="tabs"
-    @tab-click="changeTab"
-    @tab-remove="removeTab"
-    :closable="true"
-  >
-    <el-tab-pane v-for="tab in tabs" :key="tab.name" :label="tab.name" :name="tab.name">
-    </el-tab-pane>
+  <el-tabs v-model="activeTabName" type="card" class="tabs" @tab-click="changeTab" @tab-remove="removeTab" :closable="true">
+    <el-tab-pane v-for="tab in tabs" :key="tab.name" :label="tab.name" :name="tab.name"> </el-tab-pane>
   </el-tabs>
 </template>
 
@@ -91,6 +83,10 @@ function removeTab(targetName: TabPaneName) {
     .el-tabs__item {
       font-size: 12px;
     }
+  }
+  :deep(.is-active) {
+    color: #c51e3a;
+    font-weight: bold;
   }
 }
 </style>
