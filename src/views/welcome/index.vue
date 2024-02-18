@@ -8,7 +8,7 @@
         </div>
         <div class="entrance__content">
           <Transition name="fade" mode="out-in">
-            <component :is="activeComponent"></component>
+            <component :is="activeComponent" @go-to-login="activeComponent = UserLogin"></component>
           </Transition>
         </div>
         <div class="action">
@@ -111,7 +111,9 @@ const activeComponent: any = shallowRef(UserLogin)
       flex: 1;
       background-image: url('@/assets/image/illustration.jpg');
       background-size: cover;
-      box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 0px 8px;
+      box-shadow:
+        rgba(17, 17, 26, 0.05) 0px 1px 0px,
+        rgba(17, 17, 26, 0.1) 0px 0px 8px;
     }
   }
 }

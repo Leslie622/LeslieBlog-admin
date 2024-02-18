@@ -67,7 +67,7 @@ const rules = reactive<FormRules<User.registerReqData>>({
 })
 
 /* 注册操作 */
-const emit = defineEmits(['change-tab'])
+const emit = defineEmits(['goToLogin'])
 let isLoading = ref(false) //控制注册加载
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
@@ -79,7 +79,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
         //请求注册接口：该逻辑在store/user中处理
         await userStore.register(registerForm)
         ElMessage.success('注册成功，开始登录吧！')
-        emit('change-tab', 'login')
+        emit('goToLogin')
         isLoading.value = false
       } catch {
         isLoading.value = false
