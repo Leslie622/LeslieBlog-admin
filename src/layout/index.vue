@@ -46,7 +46,6 @@
   .main__router-view {
     height: 100%;
     overflow: auto;
-    padding: 10px;
   }
 }
 

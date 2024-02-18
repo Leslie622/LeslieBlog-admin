@@ -1,18 +1,20 @@
 <template>
-  <el-table :data="userList">
-    <el-table-column prop="account" label="账号" />
-    <el-table-column prop="role.roleName" label="角色" />
-    <el-table-column label="操作">
-      <template #default="scope">
-        <el-button type="primary" size="small" @click="editUserHandler(scope.row)">编辑</el-button>
-        <el-popconfirm title="确定要删除该用户吗？" @confirm="deleteUserSubmit(scope.row)">
-          <template #reference>
-            <el-button size="small" type="danger"> 删除 </el-button>
-          </template>
-        </el-popconfirm>
-      </template>
-    </el-table-column>
-  </el-table>
+  <custom-table :tableData="userList">
+    <template v-slot:tableContent>
+      <el-table-column prop="account" label="账号" />
+      <el-table-column prop="role.roleName" label="角色" />
+      <el-table-column label="操作">
+        <template #default="scope">
+          <el-button type="primary" size="small" @click="editUserHandler(scope.row)">编辑</el-button>
+          <el-popconfirm title="确定要删除该用户吗？" @confirm="deleteUserSubmit(scope.row)">
+            <template #reference>
+              <el-button size="small" type="danger"> 删除 </el-button>
+            </template>
+          </el-popconfirm>
+        </template>
+      </el-table-column>
+    </template>
+  </custom-table>
 
   <el-dialog v-model="dialogFormVisible" title="编辑角色">
     <template #header="{ titleClass }">
@@ -23,15 +25,13 @@
     </template>
 
     <div>
-      <span>角色：</span>
-      <el-select v-model="userInfo.role.roleId">
-        <el-option
-          v-for="item in roleList"
-          :key="item.roleName"
-          :label="item.roleName"
-          :value="item.id!"
-        />
-      </el-select>
+      <el-form :model="userInfo" label-width="auto">
+        <el-form-item label="角色">
+          <el-select v-model="userInfo.role.roleId">
+            <el-option v-for="item in roleList" :key="item.roleName" :label="item.roleName" :value="item.id!" />
+          </el-select>
+        </el-form-item>
+      </el-form>
     </div>
 
     <template #footer>
@@ -95,7 +95,7 @@ const editUserSubmit = async () => {
     id: userInfo.id,
     roleId: userInfo.role.roleId
   })
-  ElMessage.success("编辑成功")
+  ElMessage.success('编辑成功')
   dialogFormVisible.value = false
   getUserList()
 }
@@ -105,14 +105,14 @@ const deleteUserSubmit = async (row: User.userResData) => {
   await apiUser.deleteUser({
     id: row.id
   })
-  ElMessage.success("删除成功")
+  ElMessage.success('删除成功')
   dialogFormVisible.value = false
   getUserList()
 }
 </script>
 
 <style lang="scss" scoped>
-.my-header{
+.my-header {
   display: flex;
   gap: 10px;
 }

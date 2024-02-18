@@ -98,6 +98,8 @@ function setHeaderClass(params: any) {
   display: flex;
   flex-direction: column;
   height: 100%;
+  box-sizing: border-box;
+  padding: 10px;
   background-image: $backImgLight;
   box-shadow:
     rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
@@ -107,20 +109,17 @@ function setHeaderClass(params: any) {
     display: flex;
     align-items: center;
     box-sizing: border-box;
-    padding: 0px 10px;
-    height: 50px;
   }
 
   .table__content {
     flex: 1;
-    padding: 0 10px;
+    padding: 10px 0px;
     overflow: auto;
   }
   .table__footer {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 50px;
   }
 }
 
