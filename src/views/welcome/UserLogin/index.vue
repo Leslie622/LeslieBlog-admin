@@ -7,7 +7,7 @@
       <el-form ref="loginFormRef" :model="loginForm" :rules="rules" status-icon>
         <el-form-item prop="account">
           <span class="input input--kaede">
-            <input class="input__field input__field--kaede" type="text" id="account" v-model="loginForm.account" />
+            <input class="input__field input__field--kaede" type="text" id="account" v-model="loginForm.account" autocomplete="off" />
             <label class="input__label input__label--kaede" for="account">
               <span class="input__label-content input__label-content--kaede">
                 <Icon icon="material-symbols:account-circle-outline" width="20px"></Icon>
@@ -18,7 +18,7 @@
         </el-form-item>
         <el-form-item prop="password">
           <span class="input input--kaede">
-            <input class="input__field input__field--kaede" type="text" id="password" v-model="loginForm.password" />
+            <input class="input__field input__field--kaede" type="text" id="password" v-model="loginForm.password" autocomplete="off" />
             <label class="input__label input__label--kaede" for="password">
               <span class="input__label-content input__label-content--kaede">
                 <Icon icon="material-symbols:key-outline-rounded" width="20px"></Icon>

@@ -7,7 +7,7 @@
       <el-form ref="registerFormRef" :model="registerForm" :rules="rules" status-icon>
         <el-form-item prop="account">
           <span class="input input--kaede">
-            <input class="input__field input__field--kaede" type="text" id="account" v-model="registerForm.account" />
+            <input class="input__field input__field--kaede" type="text" id="account" v-model="registerForm.account" autocomplete="off" />
             <label class="input__label input__label--kaede" for="account">
               <span class="input__label-content input__label-content--kaede">
                 <Icon icon="material-symbols:account-circle-outline" width="20px"></Icon>
@@ -18,7 +18,7 @@
         </el-form-item>
         <el-form-item prop="password">
           <span class="input input--kaede">
-            <input class="input__field input__field--kaede" type="text" id="password" v-model="registerForm.password" />
+            <input class="input__field input__field--kaede" type="text" id="password" v-model="registerForm.password" autocomplete="off" />
             <label class="input__label input__label--kaede" for="password">
               <span class="input__label-content input__label-content--kaede">
                 <Icon icon="material-symbols:key-outline-rounded" width="20px"></Icon>
@@ -29,10 +29,10 @@
         </el-form-item>
         <el-form-item>
           <div class="button">
-            <a  @click="submitForm(registerFormRef)" :loading="isLoading"> 注册 </a>
+            <a @click="submitForm(registerFormRef)" :loading="isLoading"> 注册 </a>
           </div>
           <div class="button">
-            <a  @click="resetForm(registerFormRef)" :loading="isLoading"> Reset </a>
+            <a @click="resetForm(registerFormRef)" :loading="isLoading"> Reset </a>
           </div>
         </el-form-item>
       </el-form>
