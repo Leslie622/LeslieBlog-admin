@@ -1,54 +1,34 @@
 <template>
-  <el-button type="primary" @click="createRoleHandler">新增角色</el-button>
-  <!-- 角色列表 -->
-  <el-table :data="roleList" style="width: 100%">
-    <el-table-column label="角色名称" prop="roleName" />
-    <el-table-column label="操作">
-      <template #default="scope">
-        <el-button type="primary" size="small" @click="editRoleHandler(scope.row)">编辑</el-button>
-        <el-popconfirm title="确定要删除该角色吗？" @confirm="deleteRoleSubmit(scope.row)">
-          <template #reference>
-            <el-button size="small" type="danger" :disabled="scope.row.isDefault === true">
-              删除
-            </el-button>
-          </template>
-        </el-popconfirm>
-        <el-button size="small" @click="setDafaultRole(scope.row)" v-if="!scope.row.isDefault">
-          设置为默认角色
-        </el-button>
-        <el-button size="small" disabled v-else>默认角色</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+  <custom-table :data="roleList">
+    <template v-slot:action>
+      <el-button type="primary" @click="createRoleHandler">新增角色</el-button>
+    </template>
+    <template v-slot:tableContent>
+      <el-table-column label="角色名称" prop="roleName" />
+      <el-table-column label="操作">
+        <template #default="scope">
+          <el-button type="primary" size="small" @click="editRoleHandler(scope.row)">编辑</el-button>
+          <el-popconfirm title="确定要删除该角色吗？" @confirm="deleteRoleSubmit(scope.row)">
+            <template #reference>
+              <el-button size="small" type="danger" :disabled="scope.row.isDefault === true"> 删除 </el-button>
+            </template>
+          </el-popconfirm>
+          <el-button size="small" @click="setDafaultRole(scope.row)" v-if="!scope.row.isDefault"> 设置为默认角色 </el-button>
+          <el-button size="small" disabled v-else>默认角色</el-button>
+        </template>
+      </el-table-column>
+    </template>
+  </custom-table>
 
-  <el-dialog
-    v-model="dialogFormVisible"
-    @closed="dialogCloseHandler"
-    :title="roleDialogData['title']"
-    :align-center="true"
-    width="40%"
-  >
+  <el-dialog v-model="dialogFormVisible" @closed="dialogCloseHandler" :title="roleDialogData['title']" :align-center="true" width="40%">
     <div>
-      <el-form
-        :model="roleForm"
-        :rules="rules"
-        :key="Math.random()"
-        ref="roleFormRef"
-        label-width="auto"
-      >
+      <el-form :model="roleForm" :rules="rules" :key="Math.random()" ref="roleFormRef" label-width="auto">
         <el-form-item label="角色名称" prop="roleName">
           <el-input v-model="roleForm.roleName" />
         </el-form-item>
         <el-form-item label="权限设置" prop="permissionList">
           <div class="premission-tree">
-            <el-tree
-              ref="treeRef"
-              :data="menuList"
-              :props="defaultProps"
-              node-key="id"
-              show-checkbox
-              default-expand-all
-            />
+            <el-tree ref="treeRef" :data="menuList" :props="defaultProps" node-key="id" show-checkbox default-expand-all />
           </div>
         </el-form-item>
       </el-form>
@@ -56,9 +36,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取消</el-button>
-        <el-button type="primary" @click="roleDialogData['submitEvent'](roleFormRef)">{{
-          roleDialogData['submitName']
-        }}</el-button>
+        <el-button type="primary" @click="roleDialogData['submitEvent'](roleFormRef)">{{ roleDialogData['submitName'] }}</el-button>
       </span>
     </template>
   </el-dialog>
@@ -160,7 +138,7 @@ async function createRoleSubmit(formEl: FormInstance | undefined) {
         menuList: roleForm.menuList,
         isDefault: roleForm.isDefault
       })
-      ElMessage.success("新增成功")
+      ElMessage.success('新增成功')
       dialogFormVisible.value = false
       getRoleList()
     }
@@ -198,7 +176,7 @@ async function editRoleSubmit(formEl: FormInstance | undefined) {
         permissionList: roleForm.permissionList,
         menuList: roleForm.menuList
       })
-      ElMessage.success("编辑成功")
+      ElMessage.success('编辑成功')
       dialogFormVisible.value = false
       getRoleList()
     }
@@ -208,7 +186,7 @@ async function editRoleSubmit(formEl: FormInstance | undefined) {
 /* 删除角色 */
 async function deleteRoleSubmit(row: Role.roleResData) {
   await apiRole.deleteRole({ id: row.id })
-  ElMessage.success("删除成功")
+  ElMessage.success('删除成功')
   dialogFormVisible.value = false
   getRoleList()
 }
@@ -216,7 +194,7 @@ async function deleteRoleSubmit(row: Role.roleResData) {
 /* 设置默认角色 */
 async function setDafaultRole(row: Role.roleResData) {
   await apiRole.editRole({ id: row.id, isDefault: true })
-  ElMessage.success("设置默认角色成功")
+  ElMessage.success('设置默认角色成功')
   dialogFormVisible.value = false
   getRoleList()
 }

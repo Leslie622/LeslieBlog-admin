@@ -1,12 +1,14 @@
 <template>
-  <vditor-md
-    @publish-blog="publishBlogHandler"
-    @blur="blurHandler"
-    @input="inputHandler"
-    @recall="setBlogCache"
-    ref="vditorRef"
-    :content="blogForm.draft ? blogForm.draft : blogForm.content"
-  ></vditor-md>
+  <div class="vditor-md">
+    <vditor-md
+      @publish-blog="publishBlogHandler"
+      @blur="blurHandler"
+      @input="inputHandler"
+      @recall="setBlogCache"
+      ref="vditorRef"
+      :content="blogForm.draft ? blogForm.draft : blogForm.content"
+    ></vditor-md>
+  </div>
 
   <el-drawer title="发布博客" v-model="blogDrawer" direction="rtl" :size="400">
     <template #default>
@@ -326,6 +328,11 @@ function resetBlogData() {
 </script>
 
 <style lang="scss" scoped>
+.vditor-md {
+  box-sizing: border-box;
+  padding: 10px;
+  height: 100%;
+}
 .avatar__wrapper {
   width: 100%;
   padding-top: 56.25%;

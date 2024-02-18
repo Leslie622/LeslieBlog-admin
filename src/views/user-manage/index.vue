@@ -1,5 +1,5 @@
 <template>
-  <custom-table :tableData="userList">
+  <custom-table :data="userList">
     <template v-slot:tableContent>
       <el-table-column prop="account" label="账号" />
       <el-table-column prop="role.roleName" label="角色" />

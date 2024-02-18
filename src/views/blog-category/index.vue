@@ -1,21 +1,24 @@
 <template>
-  <el-button type="primary" @click="createCategoryHandler">新增分类</el-button>
-  <!-- 分类列表 -->
-  <el-table :data="categoryList" style="width: 100%">
-    <el-table-column label="分类名称" prop="name" />
-    <el-table-column label="博客数量" prop="count" />
-    <el-table-column label="分类介绍" prop="introduce" />
-    <el-table-column label="操作">
-      <template #default="scope">
-        <el-button type="primary" size="small" @click="editCategoryHandler(scope.row)"> 编辑 </el-button>
-        <el-popconfirm title="确定要删除该分类吗？" @confirm="deleteCategorySubmit(scope.row)">
-          <template #reference>
-            <el-button size="small" type="danger"> 删除 </el-button>
-          </template>
-        </el-popconfirm>
-      </template>
-    </el-table-column>
-  </el-table>
+  <custom-table :data="categoryList">
+    <template v-slot:action>
+      <el-button type="primary" @click="createCategoryHandler">新增分类</el-button>
+    </template>
+    <template v-slot:tableContent>
+      <el-table-column label="分类名称" prop="name" />
+      <el-table-column label="博客数量" prop="count" />
+      <el-table-column label="分类介绍" prop="introduce" />
+      <el-table-column label="操作">
+        <template #default="scope">
+          <el-button type="primary" size="small" @click="editCategoryHandler(scope.row)"> 编辑 </el-button>
+          <el-popconfirm title="确定要删除该分类吗？" @confirm="deleteCategorySubmit(scope.row)">
+            <template #reference>
+              <el-button size="small" type="danger"> 删除 </el-button>
+            </template>
+          </el-popconfirm>
+        </template>
+      </el-table-column>
+    </template>
+  </custom-table>
 
   <el-dialog v-model="dialogFormVisible" @closed="dialogCloseHandler" :title="categoryDialogData['title']" :align-center="true" width="40%">
     <div>
@@ -99,7 +102,7 @@ async function createCategorySubmit(formEl: FormInstance | undefined) {
         name: categoryForm.name,
         introduce: categoryForm.introduce
       })
-      ElMessage.success("新增成功")
+      ElMessage.success('新增成功')
       dialogFormVisible.value = false
       getCategoryList()
     }
@@ -131,7 +134,7 @@ async function editCategorySubmit(formEl: FormInstance | undefined) {
         name: categoryForm.name,
         introduce: categoryForm.introduce
       })
-      ElMessage.success("编辑成功")
+      ElMessage.success('编辑成功')
       dialogFormVisible.value = false
       getCategoryList()
     }
@@ -141,7 +144,7 @@ async function editCategorySubmit(formEl: FormInstance | undefined) {
 /* 删除分类 */
 async function deleteCategorySubmit(row: BlogCategory.info) {
   await apiBlogCategory.delete({ id: row.id })
-  ElMessage.success("删除成功")
+  ElMessage.success('删除成功')
   dialogFormVisible.value = false
   getCategoryList()
 }

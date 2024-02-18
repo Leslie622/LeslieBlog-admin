@@ -1,63 +1,42 @@
 <template>
-  <el-button
-    type="primary"
-    @click="createMenuHandler({ ...menuForm, menuType: 0, id: '', children: [] })"
-    >新增菜单</el-button
-  >
-  <el-button
-    type="primary"
-    @click="createMenuHandler({ ...menuForm, menuType: 1, id: '', children: [] })"
-    >新增路由</el-button
-  >
   <!-- 菜单列表 -->
-  <el-table :data="menuList" row-key="id" stripe>
-    <el-table-column prop="menuName" label="名称" />
-    <el-table-column prop="menuType" label="类型">
-      <template v-slot="{ row }">
-        <span>{{ menuTypeMap[row.menuType] }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column prop="menuCode" label="权限标识" />
-    <el-table-column prop="path" label="路径" />
-    <el-table-column prop="component" label="组件名" />
-    <el-table-column prop="icon" label="图标">
-      <template #default="scope">
-        <Icon :icon="scope.row.icon" width="20px" />
-      </template>
-    </el-table-column>
-    <el-table-column label="操作" width="230" fixed="right">
-      <template #default="scope">
-        <el-button
-          size="small"
-          type="primary"
-          @click="createMenuHandler(scope.row)"
-          v-if="scope.row.menuType !== 3"
-          >{{ '新增' + menuTypeMap[scope.row.menuType + 1] }}</el-button
-        >
-        <el-button size="small" @click="editMenuHandler(scope.row)">编辑</el-button>
-        <el-popconfirm title="确定要删除吗？" @confirm="deleteMenuHandler(scope.row)">
-          <template #reference>
-            <el-button size="small" type="danger"> 删除 </el-button>
-          </template>
-        </el-popconfirm>
-      </template>
-    </el-table-column>
-  </el-table>
+  <custom-table row-key="id" :data="menuList">
+    <template v-slot:action>
+      <el-button type="primary" @click="createMenuHandler({ ...menuForm, menuType: 0, id: '', children: [] })">新增菜单</el-button>
+      <el-button type="primary" @click="createMenuHandler({ ...menuForm, menuType: 1, id: '', children: [] })">新增路由</el-button>
+    </template>
+    <template v-slot:tableContent>
+      <el-table-column prop="menuName" label="名称" />
+      <el-table-column prop="menuType" label="类型">
+        <template v-slot="{ row }">
+          <span>{{ menuTypeMap[row.menuType] }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="menuCode" label="权限标识" />
+      <el-table-column prop="path" label="路径" />
+      <el-table-column prop="component" label="组件名" />
+      <el-table-column prop="icon" label="图标">
+        <template #default="scope">
+          <Icon :icon="scope.row.icon" width="20px" />
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="230" fixed="right">
+        <template #default="scope">
+          <el-button size="small" type="primary" @click="createMenuHandler(scope.row)" v-if="scope.row.menuType !== 3">{{ '新增' + menuTypeMap[scope.row.menuType + 1] }}</el-button>
+          <el-button size="small" @click="editMenuHandler(scope.row)">编辑</el-button>
+          <el-popconfirm title="确定要删除吗？" @confirm="deleteMenuHandler(scope.row)">
+            <template #reference>
+              <el-button size="small" type="danger"> 删除 </el-button>
+            </template>
+          </el-popconfirm>
+        </template>
+      </el-table-column>
+    </template>
+  </custom-table>
+
   <!-- 新增菜单弹框 -->
-  <el-dialog
-    v-model="dialogCreateMenu"
-    :title="'新增' + menuTypeMap[menuForm.menuType]"
-    @closed="dialogCloseHandler"
-    :align-center="true"
-    width="500px"
-  >
-    <el-form
-      :model="menuForm"
-      :rules="rules"
-      ref="menuFormRef"
-      label-width="auto"
-      :key="Math.random()"
-    >
+  <el-dialog v-model="dialogCreateMenu" :title="'新增' + menuTypeMap[menuForm.menuType]" @closed="dialogCloseHandler" :align-center="true" width="500px">
+    <el-form :model="menuForm" :rules="rules" ref="menuFormRef" label-width="auto" :key="Math.random()">
       <el-form-item :label="menuTypeMap[menuForm.menuType] + '名称'" prop="menuName">
         <el-input v-model="menuForm.menuName" />
       </el-form-item>
@@ -100,7 +79,6 @@
 <script setup lang="ts">
 import apiMenu from '@/api/modules/menu'
 import type { FormInstance, FormRules } from 'element-plus'
-
 const menuList = ref<Menu.menuListResData>() //菜单列表
 const dialogCreateMenu = ref(false) //弹框控制
 const menuFormRef = ref<FormInstance>() //表单ref
@@ -165,7 +143,7 @@ async function createMenuSubmit(formEl: FormInstance | undefined) {
     if (valid) {
       //表单验证通过
       await apiMenu.createMenu(menuForm)
-      ElMessage.success("新增成功")
+      ElMessage.success('新增成功')
       dialogCreateMenu.value = false
       getMenuList()
     }
@@ -190,7 +168,7 @@ async function editMenuSubmit(formEl: FormInstance | undefined) {
     if (valid) {
       //表单验证通过
       await apiMenu.editMenu(menuForm)
-      ElMessage.success("编辑成功")
+      ElMessage.success('编辑成功')
       dialogCreateMenu.value = false
       getMenuList()
     }
@@ -203,7 +181,7 @@ const deleteMenuHandler = async (row: Menu.menuResData) => {
   await apiMenu.deleteMenu({
     id: row.id
   })
-  ElMessage.success("删除成功")
+  ElMessage.success('删除成功')
   dialogCreateMenu.value = false
   getMenuList()
 }

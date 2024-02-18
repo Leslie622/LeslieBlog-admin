@@ -1,5 +1,5 @@
 <template>
-  <custom-table @page-change="pageChangeHandler" @sort-change="sortChangeHandler" :tableData="blogList" :total="blogTotal" :page-size="blogListConfig.pageSize">
+  <custom-table @page-change="pageChangeHandler" @sort-change="sortChangeHandler" :data="blogList" :total="blogTotal" :page-size="blogListConfig.pageSize">
     <template v-slot:action>
       <div class="select">
         <el-input v-model="blogListConfig.searchKeyword" @change="getBlogList()" placeholder="按博客标题搜索">

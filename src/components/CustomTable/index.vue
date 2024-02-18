@@ -6,8 +6,8 @@
     </div>
     <div class="table__content">
       <el-table
+        v-bind="$attrs"
         style="height: 100%"
-        :data="tableData"
         stripe
         border
         @sort-change="sortChangeHandler"
@@ -35,16 +35,15 @@ import type { CellCls } from 'element-plus'
 const pageNum = ref(1) //页码
 const sortField = new Map<string, any>() //排序字段存储
 
-interface Props {
-  pageSize: number
-  total: number
-  tableData: any[]
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  pageSize: 10,
-  total: 0,
-  tableData: () => []
+const props = defineProps({
+  pageSize: {
+    default: 10,
+    type: Number
+  },
+  total: {
+    default: 0,
+    type: Number
+  }
 })
 
 const emit = defineEmits<{
