@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     BreadCrumb: typeof import('./../layout/components/NavBar/BreadCrumb/index.vue')['default']
     CropperImage: typeof import('./../components/CropperImage/index.vue')['default']
+    CustomTable: typeof import('./../components/CustomTable/index.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
@@ -47,6 +48,7 @@ declare module 'vue' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SideBar: typeof import('./../layout/components/SideBar/index.vue')['default']
+    Test: typeof import('./../components/test.vue')['default']
     UserInfo: typeof import('./../layout/components/NavBar/UserInfo/index.vue')['default']
     VditorMd: typeof import('./../components/VditorMd/index.vue')['default']
   }

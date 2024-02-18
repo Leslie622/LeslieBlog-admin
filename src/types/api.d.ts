@@ -259,4 +259,14 @@ namespace Blog {
     total: number
     blogList: blogInfo[]
   }
+
+  /* 博客列表配置信息 */
+  type blogListConfigData = {
+    pageNum: number //页码
+    pageSize: number //每页个数
+    category: string //分类id，默认空为所有
+    searchKeyword: string //搜索关键字
+    //排序数组
+    sortArr: Array<{ field: string; order: number }>
+  }
 }
