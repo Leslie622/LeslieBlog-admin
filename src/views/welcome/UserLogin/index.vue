@@ -51,8 +51,8 @@ const loginFormRef = ref<FormInstance>()
 
 /* 登录表单 */
 const loginForm = reactive<User.loginReqData>({
-  account: '17671448657',
-  password: 'lyf001211'
+  account: '',
+  password: ''
 })
 
 /* 登录表单规则 */
