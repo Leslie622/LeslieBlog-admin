@@ -47,6 +47,7 @@ declare module 'vue' {
     NavTab: typeof import('./../layout/components/NavTab/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SearchInput: typeof import('./../components/SearchInput/index.vue')['default']
     SideBar: typeof import('./../layout/components/SideBar/index.vue')['default']
     UserInfo: typeof import('./../layout/components/NavBar/UserInfo/index.vue')['default']
     VditorMd: typeof import('./../components/VditorMd/index.vue')['default']

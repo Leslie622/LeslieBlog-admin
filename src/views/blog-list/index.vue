@@ -1,12 +1,8 @@
 <template>
   <custom-table @page-change="pageChangeHandler" @sort-change="sortChangeHandler" :data="blogList" :total="blogTotal" :page-size="blogListConfig.pageSize">
     <template v-slot:action>
-      <div class="select">
-        <el-input v-model="blogListConfig.searchKeyword" @change="getBlogList()" placeholder="按博客标题搜索">
-          <template v-slot:suffix>
-            <Icon icon="material-symbols:search-rounded"></Icon>
-          </template>
-        </el-input>
+      <div>
+        <search-input v-model="blogListConfig.searchKeyword" @search="getBlogList()"></search-input>
       </div>
     </template>
     <template v-slot:tableContent>
