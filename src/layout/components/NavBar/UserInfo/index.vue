@@ -101,7 +101,7 @@ async function submitImg(blob: Blob) {
   //拿到图片path
   const path = res.data.path
   //编辑用户头像信息
-  await apiUser.editUser({
+  await apiUser.editUserInfo({
     id: userInfo.value.id,
     avatar: path
   })
@@ -120,7 +120,7 @@ function editIntroduceHandler() {
 
 /* 修改个性签名 */
 async function sumbitIntroduce() {
-  await apiUser.editUser({
+  await apiUser.editUserInfo({
     id: userInfo.value.id,
     introduce: userInfo.value.introduce
   })

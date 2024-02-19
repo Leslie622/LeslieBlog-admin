@@ -42,6 +42,13 @@ namespace User {
     introduce?: string
   }
 
+  /* 编辑用户个人信息：只能编辑头像和个人简介 */
+  type editUserInfoReqData = {
+    id: string
+    avatar?: string
+    introduce?: string
+  }
+
   /* 获取当前用户信息 */
   type userInfoResData = {
     id: string
