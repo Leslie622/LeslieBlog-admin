@@ -110,5 +110,6 @@ function render() {
 .welcome {
   width: 100%;
   height: 100%;
+  cursor: pointer;
 }
 </style>
