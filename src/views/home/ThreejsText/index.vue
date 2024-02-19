@@ -33,7 +33,7 @@ function init() {
   scene = new THREE.Scene()
   scene.background = new THREE.Color(0xffffff)
   const loader = new FontLoader()
-  loader.load('/node_modules/three/examples/fonts/helvetiker_regular.typeface.json', function (font) {
+  loader.load("/helvetiker_regular.typeface.json", function (font) {
     const color = 0x3b3b3b
     const matDark = new THREE.LineBasicMaterial({
       color: color,

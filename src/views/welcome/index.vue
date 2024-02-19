@@ -4,7 +4,7 @@
       <div class="illustration"></div>
       <div class="entrance">
         <div class="logo">
-          <img src="../../assets/image/logoFont.png" alt="" />
+          <img src="@/assets/image/logoFont.png" alt="" />
         </div>
         <div class="entrance__content">
           <Transition name="fade" mode="out-in">
@@ -109,7 +109,7 @@ const activeComponent: any = shallowRef(UserLogin)
       position: relative;
       z-index: 100;
       flex: 1;
-      background-image: url('@/assets/image/illustration.jpg');
+      background-image: url('@/assets/image/illustration.png');
       background-size: cover;
       box-shadow:
         rgba(17, 17, 26, 0.05) 0px 1px 0px,
