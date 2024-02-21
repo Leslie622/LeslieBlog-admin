@@ -16,8 +16,8 @@
         </template>
       </el-table-column>
       <el-table-column label="浏览量" prop="views" sortable="custom" />
-      <el-table-column label="发布时间" prop="createTime" />
-      <el-table-column label="更新时间" prop="updateTime" />
+      <el-table-column label="发布时间" prop="createdAt" />
+      <el-table-column label="更新时间" prop="updatedAt" sortable="custom" />
       <el-table-column label="是否置顶" prop="isSticky" width="120px" sortable="custom">
         <template #default="scope">
           <el-tag v-if="scope.row.isSticky" type="danger" size="small" class="tag">置顶</el-tag>

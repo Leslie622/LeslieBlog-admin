@@ -227,8 +227,8 @@ namespace Blog {
     views: number
     isOriginal: boolean
     isSticky: boolean
-    createTime: string
-    updateTime: string
+    createdAt: string
+    updatedAt: string
   }
 
   /* 创建博客 */
