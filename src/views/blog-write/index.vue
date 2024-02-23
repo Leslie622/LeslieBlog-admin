@@ -101,7 +101,7 @@ const cropperOptions = reactive<CropperOptionsData>({
   width: 300,
   height: 300,
   outputType: 'png',
-  fixedNumber: [16, 9],
+  fixedNumber: [3, 2],
   fillColor: ''
 })
 //弹窗数据：控制写博客/编辑的事件
