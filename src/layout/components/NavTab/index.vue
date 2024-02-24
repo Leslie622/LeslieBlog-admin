@@ -81,7 +81,7 @@ function removeTab(targetName: TabPaneName) {
     margin: 0px;
     --el-tabs-header-height: 35px;
     .el-tabs__item {
-      font-size: 12px;
+      font-size: 13px;
     }
   }
   :deep(.is-active) {
