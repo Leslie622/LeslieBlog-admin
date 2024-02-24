@@ -33,7 +33,7 @@ const props = defineProps<{
 //覆盖element:menu部分样式
 .el-sub-menu {
   --el-menu-item-height: 40px;
-  --el-menu-item-font-size: 10px;
+  --el-menu-item-font-size: 13px;
   .el-menu-item {
     margin: 5px 8px;
     border-radius: 5px;
