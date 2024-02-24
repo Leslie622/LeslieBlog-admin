@@ -6,8 +6,8 @@
       </div>
     </template>
     <template v-slot:tableContent>
-      <el-table-column label="标题" prop="title" />
-      <el-table-column label="所属分类" prop="category">
+      <el-table-column label="标题" prop="title" width="300px" :show-overflow-tooltip="{ effect: 'light', placement: 'right' }" />
+      <el-table-column label="所属分类" prop="category" min-width="170px" width="170px">
         <template #header>
           <el-select v-model="blogListConfig.category" style="width: 140px" size="small" placeholder="选择分类进行筛选" @change="findByCategory">
             <el-option label="所有" value=""></el-option>
@@ -33,7 +33,7 @@
       <el-table-column label="状态" prop="draft" width="120px">
         <template #default="scope">
           <el-tag v-if="scope.row.draft != ''" type="warning" size="small" class="tag"> 草稿 </el-tag>
-          <span v-else></span>
+          <el-tag v-else type="success" size="small" class="tag"> 已发布 </el-tag>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
