@@ -10,6 +10,7 @@ export default defineConfig(({ command, mode }) => {
 
   //vite配置
   return {
+    base:"/admin/",
     plugins: createVitePlugins(),
     resolve: {
       alias: {
