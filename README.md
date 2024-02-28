@@ -15,20 +15,17 @@ Vite4 + Vue3.3 + TypeScript + Sass + ElementPlus + Axios + Pinia + Iconify
 ### 登录页
 
 <p align="center">
-<video  src="https://leslie-blog-1314141789.cos.ap-nanjing.myqcloud.com/video/loginPageView.mp4"  autoplay width='100%'/>
+<img src="https://leslie-blog-1314141789.cos.ap-nanjing.myqcloud.com/image/loginPageView.gif" />
 </p>
 
 ### 主页
 
 <p align="center">
-<video controls autoplay src="https://leslie-blog-1314141789.cos.ap-nanjing.myqcloud.com/video/indexPageView.mp4" width='100%'/>
-</video>
+<img src="https://leslie-blog-1314141789.cos.ap-nanjing.myqcloud.com/image/indexPageView.gif" />
 </p>
 
 ### 用户管理
-<p align="center">
-<video  src="https://leslie-blog-1314141789.cos.ap-nanjing.myqcloud.com/video/userManageView.mp4"  autoplay width='100%'/>
-</p>
+
 
 ### 菜单管理
 
