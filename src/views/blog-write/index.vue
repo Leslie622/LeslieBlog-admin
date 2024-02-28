@@ -50,14 +50,14 @@
     </template>
     <template #footer>
       <div style="flex: auto">
-        <el-button>取消</el-button>
+        <el-button @click="blogDrawer = false">取消</el-button>
         <el-button type="warning" @click="publishAsDraft">保存草稿</el-button>
         <el-button type="primary" @click="blogDrawerData['submitEvent'](blogFormRef)">上传</el-button>
       </div>
     </template>
   </el-drawer>
 
-  <el-dialog v-model="dialogCropperVisible" destroy-on-close title="修改用户头像" class="cropper-dailog" align-center>
+  <el-dialog v-model="dialogCropperVisible" destroy-on-close title="修改博客封面" class="cropper-dailog" align-center>
     <cropper-image :img="blogForm.cover === '' ? '' : $ImgPrefix + blogForm.cover" @submit-img="submitImg" v-bind="cropperOptions"></cropper-image>
   </el-dialog>
 </template>
