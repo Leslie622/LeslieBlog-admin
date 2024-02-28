@@ -21,7 +21,8 @@ Vite4 + Vue3.3 + TypeScript + Sass + ElementPlus + Axios + Pinia + Iconify
 ### 主页
 
 <p align="center">
-<video  src="https://leslie-blog-1314141789.cos.ap-nanjing.myqcloud.com/video/indexPageView.mp4"  autoplay width='100%'/>
+<video controls autoplay src="https://leslie-blog-1314141789.cos.ap-nanjing.myqcloud.com/video/indexPageView.mp4" width='100%'/>
+</video>
 </p>
 
 ### 用户管理
