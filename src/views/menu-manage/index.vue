@@ -35,7 +35,7 @@
   </custom-table>
 
   <!-- 新增菜单弹框 -->
-  <el-dialog v-model="dialogCreateMenu" :title="'新增' + menuTypeMap[menuForm.menuType]" @closed="dialogCloseHandler" :align-center="true" width="500px">
+  <el-dialog v-model="dialogCreateMenu" :title="MenuDialogData.submitName + menuTypeMap[menuForm.menuType]" @closed="dialogCloseHandler" :align-center="true" width="500px">
     <el-form :model="menuForm" :rules="rules" ref="menuFormRef" label-width="auto" :key="Math.random()">
       <el-form-item :label="menuTypeMap[menuForm.menuType] + '名称'" prop="menuName">
         <el-input v-model="menuForm.menuName" />
