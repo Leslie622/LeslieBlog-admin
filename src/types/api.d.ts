@@ -277,3 +277,20 @@ namespace Blog {
     sortArr: Array<{ field: string; order: number }>
   }
 }
+
+namespace Visitor {
+  type info = {
+    location: string
+    system: string
+    browser: string
+    ip: string
+    visitTimes: number
+    createdAt: string
+    updatedAt: string
+  }
+
+  type listResData = {
+    total: number
+    visitorList: info[]
+  }
+}
