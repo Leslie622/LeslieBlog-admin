@@ -1,5 +1,5 @@
 <template>
-  <custom-table :data="userList">
+  <custom-table :data="userList" @page-change="pageChangeHandler" :total="userTotal" :page-size="userListConfig.pageSize">
     <template v-slot:tableContent>
       <el-table-column prop="account" label="账号" />
       <el-table-column prop="role.roleName" label="角色" />
@@ -59,9 +59,15 @@ const userInfo = reactive<User.userResData>({
   }
 })
 //用户列表
-const userList = ref<User.userListResData>()
+const userList = ref<User.userResData[]>()
 //角色列表
-const roleList = ref<Role.roleListResData>()
+const roleList = ref<Role.roleResData[]>()
+const userListConfig = reactive<User.userListConfigData>({
+  pageNum: 1,
+  pageSize: 14
+})
+//用户总数量，控制分页，默认一页
+const userTotal = ref(userListConfig.pageSize)
 
 onBeforeMount(() => {
   getUserList()
@@ -70,14 +76,15 @@ onBeforeMount(() => {
 
 /* 获取用户列表 */
 const getUserList = async () => {
-  const res = await apiUser.getUserList()
-  userList.value = res.data
+  const res = await apiUser.getUserList(userListConfig)
+  userList.value = res.data.userList
+  userTotal.value = res.data.total
 }
 
 /* 获取角色列表 */
 const getRoleList = async () => {
-  const res = await apiRole.getRoleList()
-  roleList.value = res.data
+  const res = await apiRole.getRoleList({})
+  roleList.value = res.data.roleList
 }
 
 /* 编辑用户信息处理函数 */
@@ -107,6 +114,12 @@ const deleteUserSubmit = async (row: User.userResData) => {
   })
   ElMessage.success('删除成功')
   dialogFormVisible.value = false
+  getUserList()
+}
+
+/* 分页改变处理函数 */
+function pageChangeHandler(pageNum: number) {
+  userListConfig.pageNum = pageNum
   getUserList()
 }
 </script>

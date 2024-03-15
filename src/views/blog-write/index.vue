@@ -79,7 +79,7 @@ const vditorRef = ref() //vditorRef
 const blogCoverRef = ref() //博客封面img ref
 const dialogCropperVisible = ref(false) //修改用户头像弹窗控制
 const imgBlob = ref() //临时存储Blob
-const categoryList = ref<BlogCategory.listResData>([]) //博客分类列表
+const categoryList = ref<BlogCategory.info[]>([]) //博客分类列表
 //博客内容表单
 const blogForm = reactive<Blog.createReqData>({
   title: '',
@@ -151,7 +151,7 @@ watch(
   async () => {
     const blogId = route.query.blogId
     if (blogId) {
-      const res = await apiBlog.singleBlog({ blogId })
+      const res = await apiBlog.singleBlog({ blogId: blogId as string })
       blogForm.abstract = res.data.abstract
       blogForm.title = res.data.title
       blogForm.category = res.data.category
@@ -187,8 +187,8 @@ function inputHandler(value: string) {
 
 /* 获取博客分类列表 */
 async function getBlogCategoryList() {
-  const res = await apiBlogCategory.getList()
-  categoryList.value = res.data
+  const res = await apiBlogCategory.getList({})
+  categoryList.value = res.data.categoryList
 }
 
 /* 上传博客处理函数 */

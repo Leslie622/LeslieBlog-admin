@@ -70,7 +70,16 @@ namespace User {
       roleName: string
     }
   }
-  type userListResData = userResData[]
+  type userListResData = {
+    total: number
+    userList: userResData[]
+  }
+
+  /* 用户列表配置信息 */
+  type userListConfigData = {
+    pageNum: number //页码
+    pageSize: number //每页个数
+  }
 
   /* 获取用户权限 */
   type permissionResData = {
@@ -119,7 +128,16 @@ namespace Role {
     menuList: string[]
     isDefault: boolean
   }
-  type roleListResData = roleResData[]
+  type roleListResData = {
+    total: number
+    roleList: roleResData[]
+  }
+
+  /* 角色列表配置信息 */
+  type roleListConfigData = {
+    pageNum?: number //页码
+    pageSize?: number //每页个数
+  }
 }
 
 namespace Menu {
@@ -210,7 +228,16 @@ namespace BlogCategory {
   }
 
   /* 查询博客分类列表 */
-  type listResData = info[]
+  type listResData = {
+    total: number
+    categoryList: info[]
+  }
+
+  /* 分类列表配置信息 */
+  type listConfigData = {
+    pageNum?: number //页码
+    pageSize?: number //每页个数
+  }
 }
 
 namespace Blog {
@@ -265,6 +292,11 @@ namespace Blog {
   type listResData = {
     total: number
     blogList: blogInfo[]
+  }
+
+  /* 查询单篇博客 */
+  type singleBlogReqData = {
+    blogId: string
   }
 
   /* 博客列表配置信息 */

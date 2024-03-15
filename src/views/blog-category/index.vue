@@ -1,5 +1,5 @@
 <template>
-  <custom-table :data="categoryList">
+  <custom-table :data="categoryList" @page-change="pageChangeHandler" :total="categoryTotal" :page-size="categoryListConfig.pageSize">
     <template v-slot:action>
       <el-button type="primary" @click="createCategoryHandler">新增分类</el-button>
     </template>
@@ -44,7 +44,12 @@
 import apiBlogCategory from '@/api/modules/blogCategory'
 import type { FormInstance, FormRules } from 'element-plus'
 
-const categoryList = ref<BlogCategory.listResData>() //分类列表
+const categoryList = ref<BlogCategory.info[]>() //分类列表
+const categoryListConfig = reactive<BlogCategory.listConfigData>({
+  pageNum: 1,
+  pageSize: 14
+})
+const categoryTotal = ref(categoryListConfig.pageSize)
 const dialogFormVisible = ref(false) //弹框控制
 const categoryFormRef = ref<FormInstance>() //表单ref
 //弹框数据
@@ -79,8 +84,9 @@ onActivated(() => {
 
 /* 获取分类列表 */
 const getCategoryList = async () => {
-  const res = await apiBlogCategory.getList()
-  categoryList.value = res.data
+  const res = await apiBlogCategory.getList(categoryListConfig)
+  categoryList.value = res.data.categoryList
+  categoryTotal.value = res.data.total
 }
 
 /* 新增博客分类处理函数 */
@@ -154,6 +160,12 @@ function dialogCloseHandler() {
   //每次弹框关闭,重置表单数据
   categoryForm.name = ''
   categoryForm.introduce = ''
+}
+
+/* 分页改变处理函数 */
+function pageChangeHandler(pageNum: number) {
+  categoryListConfig.pageNum = pageNum
+  getCategoryList()
 }
 </script>
 

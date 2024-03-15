@@ -1,5 +1,5 @@
 <template>
-  <custom-table :data="roleList">
+  <custom-table :data="roleList" @page-change="pageChangeHandler" :total="roleTotal" :page-size="roleListConfig.pageSize">
     <template v-slot:action>
       <el-button type="primary" @click="createRoleHandler">新增角色</el-button>
     </template>
@@ -48,7 +48,13 @@ import apiRole from '@/api/modules/role'
 import type { FormInstance, FormRules } from 'element-plus'
 
 const menuList = ref() //菜单列表
-const roleList = ref<Role.roleListResData>() //角色列表
+const roleList = ref<Role.roleResData[]>() //角色列表
+const roleListConfig = reactive<Role.roleListConfigData>({
+  pageNum: 1,
+  pageSize: 14
+})
+//角色总数量，控制分页，默认一页
+const roleTotal = ref(roleListConfig.pageSize)
 const dialogFormVisible = ref(false) //弹框控制
 const treeRef = ref() //树形组件ref
 const roleFormRef = ref<FormInstance>() //表单ref
@@ -93,8 +99,9 @@ async function getMenuList() {
 
 /* 获取角色列表 */
 const getRoleList = async () => {
-  const res = await apiRole.getRoleList()
-  roleList.value = res.data
+  const res = await apiRole.getRoleList(roleListConfig)
+  roleList.value = res.data.roleList
+  roleTotal.value = res.data.total
 }
 
 /* 新增角色处理函数 */
@@ -203,6 +210,12 @@ async function setDafaultRole(row: Role.roleResData) {
 function dialogCloseHandler() {
   //每次弹框关闭,重置roleForm数据
   roleForm.roleName = ''
+}
+
+/* 分页改变处理函数 */
+function pageChangeHandler(pageNum: number) {
+  roleListConfig.pageNum = pageNum
+  getRoleList()
 }
 </script>
 

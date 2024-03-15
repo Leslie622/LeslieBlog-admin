@@ -8,5 +8,5 @@ export default {
   //编辑角色
   editRole: (data: Role.editRoleReqData) => ApiService.post('role/editRole', data),
   //获取角色列表
-  getRoleList: () => ApiService.get<Role.roleListResData>('role/getRoleList')
+  getRoleList: (data:Role.roleListConfigData) => ApiService.post<Role.roleListResData>('role/getRoleList',data)
 }

@@ -55,12 +55,12 @@ import apiBlog from '@/api/modules/blog'
 import apiBlogCategory from '@/api/modules/blogCategory'
 
 const router = useRouter()
-const categoryList = ref<BlogCategory.listResData>([]) //博客分类列表
+const categoryList = ref<BlogCategory.info[]>([]) //博客分类列表
 const blogList = ref<Blog.blogInfo[]>() //博客列表
 //博客列表配置：排序，分页，分类等
 const blogListConfig = reactive<Blog.blogListConfigData>({
   pageNum: 1,
-  pageSize: 20,
+  pageSize: 14,
   category: '',
   searchKeyword: '',
   sortArr: []
@@ -80,8 +80,8 @@ onActivated(() => {
 
 /* 获取博客分类列表 */
 async function getBlogCategoryList() {
-  const res = await apiBlogCategory.getList()
-  categoryList.value = res.data
+  const res = await apiBlogCategory.getList({})
+  categoryList.value = res.data.categoryList
 }
 
 /* 获取博客列表 */

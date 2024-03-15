@@ -10,7 +10,7 @@ export default {
   // 获取用户菜单和权限
   getPermission: () => ApiService.get<User.permissionResData>('users/getPermission'),
   // 获取用户列表
-  getUserList: () => ApiService.get<User.userListResData>('users/getUserList'),
+  getUserList: (data:User.userListConfigData) => ApiService.post<User.userListResData>('users/getUserList',data),
   // 编辑用户(目前只更改角色)
   editUser: (data: User.editUserReqData) => ApiService.post('users/editUser', data),
   // 编辑用户个人信息
