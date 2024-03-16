@@ -330,6 +330,12 @@ namespace Visitor {
     total: number
     visitorList: info[]
   }
+
+    /* 分类列表配置信息 */
+    type visitorListConfigData = {
+      pageNum?: number //页码
+      pageSize?: number //每页个数
+    }
 }
 
 namespace DataOverview {

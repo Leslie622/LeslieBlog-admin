@@ -1,5 +1,5 @@
 <template>
-  <custom-table :data="visitorList">
+  <custom-table :data="visitorList" @page-change="pageChangeHandler" :total="visitorTotal" :page-size="visitorListConfig.pageSize">
     <template v-slot:tableContent>
       <el-table-column label="IP" prop="ip" />
       <el-table-column label="省份" prop="location.province" />
@@ -17,11 +17,11 @@
 import apiVisitor from '@/api/modules/visitor'
 const visitorList = ref<Visitor.info[]>()
 //游客列表配置：分页
-const visitorListConfig = reactive({
+const visitorListConfig = reactive<Visitor.visitorListConfigData>({
   pageNum: 1,
-  pageSize: 10
+  pageSize: 14
 })
-
+const visitorTotal = ref<number>()
 onMounted(() => {
   getVisitorList()
 })
@@ -30,6 +30,13 @@ onMounted(() => {
 async function getVisitorList() {
   const res = await apiVisitor.getVisitorList(visitorListConfig)
   visitorList.value = res.data.visitorList
+  visitorTotal.value = res.data.total
+}
+
+/* 分页改变处理函数 */
+function pageChangeHandler(pageNum: number) {
+  visitorListConfig.pageNum = pageNum
+  getVisitorList()
 }
 </script>
 
