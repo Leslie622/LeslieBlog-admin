@@ -312,7 +312,12 @@ namespace Blog {
 
 namespace Visitor {
   type info = {
-    location: string
+    location: {
+      city: string
+      province: string
+      country: string
+      isp: string
+    }
     system: string
     browser: string
     ip: string
@@ -325,4 +330,11 @@ namespace Visitor {
     total: number
     visitorList: info[]
   }
+}
+
+namespace DataOverview {
+  type visitorLocation = {
+    name: string
+    value: number
+  }[]
 }

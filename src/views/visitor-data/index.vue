@@ -1,35 +1,37 @@
 <template>
-  <custom-table :data="visitorList">
-    <template v-slot:tableContent>
-      <el-table-column label="IP" prop="ip" />
-      <el-table-column label="城市" prop="location" />
-      <el-table-column label="操作系统" prop="system" />
-      <el-table-column label="浏览器" prop="browser" />
-      <el-table-column label="访问次数" prop="visitTimes" />
-      <el-table-column label="首次访问时间" prop="createdAt" />
-      <el-table-column label="最近访问时间" prop="updatedAt" />
-    </template>
-  </custom-table>
+  <div class="visitor">
+    <div class="action">
+      <el-button type="primary" size="small" @click="currentTab = 'VisitorTable'">表格</el-button>
+      <el-button type="primary" size="small" @click="currentTab = 'VisitorVisual'">数据可视化</el-button>
+    </div>
+    <component :is="tabs[currentTab]"></component>
+  </div>
 </template>
 
 <script setup lang="ts">
-import apiVisitor from '@/api/modules/visitor'
-const visitorList = ref<Visitor.info[]>()
-//游客列表配置：分页
-const visitorListConfig = reactive({
-  pageNum: 1,
-  pageSize: 10
-})
+import VisitorTable from './VisitorTable/index.vue'
+import VisitorVisual from './VisitorVisual/index.vue'
 
-onMounted(() => {
-  getVisitorList()
-})
+type Tabs = {
+  [key: string]: any
+}
 
-async function getVisitorList() {
-  const res = await apiVisitor.getVisitorList(visitorListConfig)
-  visitorList.value = res.data.visitorList
-  console.log(res)
+const currentTab = ref<string>('VisitorTable')
+const tabs: Tabs = {
+  VisitorTable,
+  VisitorVisual
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.visitor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.action {
+  padding: 10px;
+  display: flex;
+}
+</style>

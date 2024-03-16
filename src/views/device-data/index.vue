@@ -1,4 +1,6 @@
-<template>device</template>
+<template>
+  <div></div>
+</template>
 
 <script setup lang="ts"></script>
 
