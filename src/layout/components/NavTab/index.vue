@@ -85,7 +85,6 @@ function removeTab(targetName: TabPaneName) {
     }
   }
   :deep(.is-active) {
-    color: #c51e3a;
     font-weight: bold;
   }
 }
