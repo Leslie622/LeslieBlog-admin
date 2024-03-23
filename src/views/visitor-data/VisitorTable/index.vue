@@ -27,7 +27,8 @@ const visitorList = ref<Visitor.info[]>()
 //游客列表配置：分页
 const visitorListConfig = reactive<Visitor.visitorListConfigData>({
   pageNum: 1,
-  pageSize: 14
+  pageSize: 14,
+  sortArr: [{ field: 'updatedAt', order: -1 }]
 })
 const visitorTotal = ref<number>() //游客总数
 
