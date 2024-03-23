@@ -3,6 +3,8 @@ import { defineConfig, loadEnv } from 'vite'
 
 //导入plugin配置
 import createVitePlugins from './vite/plugins'
+//postcss
+import postcssPresetEnv from 'postcss-preset-env'
 
 export default defineConfig(({ command, mode }) => {
   //环境变量
@@ -10,7 +12,7 @@ export default defineConfig(({ command, mode }) => {
 
   //vite配置
   return {
-    base:"/",
+    base: '/',
     plugins: createVitePlugins(),
     resolve: {
       alias: {
@@ -19,6 +21,9 @@ export default defineConfig(({ command, mode }) => {
     },
     //配置全局SCSS变量
     css: {
+      postcss: {
+        plugins: [postcssPresetEnv()]
+      },
       preprocessorOptions: {
         scss: {
           additionalData: `
